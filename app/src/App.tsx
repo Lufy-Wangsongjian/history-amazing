@@ -11,6 +11,7 @@ import { WelcomeDialog } from '@/components/WelcomeDialog'
 import { DEFAULT_YEAR_RANGE, useTimelineState } from '@/hooks/useTimelineState'
 import { useTheme } from '@/hooks/useTheme'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { ALL_REGIONS, getVisibleSelectedRegions } from '@/data/regions'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear } from '@/data/types'
 import { Globe, Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays } from 'lucide-react'
 import { useState } from 'react'
@@ -43,6 +44,8 @@ function App() {
   }
 
   const activeFilters: Array<{ id: string; label: string; onRemove: () => void }> = []
+  const visibleSelectedRegions = getVisibleSelectedRegions(state.selectedRegions)
+  const hasSpecificRegionFilter = visibleSelectedRegions.length > 0 && visibleSelectedRegions.length < ALL_REGIONS.length
 
   if (state.searchQuery.trim()) {
     activeFilters.push({
@@ -68,13 +71,15 @@ function App() {
     })
   })
 
-  Array.from(state.selectedRegions).forEach((region) => {
-    activeFilters.push({
-      id: `reg-${region}`,
-      label: REGION_CONFIG[region].label,
-      onRemove: () => state.toggleRegion(region),
+  if (hasSpecificRegionFilter) {
+    visibleSelectedRegions.forEach((region) => {
+      activeFilters.push({
+        id: `reg-${region}`,
+        label: REGION_CONFIG[region].label,
+        onRemove: () => state.toggleRegion(region),
+      })
     })
-  })
+  }
 
   if (!state.coreOnly) {
     activeFilters.push({
@@ -176,6 +181,7 @@ function App() {
             selectedCategories={state.selectedCategories}
             toggleCategory={state.toggleCategory}
             selectedRegions={state.selectedRegions}
+            setSelectedRegions={state.setSelectedRegions}
             toggleRegion={state.toggleRegion}
             yearRange={state.yearRange}
             setYearRange={state.setYearRange}

@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useDeferredValue, useEffect } from 'react'
 import type { Category, Region, HistoricalEvent } from '@/data/types'
+import { getEffectiveRegionFilters } from '@/data/regions'
 import { fetchAllEvents, fetchStats } from '@/lib/api'
 
 export type ViewMode = 'timeline' | 'matrix' | 'stats' | 'compare'
@@ -43,8 +44,10 @@ function syncURLState(state: {
   coreOnly: boolean
 }) {
   const params = new URLSearchParams()
+  const effectiveRegions = getEffectiveRegionFilters(state.selectedRegions)
+
   if (state.selectedCategories.size > 0) params.set('cat', Array.from(state.selectedCategories).join(','))
-  if (state.selectedRegions.size > 0) params.set('reg', Array.from(state.selectedRegions).join(','))
+  if (effectiveRegions.length > 0) params.set('reg', effectiveRegions.join(','))
   if (state.yearRange[0] !== DEFAULT_YEAR_RANGE[0]) params.set('ymin', String(state.yearRange[0]))
   if (state.yearRange[1] !== DEFAULT_YEAR_RANGE[1]) params.set('ymax', String(state.yearRange[1]))
   if (state.viewMode !== 'timeline') params.set('view', state.viewMode)
@@ -65,7 +68,7 @@ export function useTimelineState() {
   const [selectedCategories, setSelectedCategories] = useState<Set<Category>>(
     () => (urlState.categories ? new Set(urlState.categories) : new Set())
   )
-  const [selectedRegions, setSelectedRegions] = useState<Set<Region>>(
+  const [selectedRegions, setSelectedRegionsState] = useState<Set<Region>>(
     () => (urlState.regions ? new Set(urlState.regions) : new Set())
   )
   const [yearRange, setYearRange] = useState<[number, number]>(
@@ -98,7 +101,7 @@ export function useTimelineState() {
 
   const query = useMemo(() => {
     const categories = Array.from(selectedCategories)
-    const regions = Array.from(selectedRegions)
+    const regions = getEffectiveRegionFilters(selectedRegions)
 
     return {
       categories: categories.length > 0 ? categories : undefined,
@@ -183,8 +186,12 @@ export function useTimelineState() {
     })
   }, [])
 
+  const setSelectedRegions = useCallback((regions: Iterable<Region>) => {
+    setSelectedRegionsState(new Set(regions))
+  }, [])
+
   const toggleRegion = useCallback((region: Region) => {
-    setSelectedRegions(prev => {
+    setSelectedRegionsState(prev => {
       const next = new Set(prev)
       if (next.has(region)) next.delete(region)
       else next.add(region)
@@ -198,7 +205,7 @@ export function useTimelineState() {
 
   const clearFilters = useCallback(() => {
     setSelectedCategories(new Set())
-    setSelectedRegions(new Set())
+    setSelectedRegionsState(new Set())
     setYearRange(DEFAULT_YEAR_RANGE)
     setSearchQuery('')
     setCoreOnly(true)
@@ -208,6 +215,7 @@ export function useTimelineState() {
     selectedCategories,
     toggleCategory,
     selectedRegions,
+    setSelectedRegions,
     toggleRegion,
     yearRange,
     setYearRange,

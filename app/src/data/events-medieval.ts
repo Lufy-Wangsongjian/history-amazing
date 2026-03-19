@@ -33,7 +33,7 @@ export const medievalEvents: HistoricalEvent[] = [
   { id: 'd013', year: 793, title: '维京时代开始', description: '维京人袭击英格兰林迪斯法恩修道院，开启了维京海上扩张时代。', category: 'exploration', region: 'norway', significance: 2 },
   { id: 'd014', year: 802, title: '高棉帝国建立', description: '阇耶跋摩二世建立高棉帝国，此后数百年成为东南亚最强大的帝国。', category: 'history', region: 'cambodia', significance: 2 },
   { id: 'd015', year: 850, title: '大摩拉维亚西里尔字母', description: '西里尔和美多德创制斯拉夫字母，用于翻译圣经，奠定了斯拉夫文字基础。', category: 'literature', region: 'czech', significance: 2 },
-  { id: 'd016', year: 862, title: '基辅罗斯建立', description: '维京人留里克建立基辅罗斯，奠定了俄罗斯国家的基础。', category: 'history', region: 'russia', significance: 2, figure: '留里克' },
+  { id: 'd016', year: 862, title: '基辅罗斯建立', description: '维京人留里克建立基辅罗斯，奠定了东欧斯拉夫文明与基辅传统国家发展的基础。', category: 'history', region: 'ukraine', significance: 2, figure: '留里克' },
   { id: 'd017', year: 900, title: '玛雅文明衰落', description: '中美洲玛雅古典文明神秘衰落，多座伟大城市被废弃。', category: 'history', region: 'mexico', significance: 2 },
   { id: 'd018', year: 907, title: '五代十国', description: '唐朝灭亡后中国进入五代十国分裂时期，军阀割据混战。', category: 'history', region: 'china', significance: 1 },
   { id: 'd019', year: 935, title: '高丽统一朝鲜', description: '王建建立高丽王朝，统一朝鲜半岛，开创了韩国历史的新时代。', category: 'history', region: 'korea', significance: 2, figure: '王建' },
@@ -54,12 +54,12 @@ export const medievalEvents: HistoricalEvent[] = [
   { id: 'd034', year: 1180, title: '日本武士文化形成', description: '源平合战后�的仓幕府建立，武士阶层成为日本社会的统治力量。', category: 'warfare', region: 'japan', significance: 2 },
   { id: 'd035', year: 630, title: '伊斯兰艺术兴起', description: '清真寺建筑和几何纹饰艺术蓬勃发展，形成独特的伊斯兰艺术风格。', category: 'art', region: 'saudi-arabia', significance: 2 },
   { id: 'd036', year: 1000, title: '越南独立', description: '越南从中国统治下获得独立，李朝建立，开启了越南自主发展的时代。', category: 'history', region: 'vietnam', significance: 2 },
-  { id: 'd037', year: 900, title: '加纳帝国', description: '西非加纳帝国依靠黄金和盐的贸易达到鼎盛，控制跨撒哈拉商路。', category: 'history', region: 'mali', significance: 2 },
+  { id: 'd037', year: 900, title: '加纳帝国', description: '西非加纳帝国依靠黄金和盐的贸易达到鼎盛，控制跨撒哈拉商路。', category: 'history', region: 'ghana', significance: 2 },
   { id: 'd038', year: 1000, title: '室利佛逝帝国', description: '东南亚室利佛逝帝国控制马六甲海峡贸易，佛教文化繁荣。', category: 'history', region: 'indonesia', significance: 2 },
   { id: 'd039', year: 1050, title: '宋代火药武器', description: '宋朝军队开始大规模使用火药武器，包括火箭、火炮等原始火器。', category: 'technology', region: 'china', significance: 3 },
   { id: 'd040', year: 794, title: '平安时代·日本文学', description: '日本进入平安时代，假名文字发明推动了日本文学的繁荣。', category: 'literature', region: 'japan', significance: 2 },
   { id: 'd041', year: 1150, title: '柬埔寨巴戎寺', description: '高棉帝国建造巴戎寺，以巨大的佛面石雕闻名于世。', category: 'architecture', region: 'cambodia', significance: 2 },
-  { id: 'd042', year: 988, title: '基辅罗斯皈依基督教', description: '弗拉基米尔大公为基辅罗斯选择东正教，影响了俄罗斯文化的发展方向。', category: 'religion', region: 'russia', significance: 2, figure: '弗拉基米尔' },
+  { id: 'd042', year: 988, title: '基辅罗斯皈依基督教', description: '弗拉基米尔大公为基辅罗斯选择东正教，深刻塑造了基辅传统与东斯拉夫宗教文化。', category: 'religion', region: 'ukraine', significance: 2, figure: '弗拉基米尔' },
   { id: 'd043', year: 1180, title: '萨拉丁收复耶路撒冷', description: '库尔德英雄萨拉丁从十字军手中收复耶路撒冷，展现了骑士精神。', category: 'warfare', region: 'iraq', significance: 2, figure: '萨拉丁' },
 ]
 
@@ -109,4 +109,9 @@ export const preRenaissanceEvents: HistoricalEvent[] = [
   { id: 'd079', year: 1000, title: '维京人到达北美', description: '维京探险家莱夫·埃里克森到达北美（文兰），比哥伦布早近500年。', category: 'exploration', region: 'norway', significance: 3, figure: '莱夫·埃里克森' },
   { id: 'd080', year: 1054, title: '东西教会大分裂', description: '基督教会发生大分裂，分为以罗马为中心的天主教和以君士坦丁堡为中心的东正教，影响延续至今。', category: 'religion', region: 'global', significance: 3 },
   { id: 'd081', year: 1170, title: '萨拉丁统一伊斯兰世界', description: '库尔德人萨拉丁统一埃及和叙利亚，收复耶路撒冷，展现了伊斯兰文明的骑士精神。', category: 'warfare', region: 'egypt', significance: 2, figure: '萨拉丁' },
+  { id: 'd082', year: 919, title: '开城成为高丽都城', description: '高丽将都城定于开城，朝鲜半岛北部逐渐形成稳定的政治与佛教文化中心。', category: 'history', region: 'north-korea', significance: 2 },
+  { id: 'd083', year: 1037, title: '基辅圣索菲亚大教堂', description: '基辅圣索菲亚大教堂完成后成为东正教世界的重要宗教与艺术中心，象征基辅罗斯的文明高度。', category: 'architecture', region: 'ukraine', significance: 3 },
+  { id: 'd084', year: 1190, title: '斯图代尼察修道院', description: '斯图代尼察修道院建成并成为塞尔维亚中世纪宗教艺术与王朝纪念建筑的代表。', category: 'architecture', region: 'serbia', significance: 2 },
+  { id: 'd085', year: 1346, title: '塞尔维亚帝国加冕', description: '斯特凡·杜尚加冕为皇帝，塞尔维亚中世纪国家版图与法典建设达到高峰。', category: 'history', region: 'serbia', significance: 2, figure: '斯特凡·杜尚' },
+  { id: 'd086', year: 1353, title: '澜沧王国建立', description: '法昂统一老挝地区建立澜沧王国，琅勃拉邦逐渐成为上座部佛教文化中心。', category: 'history', region: 'laos', significance: 2, figure: '法昂' },
 ]

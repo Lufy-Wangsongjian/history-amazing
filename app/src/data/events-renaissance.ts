@@ -44,6 +44,10 @@ export const renaissanceEvents: HistoricalEvent[] = [
   { id: 'f028', year: 1500, title: '葡萄牙到达巴西', description: '佩德罗·卡布拉尔到达巴西，开启了葡萄牙在南美洲的殖民史。', category: 'exploration', region: 'brazil', significance: 2, figure: '卡布拉尔' },
   { id: 'f029', year: 1550, title: '日本茶道', description: '千利休将茶道发展为日本独特的艺术和哲学体系，追求"和敬清寂"。', category: 'art', region: 'japan', significance: 2, figure: '千利休' },
   { id: 'f030', year: 1470, title: '越南后黎朝·黎圣宗', description: '越南黎圣宗推行儒学教育和科举制度，后黎朝进入黄金时期。', category: 'history', region: 'vietnam', significance: 1 },
+  { id: 'f031', year: 1465, title: '哈萨克汗国建立', description: '克烈和贾尼别克建立哈萨克汗国，草原诸部开始形成稳定的汗国政治结构。', category: 'history', region: 'kazakhstan', significance: 2 },
+  { id: 'f032', year: 1545, title: '波托西银山开发', description: '玻利维亚波托西银矿被大规模开采，安第斯白银迅速卷入全球贸易网络。', category: 'technology', region: 'bolivia', significance: 3 },
+  { id: 'f033', year: 1557, title: '澳门开埠', description: '葡萄牙商人在澳门长期定居，澳门逐渐发展为连接东亚与欧洲的重要港口。', category: 'exploration', region: 'macau', significance: 2 },
+  { id: 'f034', year: 1560, title: '香通寺建成', description: '琅勃拉邦香通寺建成，金色屋檐与镶嵌壁画成为老挝佛教建筑经典。', category: 'architecture', region: 'laos', significance: 2 },
 ]
 
 // ============ 科学革命 (1600 ~ 1800) ============
@@ -100,4 +104,6 @@ export const scientificRevolutionEvents: HistoricalEvent[] = [
   { id: 'f073', year: 1660, title: '斯宾诺莎哲学', description: '荷兰哲学家斯宾诺莎发展了泛神论哲学体系，影响了后来的理性主义。', category: 'philosophy', region: 'netherlands', significance: 2, figure: '斯宾诺莎' },
   { id: 'f074', year: 1752, title: '富兰克林·电学实验', description: '本杰明·富兰克林进行风筝实验证明闪电是电现象，发明避雷针。', category: 'science', region: 'usa', significance: 2, figure: '富兰克林' },
   { id: 'f075', year: 1780, title: '日本松尾芭蕉·俳句', description: '松尾芭蕉将俳句提升为一种深刻的文学艺术形式，影响世界文学。', category: 'literature', region: 'japan', significance: 2, figure: '松尾芭蕉' },
+  { id: 'f076', year: 1624, title: '热兰遮城建成', description: '台南热兰遮城兴建，见证中国台湾海洋贸易与多元文化交流的早期节点。', category: 'architecture', region: 'taiwan', significance: 2 },
+  { id: 'f077', year: 1634, title: '不丹统一与宗堡体系', description: '夏宗阿旺南杰统一不丹诸部，并以宗堡体系奠定政教合一的国家结构。', category: 'history', region: 'bhutan', significance: 2, figure: '夏宗阿旺南杰' },
 ]

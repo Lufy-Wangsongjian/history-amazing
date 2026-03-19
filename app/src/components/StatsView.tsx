@@ -37,7 +37,7 @@ export function StatsView({ events, onSelectEvent }: StatsViewProps) {
   const continentStats = useMemo(() => {
     const regionCounts: Record<string, number> = {}
     events.forEach(e => { regionCounts[e.region] = (regionCounts[e.region] || 0) + 1 })
-    return CONTINENT_GROUPS.filter(g => g.name !== '跨区域').map(group => ({
+    return CONTINENT_GROUPS.map(group => ({
       name: group.name,
       count: group.regions.reduce((sum, r) => sum + (regionCounts[r] || 0), 0),
       topRegions: group.regions

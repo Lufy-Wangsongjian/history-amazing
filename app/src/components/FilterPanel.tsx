@@ -1,6 +1,6 @@
 import { CATEGORY_CONFIG, REGION_CONFIG } from '@/data/types'
 import type { Category, Region } from '@/data/types'
-import { CONTINENT_GROUPS } from '@/data/regions'
+import { ALL_REGIONS, CONTINENT_GROUPS } from '@/data/regions'
 import { Badge } from '@/components/ui/badge'
 import { Slider } from '@/components/ui/slider'
 import { Input } from '@/components/ui/input'
@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import type { ViewMode } from '@/hooks/useTimelineState'
 import { formatYear } from '@/data/types'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 
 const TIMELINE_MIN_YEAR = -4000
 const TIMELINE_MAX_YEAR = 2030
@@ -44,10 +44,13 @@ const ERA_PRESETS = [
   { label: '全部', range: [-4000, 2030] as [number, number] },
 ]
 
+const HIDDEN_REGIONS: Region[] = ['global']
+
 interface FilterPanelProps {
   selectedCategories: Set<Category>
   toggleCategory: (cat: Category) => void
   selectedRegions: Set<Region>
+  setSelectedRegions: (regions: Iterable<Region>) => void
   toggleRegion: (region: Region) => void
   yearRange: [number, number]
   setYearRange: (range: [number, number]) => void
@@ -69,7 +72,7 @@ function clampYear(year: number) {
 
 export function FilterPanel({
   selectedCategories, toggleCategory,
-  selectedRegions, toggleRegion,
+  selectedRegions, setSelectedRegions, toggleRegion,
   yearRange, setYearRange,
   viewMode, setViewMode,
   searchQuery, setSearchQuery,
@@ -91,15 +94,35 @@ export function FilterPanel({
   }, [])
 
   const toggleContinentAll = useCallback((regions: Region[]) => {
-    const allSelected = regions.every(r => selectedRegions.has(r))
-    regions.forEach(r => {
-      if (allSelected) {
-        if (selectedRegions.has(r)) toggleRegion(r)
-      } else {
-        if (!selectedRegions.has(r)) toggleRegion(r)
-      }
+    const next = new Set(selectedRegions)
+    const allSelected = regions.every(region => next.has(region))
+
+    regions.forEach(region => {
+      if (allSelected) next.delete(region)
+      else next.add(region)
     })
-  }, [selectedRegions, toggleRegion])
+
+    setSelectedRegions(next)
+  }, [selectedRegions, setSelectedRegions])
+
+  const visibleSelectedRegionCount = useMemo(
+    () => ALL_REGIONS.filter(region => selectedRegions.has(region)).length,
+    [selectedRegions]
+  )
+
+  const allRegionsSelected = visibleSelectedRegionCount === ALL_REGIONS.length && ALL_REGIONS.length > 0
+
+  useEffect(() => {
+    const visibleRegions = Array.from(selectedRegions).filter(region => !HIDDEN_REGIONS.includes(region))
+
+    if (visibleRegions.length === selectedRegions.size) return
+
+    setSelectedRegions(visibleRegions)
+  }, [selectedRegions, setSelectedRegions])
+
+  const toggleAllRegions = useCallback(() => {
+    setSelectedRegions(allRegionsSelected ? [] : ALL_REGIONS)
+  }, [allRegionsSelected, setSelectedRegions])
 
   const commitYearInput = useCallback((key: 'min' | 'max', rawValue: string) => {
     const fallbackValue = key === 'min' ? yearRange[0] : yearRange[1]
@@ -152,6 +175,16 @@ export function FilterPanel({
           </p>
         </div>
         <div className="flex items-center gap-1">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleAllRegions}
+            className="h-7 px-2 text-[10px]"
+            title={allRegionsSelected ? '取消全选地区' : '全选地区'}
+          >
+            <CheckSquare size={12} />
+            {allRegionsSelected ? '取消' : '全选'}
+          </Button>
           <button
             onClick={clearFilters}
             className="p-1.5 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground"
@@ -175,23 +208,25 @@ export function FilterPanel({
 
       <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
         <div className="p-4 space-y-5">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
-            <Input
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              placeholder="搜索事件、人物..."
-              className="pl-8 h-8 text-xs bg-background/50"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                aria-label="清空搜索词"
-              >
-                <X size={12} />
-              </button>
-            )}
+          <div>
+            <div className="relative">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
+              <Input
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="搜索事件、人物..."
+                className="pl-8 h-8 text-xs bg-background/50"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  aria-label="清空搜索词"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {POPULAR_SEARCHES.map(keyword => (
                 <button
@@ -361,7 +396,12 @@ export function FilterPanel({
           <Separator />
 
           <div>
-            <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">国家 / 地区</p>
+            <div className="mb-2">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">国家 / 地区</p>
+              <p className="mt-0.5 text-[10px] text-muted-foreground">
+                已选 {visibleSelectedRegionCount} / {ALL_REGIONS.length}
+              </p>
+            </div>
             <div className="space-y-1.5">
               {CONTINENT_GROUPS.map(group => {
                 const isExpanded = expandedContinents.has(group.name)

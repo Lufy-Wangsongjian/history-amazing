@@ -16,13 +16,18 @@ export type Category =
 export type Region =
   // 东亚
   | 'china'           // 中国
+  | 'taiwan'          // 中国台湾
+  | 'hong-kong'       // 中国香港
+  | 'macau'           // 中国澳门
   | 'japan'           // 日本
   | 'korea'           // 韩国
+  | 'north-korea'     // 朝鲜
   | 'mongolia'        // 蒙古
   // 东南亚
   | 'vietnam'         // 越南
   | 'thailand'        // 泰国
   | 'cambodia'        // 柬埔寨
+  | 'laos'            // 老挝
   | 'myanmar'         // 缅甸
   | 'indonesia'       // 印度尼西亚
   | 'philippines'     // 菲律宾
@@ -30,14 +35,19 @@ export type Region =
   | 'singapore'       // 新加坡
   // 南亚
   | 'india'           // 印度
-  | 'pakistan'         // 巴基斯坦
+  | 'pakistan'        // 巴基斯坦
+  | 'bangladesh'      // 孟加拉国
   | 'sri-lanka'       // 斯里兰卡
   | 'nepal'           // 尼泊尔
+  | 'bhutan'          // 不丹
   // 中亚与西亚
+  | 'kazakhstan'      // 哈萨克斯坦
   | 'iran'            // 伊朗/波斯
   | 'iraq'            // 伊拉克
   | 'turkey'          // 土耳其
   | 'israel'          // 以色列
+  | 'lebanon'         // 黎巴嫩
+  | 'jordan'          // 约旦
   | 'saudi-arabia'    // 沙特阿拉伯
   | 'syria'           // 叙利亚
   | 'uzbekistan'      // 乌兹别克斯坦
@@ -51,10 +61,12 @@ export type Region =
   | 'portugal'        // 葡萄牙
   | 'greece'          // 希腊
   | 'russia'          // 俄罗斯
+  | 'ukraine'         // 乌克兰
   | 'netherlands'     // 荷兰
   | 'poland'          // 波兰
   | 'austria'         // 奥地利
   | 'sweden'          // 瑞典
+  | 'finland'         // 芬兰
   | 'switzerland'     // 瑞士
   | 'belgium'         // 比利时
   | 'czech'           // 捷克
@@ -63,13 +75,17 @@ export type Region =
   | 'ireland'         // 爱尔兰
   | 'romania'         // 罗马尼亚
   | 'hungary'         // 匈牙利
+  | 'serbia'          // 塞尔维亚
   // 非洲
   | 'egypt'           // 埃及
   | 'ethiopia'        // 埃塞俄比亚
   | 'nigeria'         // 尼日利亚
   | 'south-africa'    // 南非
   | 'morocco'         // 摩洛哥
+  | 'algeria'         // 阿尔及利亚
   | 'mali'            // 马里
+  | 'sudan'           // 苏丹
+  | 'ghana'           // 加纳
   | 'kenya'           // 肯尼亚
   | 'tanzania'        // 坦桑尼亚
   // 美洲
@@ -79,6 +95,8 @@ export type Region =
   | 'argentina'       // 阿根廷
   | 'peru'            // 秘鲁
   | 'colombia'        // 哥伦比亚
+  | 'venezuela'       // 委内瑞拉
+  | 'bolivia'         // 玻利维亚
   | 'canada'          // 加拿大
   | 'chile'           // 智利
   | 'cuba'            // 古巴
@@ -129,13 +147,18 @@ export const CATEGORY_CONFIG: Record<Category, { label: string; color: string; i
 export const REGION_CONFIG: Record<Region, { label: string; flag: string; color: string }> = {
   // 东亚
   'china':         { label: '中国',       flag: '🇨🇳', color: '#DE2910' },
+  'taiwan':        { label: '中国台湾',   flag: '🇹🇼', color: '#0F6CBD' },
+  'hong-kong':     { label: '中国香港',   flag: '🇭🇰', color: '#C8102E' },
+  'macau':         { label: '中国澳门',   flag: '🇲🇴', color: '#0B7A5B' },
   'japan':         { label: '日本',       flag: '🇯🇵', color: '#BC002D' },
   'korea':         { label: '韩国',       flag: '🇰🇷', color: '#003478' },
+  'north-korea':   { label: '朝鲜',       flag: '🇰🇵', color: '#024FA2' },
   'mongolia':      { label: '蒙古',       flag: '🇲🇳', color: '#015197' },
   // 东南亚
   'vietnam':       { label: '越南',       flag: '🇻🇳', color: '#DA251D' },
   'thailand':      { label: '泰国',       flag: '🇹🇭', color: '#2D2A4A' },
   'cambodia':      { label: '柬埔寨',     flag: '🇰🇭', color: '#032EA1' },
+  'laos':          { label: '老挝',       flag: '🇱🇦', color: '#002868' },
   'myanmar':       { label: '缅甸',       flag: '🇲🇲', color: '#FECB00' },
   'indonesia':     { label: '印度尼西亚', flag: '🇮🇩', color: '#CE1126' },
   'philippines':   { label: '菲律宾',     flag: '🇵🇭', color: '#0038A8' },
@@ -143,14 +166,19 @@ export const REGION_CONFIG: Record<Region, { label: string; flag: string; color:
   'singapore':     { label: '新加坡',     flag: '🇸🇬', color: '#EF3340' },
   // 南亚
   'india':         { label: '印度',       flag: '🇮🇳', color: '#FF9933' },
-  'pakistan':       { label: '巴基斯坦',   flag: '🇵🇰', color: '#01411C' },
+  'pakistan':      { label: '巴基斯坦',   flag: '🇵🇰', color: '#01411C' },
+  'bangladesh':    { label: '孟加拉国',   flag: '🇧🇩', color: '#006A4E' },
   'sri-lanka':     { label: '斯里兰卡',   flag: '🇱🇰', color: '#8D153A' },
   'nepal':         { label: '尼泊尔',     flag: '🇳🇵', color: '#DC143C' },
+  'bhutan':        { label: '不丹',       flag: '🇧🇹', color: '#FF8F1C' },
   // 中亚与西亚
+  'kazakhstan':    { label: '哈萨克斯坦', flag: '🇰🇿', color: '#00AFCA' },
   'iran':          { label: '伊朗',       flag: '🇮🇷', color: '#239F40' },
   'iraq':          { label: '伊拉克',     flag: '🇮🇶', color: '#007A3D' },
   'turkey':        { label: '土耳其',     flag: '🇹🇷', color: '#E30A17' },
   'israel':        { label: '以色列',     flag: '🇮🇱', color: '#0038B8' },
+  'lebanon':       { label: '黎巴嫩',     flag: '🇱🇧', color: '#ED1C24' },
+  'jordan':        { label: '约旦',       flag: '🇯🇴', color: '#007A3D' },
   'saudi-arabia':  { label: '沙特阿拉伯', flag: '🇸🇦', color: '#006C35' },
   'syria':         { label: '叙利亚',     flag: '🇸🇾', color: '#CE1126' },
   'uzbekistan':    { label: '乌兹别克斯坦', flag: '🇺🇿', color: '#1EB53A' },
@@ -164,10 +192,12 @@ export const REGION_CONFIG: Record<Region, { label: string; flag: string; color:
   'portugal':      { label: '葡萄牙',     flag: '🇵🇹', color: '#006600' },
   'greece':        { label: '希腊',       flag: '🇬🇷', color: '#0D5EAF' },
   'russia':        { label: '俄罗斯',     flag: '🇷🇺', color: '#0039A6' },
+  'ukraine':       { label: '乌克兰',     flag: '🇺🇦', color: '#0057B7' },
   'netherlands':   { label: '荷兰',       flag: '🇳🇱', color: '#AE1C28' },
   'poland':        { label: '波兰',       flag: '🇵🇱', color: '#DC143C' },
   'austria':       { label: '奥地利',     flag: '🇦🇹', color: '#ED2939' },
   'sweden':        { label: '瑞典',       flag: '🇸🇪', color: '#006AA7' },
+  'finland':       { label: '芬兰',       flag: '🇫🇮', color: '#003580' },
   'switzerland':   { label: '瑞士',       flag: '🇨🇭', color: '#FF0000' },
   'belgium':       { label: '比利时',     flag: '🇧🇪', color: '#2D2926' },
   'czech':         { label: '捷克',       flag: '🇨🇿', color: '#11457E' },
@@ -176,13 +206,17 @@ export const REGION_CONFIG: Record<Region, { label: string; flag: string; color:
   'ireland':       { label: '爱尔兰',     flag: '🇮🇪', color: '#169B62' },
   'romania':       { label: '罗马尼亚',   flag: '🇷🇴', color: '#002B7F' },
   'hungary':       { label: '匈牙利',     flag: '🇭🇺', color: '#436F4D' },
+  'serbia':        { label: '塞尔维亚',   flag: '🇷🇸', color: '#C6363C' },
   // 非洲
   'egypt':         { label: '埃及',       flag: '🇪🇬', color: '#C8102E' },
   'ethiopia':      { label: '埃塞俄比亚', flag: '🇪🇹', color: '#009739' },
   'nigeria':       { label: '尼日利亚',   flag: '🇳🇬', color: '#008751' },
   'south-africa':  { label: '南非',       flag: '🇿🇦', color: '#007749' },
   'morocco':       { label: '摩洛哥',     flag: '🇲🇦', color: '#C1272D' },
+  'algeria':       { label: '阿尔及利亚', flag: '🇩🇿', color: '#006233' },
   'mali':          { label: '马里',       flag: '🇲🇱', color: '#14B53A' },
+  'sudan':         { label: '苏丹',       flag: '🇸🇩', color: '#D21034' },
+  'ghana':         { label: '加纳',       flag: '🇬🇭', color: '#CE1126' },
   'kenya':         { label: '肯尼亚',     flag: '🇰🇪', color: '#006600' },
   'tanzania':      { label: '坦桑尼亚',   flag: '🇹🇿', color: '#1EB53A' },
   // 美洲
@@ -192,6 +226,8 @@ export const REGION_CONFIG: Record<Region, { label: string; flag: string; color:
   'argentina':     { label: '阿根廷',     flag: '🇦🇷', color: '#74ACDF' },
   'peru':          { label: '秘鲁',       flag: '🇵🇪', color: '#D91023' },
   'colombia':      { label: '哥伦比亚',   flag: '🇨🇴', color: '#FCD116' },
+  'venezuela':     { label: '委内瑞拉',   flag: '🇻🇪', color: '#F4C300' },
+  'bolivia':       { label: '玻利维亚',   flag: '🇧🇴', color: '#D52B1E' },
   'canada':        { label: '加拿大',     flag: '🇨🇦', color: '#FF0000' },
   'chile':         { label: '智利',       flag: '🇨🇱', color: '#D52B1E' },
   'cuba':          { label: '古巴',       flag: '🇨🇺', color: '#002A8F' },
