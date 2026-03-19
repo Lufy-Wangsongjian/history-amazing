@@ -1,19 +1,37 @@
 import { useState, useMemo, useCallback, useDeferredValue, useEffect } from 'react'
 import type { Category, Region, HistoricalEvent } from '@/data/types'
-import { historicalEvents } from '@/data/events'
+import { fetchAllEvents, fetchStats } from '@/lib/api'
 
-export type ViewMode = 'timeline' | 'matrix' | 'stats'
+export type ViewMode = 'timeline' | 'matrix' | 'stats' | 'compare'
 
-// URL 参数解析/序列化工具
+export const DEFAULT_YEAR_RANGE: [number, number] = [-4000, 2030]
+const EVENTS_PAGE_SIZE = 2000
+const DERIVED_EVENT_PATTERN = /_(?:context|acceleration|diffusion|legacy)$/
+
+function parseFiniteNumber(value: string | null) {
+  if (value === null) return undefined
+  const parsed = Number(value)
+  return Number.isFinite(parsed) ? parsed : undefined
+}
+
+function parseViewMode(value: string | null): ViewMode | undefined {
+  if (value === 'timeline' || value === 'matrix' || value === 'stats' || value === 'compare') {
+    return value
+  }
+
+  return undefined
+}
+
 function parseURLState() {
   const params = new URLSearchParams(window.location.search)
   const categories = params.get('cat')?.split(',').filter(Boolean) as Category[] | undefined
   const regions = params.get('reg')?.split(',').filter(Boolean) as Region[] | undefined
-  const yearMin = params.get('ymin') ? Number(params.get('ymin')) : undefined
-  const yearMax = params.get('ymax') ? Number(params.get('ymax')) : undefined
-  const view = params.get('view') as ViewMode | undefined
+  const yearMin = parseFiniteNumber(params.get('ymin'))
+  const yearMax = parseFiniteNumber(params.get('ymax'))
+  const view = parseViewMode(params.get('view'))
   const search = params.get('q') || undefined
-  return { categories, regions, yearMin, yearMax, view, search }
+  const coreOnly = params.get('core') === '0' ? false : true
+  return { categories, regions, yearMin, yearMax, view, search, coreOnly }
 }
 
 function syncURLState(state: {
@@ -22,65 +40,139 @@ function syncURLState(state: {
   yearRange: [number, number]
   viewMode: ViewMode
   searchQuery: string
+  coreOnly: boolean
 }) {
   const params = new URLSearchParams()
   if (state.selectedCategories.size > 0) params.set('cat', Array.from(state.selectedCategories).join(','))
   if (state.selectedRegions.size > 0) params.set('reg', Array.from(state.selectedRegions).join(','))
-  if (state.yearRange[0] !== -4000) params.set('ymin', String(state.yearRange[0]))
-  if (state.yearRange[1] !== 2030) params.set('ymax', String(state.yearRange[1]))
+  if (state.yearRange[0] !== DEFAULT_YEAR_RANGE[0]) params.set('ymin', String(state.yearRange[0]))
+  if (state.yearRange[1] !== DEFAULT_YEAR_RANGE[1]) params.set('ymax', String(state.yearRange[1]))
   if (state.viewMode !== 'timeline') params.set('view', state.viewMode)
   if (state.searchQuery) params.set('q', state.searchQuery)
+  if (!state.coreOnly) params.set('core', '0')
   const str = params.toString()
   const url = str ? `${window.location.pathname}?${str}` : window.location.pathname
   window.history.replaceState(null, '', url)
 }
 
+function isDerivedEvent(event: HistoricalEvent) {
+  return DERIVED_EVENT_PATTERN.test(event.id)
+}
+
 export function useTimelineState() {
-  // 从 URL 恢复初始状态
   const urlState = useMemo(() => parseURLState(), [])
 
   const [selectedCategories, setSelectedCategories] = useState<Set<Category>>(
-    () => urlState.categories ? new Set(urlState.categories) : new Set()
+    () => (urlState.categories ? new Set(urlState.categories) : new Set())
   )
   const [selectedRegions, setSelectedRegions] = useState<Set<Region>>(
-    () => urlState.regions ? new Set(urlState.regions) : new Set()
+    () => (urlState.regions ? new Set(urlState.regions) : new Set())
   )
   const [yearRange, setYearRange] = useState<[number, number]>(
-    () => [urlState.yearMin ?? -4000, urlState.yearMax ?? 2030]
+    () => [urlState.yearMin ?? DEFAULT_YEAR_RANGE[0], urlState.yearMax ?? DEFAULT_YEAR_RANGE[1]]
   )
   const [viewMode, setViewMode] = useState<ViewMode>(urlState.view ?? 'timeline')
   const [searchQuery, setSearchQuery] = useState(urlState.search ?? '')
-  const [selectedEvent, setSelectedEvent] = useState<HistoricalEvent | null>(null)
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
   const [focusYear, setFocusYear] = useState<number | null>(null)
+  const [filteredEvents, setFilteredEvents] = useState<HistoricalEvent[]>([])
+  const [statsTotal, setStatsTotal] = useState(0)
+  const [coreTotalEvents, setCoreTotalEvents] = useState(0)
+  const [error, setError] = useState<string | null>(null)
+  const [coreOnly, setCoreOnly] = useState(urlState.coreOnly)
+  const [loadedQueryKey, setLoadedQueryKey] = useState<string | null>(null)
 
-  // 搜索防抖 — 使用 useDeferredValue 避免每次按键都触发全量过滤
   const deferredSearch = useDeferredValue(searchQuery)
+  const normalizedSearch = useMemo(() => deferredSearch.trim(), [deferredSearch])
 
-  // URL 同步
   useEffect(() => {
-    syncURLState({ selectedCategories, selectedRegions, yearRange, viewMode, searchQuery: deferredSearch })
-  }, [selectedCategories, selectedRegions, yearRange, viewMode, deferredSearch])
+    syncURLState({
+      selectedCategories,
+      selectedRegions,
+      yearRange,
+      viewMode,
+      searchQuery: normalizedSearch,
+      coreOnly,
+    })
+  }, [selectedCategories, selectedRegions, yearRange, viewMode, normalizedSearch, coreOnly])
 
-  const filteredEvents = useMemo(() => {
-    return historicalEvents.filter(event => {
-      // 类目筛选
-      if (selectedCategories.size > 0 && !selectedCategories.has(event.category)) return false
-      // 地区筛选
-      if (selectedRegions.size > 0 && !selectedRegions.has(event.region)) return false
-      // 年份范围
-      if (event.year < yearRange[0] || event.year > yearRange[1]) return false
-      // 搜索（使用 deferred 值）
-      if (deferredSearch) {
-        const q = deferredSearch.toLowerCase()
-        return (
-          event.title.toLowerCase().includes(q) ||
-          event.description.toLowerCase().includes(q) ||
-          (event.figure && event.figure.toLowerCase().includes(q))
-        )
-      }
-      return true
-    }).sort((a, b) => a.year - b.year)
-  }, [selectedCategories, selectedRegions, yearRange, deferredSearch])
+  const query = useMemo(() => {
+    const categories = Array.from(selectedCategories)
+    const regions = Array.from(selectedRegions)
+
+    return {
+      categories: categories.length > 0 ? categories : undefined,
+      regions: regions.length > 0 ? regions : undefined,
+      yearMin: yearRange[0] !== DEFAULT_YEAR_RANGE[0] ? yearRange[0] : undefined,
+      yearMax: yearRange[1] !== DEFAULT_YEAR_RANGE[1] ? yearRange[1] : undefined,
+      search: normalizedSearch || undefined,
+      limit: EVENTS_PAGE_SIZE,
+      offset: 0,
+    }
+  }, [selectedCategories, selectedRegions, yearRange, normalizedSearch])
+
+  const queryKey = useMemo(() => JSON.stringify(query), [query])
+
+  const displayEvents = useMemo(() => {
+    if (!coreOnly) return filteredEvents
+    return filteredEvents.filter(event => !isDerivedEvent(event))
+  }, [filteredEvents, coreOnly])
+
+  const selectedEvent = useMemo(() => {
+    if (!selectedEventId) return null
+    return filteredEvents.find(event => event.id === selectedEventId) ?? null
+  }, [filteredEvents, selectedEventId])
+
+  const visibleTotalEvents = useMemo(() => {
+    if (coreOnly) {
+      return coreTotalEvents || displayEvents.length
+    }
+
+    return statsTotal || filteredEvents.length
+  }, [coreOnly, coreTotalEvents, displayEvents.length, filteredEvents.length, statsTotal])
+
+  const isLoading = loadedQueryKey !== queryKey
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    fetchStats(controller.signal)
+      .then(stats => {
+        setStatsTotal(stats.total)
+        setCoreTotalEvents(stats.coreTotal)
+      })
+      .catch((fetchError: unknown) => {
+        if ((fetchError as DOMException).name !== 'AbortError') {
+          console.error('加载统计信息失败', fetchError)
+        }
+      })
+
+    return () => controller.abort()
+  }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    fetchAllEvents(query, controller.signal)
+      .then(response => {
+        if (controller.signal.aborted) return
+        setFilteredEvents(response.data)
+        setError(null)
+        setLoadedQueryKey(queryKey)
+      })
+      .catch((fetchError: unknown) => {
+        if ((fetchError as DOMException).name === 'AbortError') {
+          return
+        }
+
+        console.error('加载历史事件失败', fetchError)
+        setFilteredEvents([])
+        setError('历史事件加载失败，请确认后端服务已启动。')
+        setLoadedQueryKey(queryKey)
+      })
+
+    return () => controller.abort()
+  }, [query, queryKey])
 
   const toggleCategory = useCallback((cat: Category) => {
     setSelectedCategories(prev => {
@@ -100,23 +192,39 @@ export function useTimelineState() {
     })
   }, [])
 
+  const setSelectedEvent = useCallback((event: HistoricalEvent | null) => {
+    setSelectedEventId(event?.id ?? null)
+  }, [])
+
   const clearFilters = useCallback(() => {
     setSelectedCategories(new Set())
     setSelectedRegions(new Set())
-    setYearRange([-4000, 2030])
+    setYearRange(DEFAULT_YEAR_RANGE)
     setSearchQuery('')
+    setCoreOnly(true)
   }, [])
 
   return {
-    selectedCategories, toggleCategory,
-    selectedRegions, toggleRegion,
-    yearRange, setYearRange,
-    viewMode, setViewMode,
-    searchQuery, setSearchQuery,
-    selectedEvent, setSelectedEvent,
-    focusYear, setFocusYear,
-    filteredEvents,
+    selectedCategories,
+    toggleCategory,
+    selectedRegions,
+    toggleRegion,
+    yearRange,
+    setYearRange,
+    viewMode,
+    setViewMode,
+    searchQuery,
+    setSearchQuery,
+    selectedEvent,
+    setSelectedEvent,
+    focusYear,
+    setFocusYear,
+    filteredEvents: displayEvents,
+    coreOnly,
+    setCoreOnly,
     clearFilters,
-    totalEvents: historicalEvents.length,
+    totalEvents: visibleTotalEvents,
+    isLoading,
+    error,
   }
 }

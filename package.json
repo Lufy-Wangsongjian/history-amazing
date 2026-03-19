@@ -1,0 +1,17 @@
+{
+  "name": "history-amazing",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n server,app -c green,blue \"npm run dev:server\" \"npm run dev:app\"",
+    "dev:app": "npm --prefix app run dev",
+    "dev:server": "npm --prefix server run dev",
+    "build": "npm --prefix app run build",
+    "build:app": "npm --prefix app run build",
+    "seed": "npm --prefix server run seed",
+    "start:server": "npm --prefix server run start",
+    "install:all": "npm --prefix app install && npm --prefix server install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

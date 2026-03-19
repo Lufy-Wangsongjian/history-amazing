@@ -59,7 +59,7 @@ export function StatsView({ events, onSelectEvent }: StatsViewProps) {
   const maxCont = Math.max(...continentStats.map(c => c.count), 1)
 
   return (
-    <div className="flex-1 overflow-hidden">
+    <div className="flex-1 min-h-0 overflow-hidden">
       <ScrollArea className="h-full">
         <div className="p-6 max-w-5xl mx-auto">
           {/* Title */}

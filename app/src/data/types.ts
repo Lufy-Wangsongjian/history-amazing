@@ -94,6 +94,7 @@ export interface HistoricalEvent {
   endYear?: number            // 可选，表示持续时间
   title: string
   description: string
+  details?: string            // 展开后的详细介绍
   category: Category
   region: Region
   significance: 1 | 2 | 3    // 重要程度：1普通 2重要 3里程碑
