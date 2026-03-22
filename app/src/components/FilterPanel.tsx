@@ -175,16 +175,6 @@ export function FilterPanel({
           </p>
         </div>
         <div className="flex items-center gap-1">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={toggleAllRegions}
-            className="h-7 px-2 text-[10px]"
-            title={allRegionsSelected ? '取消全选地区' : '全选地区'}
-          >
-            <CheckSquare size={12} />
-            {allRegionsSelected ? '取消' : '全选'}
-          </Button>
           <button
             onClick={clearFilters}
             className="p-1.5 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground"
@@ -396,11 +386,23 @@ export function FilterPanel({
           <Separator />
 
           <div>
-            <div className="mb-2">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">国家 / 地区</p>
-              <p className="mt-0.5 text-[10px] text-muted-foreground">
-                已选 {visibleSelectedRegionCount} / {ALL_REGIONS.length}
-              </p>
+            <div className="mb-2 flex items-start justify-between gap-2">
+              <div>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">国家 / 地区</p>
+                <p className="mt-0.5 text-[10px] text-muted-foreground">
+                  已选 {visibleSelectedRegionCount} / {ALL_REGIONS.length}
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleAllRegions}
+                className="h-7 shrink-0 px-2 text-[10px]"
+                title={allRegionsSelected ? '取消全选地区' : '全选地区'}
+              >
+                <CheckSquare size={12} />
+                {allRegionsSelected ? '取消' : '全选'}
+              </Button>
             </div>
             <div className="space-y-1.5">
               {CONTINENT_GROUPS.map(group => {

@@ -1,7 +1,15 @@
 import express from 'express'
 import cors from 'cors'
+import fs from 'fs'
+import path from 'path'
 import type Database from 'better-sqlite3'
+import { fileURLToPath } from 'url'
 import { getDB, closeDB } from './db.js'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const CLIENT_DIST_PATH = path.resolve(__dirname, '../../app/dist')
+const CLIENT_INDEX_PATH = path.join(CLIENT_DIST_PATH, 'index.html')
+const HAS_CLIENT_BUILD = fs.existsSync(CLIENT_INDEX_PATH)
 
 const app = express()
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3001
@@ -338,8 +346,20 @@ app.get('/api/stats', (_req, res) => {
   res.json({ total, coreTotal, byCategory, byRegion, bySignificance, yearRange })
 })
 
+app.get('/health', (_req, res) => {
+  res.json({ ok: true, hasClientBuild: HAS_CLIENT_BUILD })
+})
+
+if (HAS_CLIENT_BUILD) {
+  app.use(express.static(CLIENT_DIST_PATH))
+
+  app.get(/^\/(?!api(?:\/|$)|health(?:\/|$)).*/, (_req, res) => {
+    res.sendFile(CLIENT_INDEX_PATH)
+  })
+}
+
 app.listen(PORT, () => {
-  console.log(`Chrono Atlas API 已启动: http://localhost:${PORT}`)
+  console.log(`Chrono Atlas 服务已启动: http://localhost:${PORT}`)
 })
 
 process.on('SIGINT', () => {

@@ -71,17 +71,17 @@ export function TodayInHistory({ open, onClose, events, onSelectEvent }: TodayIn
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-lg bg-card rounded-2xl border border-border/50 shadow-2xl overflow-hidden">
+      <div className="relative flex max-h-[min(84vh,820px)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-border/50 bg-card shadow-2xl">
         {/* Header */}
-        <div className="px-5 py-4 border-b border-border/50 bg-gradient-to-r from-amber-500/10 to-orange-500/10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
+        <div className="border-b border-border/50 bg-gradient-to-r from-amber-500/10 to-orange-500/10 px-5 py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-orange-500/20">
                 <CalendarDays size={20} className="text-white" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h2 className="text-base font-bold text-foreground">历史上的今天</h2>
                 <p className="text-xs text-muted-foreground">
                   {month}月{day}日 — 在漫长的历史中，今天曾发生过什么？
@@ -90,7 +90,7 @@ export function TodayInHistory({ open, onClose, events, onSelectEvent }: TodayIn
             </div>
             <button
               onClick={onClose}
-              className="p-2 rounded-lg hover:bg-accent transition-colors text-muted-foreground hover:text-foreground"
+              className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
               <X size={18} />
             </button>
@@ -98,13 +98,13 @@ export function TodayInHistory({ open, onClose, events, onSelectEvent }: TodayIn
         </div>
 
         {/* Content */}
-        <ScrollArea className="max-h-[60vh]">
-          <div className="p-5 space-y-3">
+        <ScrollArea className="min-h-0 flex-1" type="hover">
+          <div className="space-y-3 p-5">
             {todayEvents.length === 0 ? (
-              <div className="text-center py-12">
+              <div className="py-12 text-center">
                 <Sparkles className="mx-auto mb-3 text-muted-foreground" size={36} />
                 <p className="text-sm text-muted-foreground">今天的历史相对平静</p>
-                <p className="text-xs text-muted-foreground mt-1">试试点击"随机穿越"发现更多</p>
+                <p className="mt-1 text-xs text-muted-foreground">试试点击"随机穿越"发现更多</p>
               </div>
             ) : (
               todayEvents.map(event => {
@@ -114,17 +114,15 @@ export function TodayInHistory({ open, onClose, events, onSelectEvent }: TodayIn
                   <button
                     key={event.id}
                     onClick={() => onSelectEvent(event)}
-                    className="w-full text-left p-3.5 rounded-xl border border-border/50 bg-card/80
-                      hover:border-border hover:shadow-md hover:-translate-y-0.5
-                      transition-all duration-200 group"
+                    className="group w-full rounded-xl border border-border/50 bg-card/80 p-3.5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
                   >
-                    <div className="flex items-center gap-2 mb-1.5">
+                    <div className="mb-1.5 flex items-center gap-2">
                       <span className="text-[11px] font-mono text-muted-foreground">
                         {formatYear(event.year)}
                       </span>
                       <span className="text-sm">{regCfg.flag}</span>
                       <span
-                        className="text-[10px] px-1.5 py-0.5 rounded-full font-medium ml-auto"
+                        className="ml-auto rounded-full px-1.5 py-0.5 text-[10px] font-medium"
                         style={{
                           backgroundColor: `${catCfg.color}18`,
                           color: catCfg.color,
@@ -133,13 +131,13 @@ export function TodayInHistory({ open, onClose, events, onSelectEvent }: TodayIn
                         {catCfg.label}
                       </span>
                       {event.significance === 3 && (
-                        <span className="text-amber-500 text-[10px]">★ 里程碑</span>
+                        <span className="text-[10px] text-amber-500">★ 里程碑</span>
                       )}
                     </div>
-                    <h3 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
                       {event.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2 leading-relaxed">
+                    <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                       {event.description}
                     </p>
                   </button>

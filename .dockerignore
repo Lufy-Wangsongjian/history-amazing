@@ -1,0 +1,15 @@
+node_modules
+app/node_modules
+server/node_modules
+app/dist
+server/dist
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.md
+.codebuddy

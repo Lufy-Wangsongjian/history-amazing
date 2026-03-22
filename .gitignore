@@ -21,5 +21,8 @@ Thumbs.db
 *.log
 npm-debug.log*
 
+# Deploy bundles
+.deploy-lighthouse-bundle*/
+
 # CodeBuddy
 .codebuddy/
