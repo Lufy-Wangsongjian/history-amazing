@@ -17,6 +17,7 @@ import {
   PanelRightOpen,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { RegionFlag } from './RegionFlag'
 import {
   Dialog,
   DialogContent,
@@ -159,7 +160,7 @@ export function EventDetail({ event, events, onClose, onNavigate }: EventDetailP
               </span>
               <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <MapPin size={12} />
-                {regionCfg.flag} {regionCfg.label}
+                <RegionFlag region={event.region} size={14} className="inline-block" /> {regionCfg.label}
               </span>
               <span
                 className="flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full"

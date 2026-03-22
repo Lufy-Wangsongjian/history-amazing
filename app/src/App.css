@@ -1,4 +1,4 @@
-/* Custom scrollbar */
+/* ===== Custom scrollbar ===== */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -17,7 +17,7 @@
   background: hsl(var(--muted-foreground) / 0.3);
 }
 
-/* Smooth animations */
+/* ===== 基础 fadeIn 动画 ===== */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -33,13 +33,13 @@
   animation: fadeIn 0.3s ease-out;
 }
 
-/* Glass effect for cards on hover */
+/* ===== Glass effect ===== */
 .glass-hover:hover {
   backdrop-filter: blur(12px);
   background: hsl(var(--card) / 0.95);
 }
 
-/* Timeline dot pulse */
+/* ===== 时间线节点脉冲 ===== */
 @keyframes pulse-ring {
   0% {
     transform: scale(1);
@@ -51,7 +51,7 @@
   }
 }
 
-/* Gradient text */
+/* ===== Gradient text ===== */
 .gradient-text {
   background: linear-gradient(135deg, #E8A87C, #41B3A3, #C38D9E, #E27D60);
   background-size: 300% 300%;
@@ -65,4 +65,511 @@
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   三级事件卡片入场动画系统
+   ============================================================ */
+
+/* Level 3 · 里程碑 — 弹性缩放 + 光晕浮现 */
+@keyframes milestoneEntry {
+  0% {
+    opacity: 0;
+    transform: scale(0.94) translateY(12px);
+    filter: blur(4px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.01) translateY(-2px);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.event-card-milestone {
+  animation: milestoneEntry 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: var(--stagger-delay, 0ms);
+}
+
+/* Level 2 · 转折点 — 标准 fadeIn + 微滑 */
+@keyframes turningEntry {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.event-card-turning {
+  animation: turningEntry 0.4s ease-out both;
+  animation-delay: var(--stagger-delay, 0ms);
+}
+
+/* Level 1 · 文明切面 — 快速淡入 */
+@keyframes sliceEntry {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.event-card-slice {
+  animation: sliceEntry 0.3s ease-out both;
+  animation-delay: var(--stagger-delay, 0ms);
+}
+
+/* 里程碑节点脉冲光环 */
+@keyframes milestoneNodePulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--pulse-color, rgba(245,158,11,0.5));
+  }
+  70% {
+    box-shadow: 0 0 0 8px var(--pulse-color-end, rgba(245,158,11,0));
+  }
+  100% {
+    box-shadow: 0 0 0 0 var(--pulse-color-end, rgba(245,158,11,0));
+  }
+}
+
+.milestone-node-pulse {
+  animation: milestoneNodePulse 2s ease-in-out infinite;
+}
+
+/* ============================================================
+   世纪跨越涟漪效果
+   ============================================================ */
+
+@keyframes centuryRipple {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.8;
+  }
+  60% {
+    transform: scaleX(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scaleX(1.2);
+    opacity: 0;
+  }
+}
+
+.century-ripple {
+  animation: centuryRipple 1.2s ease-out forwards;
+}
+
+/* ============================================================
+   时代氛围 — 背景视觉环境
+   ============================================================ */
+
+.era-atmosphere {
+  position: relative;
+}
+
+.era-atmosphere::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  transition: background 1.5s ease-in-out;
+  z-index: 0;
+}
+
+/* 远古文明 — 洞穴岩壁暖褐 */
+.era-atmosphere[data-era-mood="ancient"]::before {
+  background: radial-gradient(ellipse at 30% 20%, rgba(139,115,85,0.3), transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(160,120,60,0.15), transparent 50%);
+}
+
+/* 古典时代 — 星空金辉 */
+.era-atmosphere[data-era-mood="classical"]::before {
+  background: radial-gradient(ellipse at 50% 10%, rgba(205,133,63,0.25), transparent 55%),
+    radial-gradient(ellipse at 80% 90%, rgba(218,165,32,0.12), transparent 45%);
+}
+
+/* 轴心时代 — 哲思金光 */
+.era-atmosphere[data-era-mood="axial"]::before {
+  background: radial-gradient(ellipse at 40% 30%, rgba(218,165,32,0.2), transparent 50%),
+    radial-gradient(ellipse at 60% 70%, rgba(184,134,11,0.15), transparent 50%);
+}
+
+/* 帝国时代 — 权力深红 */
+.era-atmosphere[data-era-mood="empire"]::before {
+  background: radial-gradient(ellipse at 30% 40%, rgba(184,134,11,0.2), transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(160,60,30,0.15), transparent 55%);
+}
+
+/* 中世纪 — 肃穆冷紫 */
+.era-atmosphere[data-era-mood="medieval"]::before {
+  background: radial-gradient(ellipse at 50% 20%, rgba(75,55,100,0.25), transparent 55%),
+    radial-gradient(ellipse at 30% 80%, rgba(70,65,80,0.15), transparent 50%);
+}
+
+/* 文艺复兴前夜 — 蓝曙光 */
+.era-atmosphere[data-era-mood="prerenaissance"]::before {
+  background: radial-gradient(ellipse at 60% 30%, rgba(70,130,180,0.2), transparent 55%),
+    radial-gradient(ellipse at 40% 70%, rgba(100,100,160,0.12), transparent 50%);
+}
+
+/* 文艺复兴 — 艺术紫光 */
+.era-atmosphere[data-era-mood="renaissance"]::before {
+  background: radial-gradient(ellipse at 40% 20%, rgba(147,112,219,0.22), transparent 55%),
+    radial-gradient(ellipse at 70% 80%, rgba(180,130,200,0.12), transparent 50%);
+}
+
+/* 科学革命 — 理性青光 */
+.era-atmosphere[data-era-mood="scientific"]::before {
+  background: radial-gradient(ellipse at 50% 30%, rgba(32,178,170,0.2), transparent 55%),
+    radial-gradient(ellipse at 30% 70%, rgba(50,160,150,0.1), transparent 50%);
+}
+
+/* 工业时代 — 钢铁冷灰 */
+.era-atmosphere[data-era-mood="industrial"]::before {
+  background: radial-gradient(ellipse at 40% 40%, rgba(112,128,144,0.2), transparent 55%),
+    radial-gradient(ellipse at 70% 60%, rgba(100,110,120,0.12), transparent 50%);
+}
+
+/* 现代 — 数字蓝光 */
+.era-atmosphere[data-era-mood="modern"]::before {
+  background: radial-gradient(ellipse at 50% 20%, rgba(65,105,225,0.18), transparent 55%),
+    radial-gradient(ellipse at 50% 80%, rgba(100,130,230,0.08), transparent 50%);
+}
+
+/* ============================================================
+   视图切换过渡（由方向五 5.5 增强版替代）
+   ============================================================ */
+
+/* ============================================================
+   欢迎开场粒子效果相关
+   ============================================================ */
+
+@keyframes particleDrift {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.6; }
+  100% { transform: translate(var(--drift-x, 40px), var(--drift-y, -30px)) scale(0.5); opacity: 0; }
+}
+
+@keyframes breatheGlow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.welcome-particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: particleDrift var(--particle-duration, 6s) ease-in-out infinite;
+  animation-delay: var(--particle-delay, 0s);
+}
+
+.welcome-glow {
+  animation: breatheGlow 3s ease-in-out infinite;
+}
+
+/* 时代光带 */
+@keyframes eraBarGlow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.era-bar-glow {
+  animation: eraBarGlow 2.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   因果弧线绘制动画 (方向三)
+   ============================================================ */
+
+@keyframes causalArcDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.causal-arc-draw {
+  animation: causalArcDraw 1.2s ease-out forwards;
+}
+
+/* 选中事件时其他卡片降低透明度 */
+.timeline-has-selection .event-card-unrelated {
+  opacity: 0.3;
+  filter: grayscale(0.3);
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.timeline-has-selection .event-card-related {
+  opacity: 1;
+  filter: none;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+/* ============================================================
+   时代装饰纹理 (方向四)
+   ============================================================ */
+
+.era-atmosphere::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  transition: background-image 1.5s ease-in-out, opacity 1.5s ease-in-out;
+  z-index: 0;
+  background-repeat: repeat;
+  background-size: 120px 120px;
+}
+
+/* 远古文明 — 岩画纹样 */
+.era-atmosphere[data-era-mood="ancient"]::after {
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 50 Q15 30 25 35 Q30 25 40 40 Q45 30 50 50' fill='none' stroke='%238B7355' stroke-width='1' opacity='0.6'/%3E%3Ccircle cx='30' cy='15' r='5' fill='none' stroke='%238B7355' stroke-width='0.8' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/* 古典时代 — 几何纹样 */
+.era-atmosphere[data-era-mood="classical"]::after {
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='5' y='5' width='30' height='30' fill='none' stroke='%23CD853F' stroke-width='0.5' opacity='0.5'/%3E%3Cline x1='5' y1='5' x2='35' y2='35' stroke='%23CD853F' stroke-width='0.3' opacity='0.3'/%3E%3Cline x1='35' y1='5' x2='5' y2='35' stroke='%23CD853F' stroke-width='0.3' opacity='0.3'/%3E%3C/svg%3E");
+}
+
+/* 轴心时代 — 哲思波纹 */
+.era-atmosphere[data-era-mood="axial"]::after {
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='10' fill='none' stroke='%23DAA520' stroke-width='0.5' opacity='0.4'/%3E%3Ccircle cx='30' cy='30' r='20' fill='none' stroke='%23DAA520' stroke-width='0.3' opacity='0.3'/%3E%3Ccircle cx='30' cy='30' r='28' fill='none' stroke='%23DAA520' stroke-width='0.2' opacity='0.2'/%3E%3C/svg%3E");
+}
+
+/* 帝国时代 — 地图线条 */
+.era-atmosphere[data-era-mood="empire"]::after {
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 40 Q25 20 40 35 Q55 50 70 30' fill='none' stroke='%23B8860B' stroke-width='0.5' opacity='0.4'/%3E%3Cpath d='M5 60 Q20 45 35 55 Q50 65 75 50' fill='none' stroke='%23B8860B' stroke-width='0.3' opacity='0.3'/%3E%3C/svg%3E");
+}
+
+/* 中世纪 — 哥特拱门 */
+.era-atmosphere[data-era-mood="medieval"]::after {
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 80 L10 30 Q10 10 30 10 Q50 10 50 30 L50 80' fill='none' stroke='%234A6741' stroke-width='0.6' opacity='0.4'/%3E%3Cline x1='30' y1='10' x2='30' y2='80' stroke='%234A6741' stroke-width='0.3' opacity='0.2'/%3E%3C/svg%3E");
+}
+
+/* 文艺复兴前夜 — 蓝曙光线条 */
+.era-atmosphere[data-era-mood="prerenaissance"]::after {
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='0' y1='40' x2='80' y2='40' stroke='%234682B4' stroke-width='0.3' opacity='0.3'/%3E%3Cline x1='40' y1='0' x2='40' y2='80' stroke='%234682B4' stroke-width='0.3' opacity='0.3'/%3E%3Ccircle cx='40' cy='40' r='15' fill='none' stroke='%234682B4' stroke-width='0.4' opacity='0.2'/%3E%3C/svg%3E");
+}
+
+/* 文艺复兴 — 达芬奇比例 */
+.era-atmosphere[data-era-mood="renaissance"]::after {
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='40' cy='40' r='25' fill='none' stroke='%239370DB' stroke-width='0.4' opacity='0.3'/%3E%3Crect x='15' y='15' width='50' height='50' fill='none' stroke='%239370DB' stroke-width='0.3' opacity='0.2'/%3E%3Cline x1='40' y1='5' x2='40' y2='75' stroke='%239370DB' stroke-width='0.2' opacity='0.15'/%3E%3C/svg%3E");
+}
+
+/* 科学革命 — 数学网格 */
+.era-atmosphere[data-era-mood="scientific"]::after {
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg width='50' height='50' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='0' y1='25' x2='50' y2='25' stroke='%2320B2AA' stroke-width='0.2' opacity='0.3'/%3E%3Cline x1='25' y1='0' x2='25' y2='50' stroke='%2320B2AA' stroke-width='0.2' opacity='0.3'/%3E%3Ccircle cx='25' cy='25' r='8' fill='none' stroke='%2320B2AA' stroke-width='0.3' opacity='0.2'/%3E%3C/svg%3E");
+}
+
+/* 工业时代 — 齿轮纹样 */
+.era-atmosphere[data-era-mood="industrial"]::after {
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='12' fill='none' stroke='%23708090' stroke-width='0.5' opacity='0.3'/%3E%3Ccircle cx='30' cy='30' r='5' fill='none' stroke='%23708090' stroke-width='0.4' opacity='0.2'/%3E%3Cline x1='30' y1='10' x2='30' y2='18' stroke='%23708090' stroke-width='1' opacity='0.3'/%3E%3Cline x1='30' y1='42' x2='30' y2='50' stroke='%23708090' stroke-width='1' opacity='0.3'/%3E%3Cline x1='10' y1='30' x2='18' y2='30' stroke='%23708090' stroke-width='1' opacity='0.3'/%3E%3Cline x1='42' y1='30' x2='50' y2='30' stroke='%23708090' stroke-width='1' opacity='0.3'/%3E%3C/svg%3E");
+}
+
+/* 现代 — 数字网格 */
+.era-atmosphere[data-era-mood="modern"]::after {
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='0' width='40' height='40' fill='none' stroke='%234169E1' stroke-width='0.15' opacity='0.3'/%3E%3Ccircle cx='0' cy='0' r='1' fill='%234169E1' opacity='0.3'/%3E%3Ccircle cx='40' cy='0' r='1' fill='%234169E1' opacity='0.3'/%3E%3Ccircle cx='0' cy='40' r='1' fill='%234169E1' opacity='0.3'/%3E%3Ccircle cx='40' cy='40' r='1' fill='%234169E1' opacity='0.3'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   里程碑卡片分类图标脉冲 (方向二)
+   ============================================================ */
+
+@keyframes milestoneIconPulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--icon-pulse-color, rgba(245,158,11,0.3));
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(245,158,11,0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(245,158,11,0);
+  }
+}
+
+.milestone-icon-pulse {
+  animation: milestoneIconPulse 2.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   筛选聚散过渡 (方向五 5.3)
+   ============================================================ */
+
+@keyframes filterEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-10px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes filterExit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.7) translateY(-20px);
+    filter: blur(4px);
+  }
+}
+
+.filter-enter {
+  animation: filterEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.filter-exit {
+  animation: filterExit 0.3s ease-in both;
+}
+
+/* ============================================================
+   历史上的今天心跳光环 (方向五 5.4)
+   ============================================================ */
+
+@keyframes todayHeartbeat {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245,158,11,0.4), 0 0 16px rgba(245,158,11,0.1);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(245,158,11,0), 0 0 24px rgba(245,158,11,0.2);
+  }
+}
+
+@keyframes todaySequenceIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.today-heartbeat {
+  animation: todayHeartbeat 2s ease-in-out infinite;
+  animation-delay: var(--heartbeat-delay, 0ms);
+}
+
+.today-sequence-in {
+  animation: todaySequenceIn 0.5s ease-out both;
+}
+
+/* ============================================================
+   视图切换维度转换动画 (方向五 5.5)
+   ============================================================ */
+
+@keyframes viewDimensionShift {
+  0% {
+    opacity: 0;
+    transform: perspective(800px) rotateY(8deg) scale(0.92) translateZ(-40px);
+    filter: blur(3px);
+  }
+  60% {
+    opacity: 1;
+    transform: perspective(800px) rotateY(-1deg) scale(1.01) translateZ(0);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(800px) rotateY(0deg) scale(1) translateZ(0);
+    filter: blur(0);
+  }
+}
+
+.view-transition-enter {
+  animation: viewDimensionShift 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ============================================================
+   时代主题装饰图 (方向六 Layer 1) — SVG 图案
+   ============================================================ */
+
+.era-hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.era-hero-overlay.active {
+  opacity: 0.06;
+}
+
+/* ============================================================
+   无障碍降级
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .event-card-milestone,
+  .event-card-turning,
+  .event-card-slice {
+    animation: none !important;
+  }
+  .milestone-node-pulse {
+    animation: none !important;
+  }
+  .milestone-icon-pulse {
+    animation: none !important;
+  }
+  .century-ripple {
+    animation: none !important;
+  }
+  .view-transition-enter {
+    animation: none !important;
+  }
+  .welcome-particle {
+    animation: none !important;
+  }
+  .welcome-glow {
+    animation: none !important;
+  }
+  .era-bar-glow {
+    animation: none !important;
+  }
+  .gradient-text {
+    animation: none !important;
+  }
+  .causal-arc-draw {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .filter-enter,
+  .filter-exit {
+    animation: none !important;
+  }
+  .today-heartbeat {
+    animation: none !important;
+  }
+  .today-sequence-in {
+    animation: none !important;
+  }
 }

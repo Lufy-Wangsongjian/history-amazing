@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
 import type { HistoricalEvent, Category } from '@/data/types'
-import { CATEGORY_CONFIG, REGION_CONFIG, ERAS, formatYear } from '@/data/types'
+import { CATEGORY_CONFIG, ERAS, formatYear } from '@/data/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { RegionFlag } from './RegionFlag'
 
 interface MatrixViewProps {
   events: HistoricalEvent[]
@@ -222,7 +223,6 @@ export function MatrixView({ events, selectedEvent, onSelectEvent }: MatrixViewP
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
               {activeCellEvents.map(event => {
-                const regCfg = REGION_CONFIG[event.region]
                 return (
                   <button
                     key={event.id}
@@ -236,7 +236,7 @@ export function MatrixView({ events, selectedEvent, onSelectEvent }: MatrixViewP
                     <div className="flex items-center gap-1.5">
                       {event.significance === 3 && <span className="text-amber-500 text-[10px]">★</span>}
                       <span className="text-[10px] font-mono text-muted-foreground">{formatYear(event.year)}</span>
-                      <span className="text-xs">{regCfg.flag}</span>
+                      <RegionFlag region={event.region} size={12} />
                       <span className="text-xs font-medium truncate">{event.title}</span>
                     </div>
                   </button>

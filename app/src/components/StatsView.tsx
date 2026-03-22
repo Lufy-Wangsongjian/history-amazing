@@ -3,6 +3,7 @@ import type { HistoricalEvent, Category } from '@/data/types'
 import { CATEGORY_CONFIG, ERAS, REGION_CONFIG, formatYear } from '@/data/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CONTINENT_GROUPS } from '@/data/regions'
+import { RegionFlag } from './RegionFlag'
 
 interface StatsViewProps {
   events: HistoricalEvent[]
@@ -184,7 +185,6 @@ export function StatsView({ events, onSelectEvent }: StatsViewProps) {
               <div className="space-y-1.5 max-h-[300px] overflow-y-auto">
                 {milestones.map(event => {
                   const catCfg = CATEGORY_CONFIG[event.category]
-                  const regCfg = REGION_CONFIG[event.region]
                   return (
                     <button
                       key={event.id}
@@ -199,7 +199,7 @@ export function StatsView({ events, onSelectEvent }: StatsViewProps) {
                         style={{ backgroundColor: catCfg.color }}
                       />
                       <span className="text-xs flex-1 truncate">{event.title}</span>
-                      <span className="text-xs flex-shrink-0">{regCfg.flag}</span>
+                      <RegionFlag region={event.region} size={12} className="flex-shrink-0" />
                     </button>
                   )
                 })}

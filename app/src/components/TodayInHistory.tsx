@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import type { HistoricalEvent } from '@/data/types'
-import { CATEGORY_CONFIG, REGION_CONFIG, formatYear } from '@/data/types'
+import { CATEGORY_CONFIG, formatYear } from '@/data/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CalendarDays, X, Sparkles } from 'lucide-react'
+import { RegionFlag } from './RegionFlag'
 
 interface TodayInHistoryProps {
   open: boolean
@@ -107,20 +108,26 @@ export function TodayInHistory({ open, onClose, events, onSelectEvent }: TodayIn
                 <p className="mt-1 text-xs text-muted-foreground">试试点击"随机穿越"发现更多</p>
               </div>
             ) : (
-              todayEvents.map(event => {
+              todayEvents.map((event, idx) => {
                 const catCfg = CATEGORY_CONFIG[event.category]
-                const regCfg = REGION_CONFIG[event.region]
                 return (
-                  <button
+                  <div
                     key={event.id}
-                    onClick={() => onSelectEvent(event)}
-                    className="group w-full rounded-xl border border-border/50 bg-card/80 p-3.5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
+                    className="today-sequence-in"
+                    style={{ animationDelay: `${idx * 120}ms` }}
                   >
+                    <button
+                      onClick={() => onSelectEvent(event)}
+                      className="group w-full rounded-xl border border-border/50 bg-card/80 p-3.5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md today-heartbeat"
+                      style={{
+                        ['--heartbeat-delay' as string]: `${idx * 200}ms`,
+                      }}
+                    >
                     <div className="mb-1.5 flex items-center gap-2">
                       <span className="text-[11px] font-mono text-muted-foreground">
                         {formatYear(event.year)}
                       </span>
-                      <span className="text-sm">{regCfg.flag}</span>
+                      <RegionFlag region={event.region} size={14} />
                       <span
                         className="ml-auto rounded-full px-1.5 py-0.5 text-[10px] font-medium"
                         style={{
@@ -140,7 +147,8 @@ export function TodayInHistory({ open, onClose, events, onSelectEvent }: TodayIn
                     <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                       {event.description}
                     </p>
-                  </button>
+                    </button>
+                  </div>
                 )
               })
             )}

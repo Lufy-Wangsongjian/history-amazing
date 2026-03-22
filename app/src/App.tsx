@@ -8,12 +8,13 @@ import { TodayInHistory } from '@/components/TodayInHistory'
 import { EraNavigator } from '@/components/EraNavigator'
 import { ActiveFiltersBar } from '@/components/ActiveFiltersBar'
 import { WelcomeDialog } from '@/components/WelcomeDialog'
+import { CuratedPaths } from '@/components/CuratedPaths'
 import { DEFAULT_YEAR_RANGE, useTimelineState } from '@/hooks/useTimelineState'
 import { useTheme } from '@/hooks/useTheme'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { ALL_REGIONS, getVisibleSelectedRegions } from '@/data/regions'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear } from '@/data/types'
-import { Globe, Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays } from 'lucide-react'
+import { Globe, Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen } from 'lucide-react'
 import { useState } from 'react'
 import './App.css'
 
@@ -25,6 +26,7 @@ function App() {
   const isMobile = useIsMobile()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showTodayInHistory, setShowTodayInHistory] = useState(false)
+  const [showCuratedPaths, setShowCuratedPaths] = useState(false)
   const [showWelcome, setShowWelcome] = useState(() => {
     if (typeof window === 'undefined') return false
     return !window.localStorage.getItem(WELCOME_STORAGE_KEY)
@@ -128,6 +130,21 @@ function App() {
           </button>
 
           <button
+            onClick={() => {
+              dismissWelcome()
+              setShowCuratedPaths(true)
+            }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20
+              text-emerald-600 dark:text-emerald-400 hover:from-emerald-500/20 hover:to-teal-500/20
+              transition-all duration-200 hover:shadow-sm"
+            title="策展路线"
+          >
+            <BookOpen size={14} />
+            <span className="hidden sm:inline">路线</span>
+          </button>
+
+          <button
             onClick={handleRandomExplore}
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
               bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20
@@ -211,30 +228,32 @@ function App() {
             onClearAll={state.clearFilters}
           />
 
-          {state.viewMode === 'timeline' ? (
-            <TimelineView
-              events={state.filteredEvents}
-              selectedEvent={state.selectedEvent}
-              onSelectEvent={state.setSelectedEvent}
-              focusYear={state.focusYear}
-            />
-          ) : state.viewMode === 'matrix' ? (
-            <MatrixView
-              events={state.filteredEvents}
-              selectedEvent={state.selectedEvent}
-              onSelectEvent={state.setSelectedEvent}
-            />
-          ) : state.viewMode === 'compare' ? (
-            <CompareView
-              events={state.filteredEvents}
-              onSelectEvent={state.setSelectedEvent}
-            />
-          ) : (
-            <StatsView
-              events={state.filteredEvents}
-              onSelectEvent={state.setSelectedEvent}
-            />
-          )}
+          <div key={state.viewMode} className="flex-1 min-h-0 flex flex-col view-transition-enter">
+            {state.viewMode === 'timeline' ? (
+              <TimelineView
+                events={state.filteredEvents}
+                selectedEvent={state.selectedEvent}
+                onSelectEvent={state.setSelectedEvent}
+                focusYear={state.focusYear}
+              />
+            ) : state.viewMode === 'matrix' ? (
+              <MatrixView
+                events={state.filteredEvents}
+                selectedEvent={state.selectedEvent}
+                onSelectEvent={state.setSelectedEvent}
+              />
+            ) : state.viewMode === 'compare' ? (
+              <CompareView
+                events={state.filteredEvents}
+                onSelectEvent={state.setSelectedEvent}
+              />
+            ) : (
+              <StatsView
+                events={state.filteredEvents}
+                onSelectEvent={state.setSelectedEvent}
+              />
+            )}
+          </div>
 
           <EraNavigator
             events={state.filteredEvents}
@@ -270,6 +289,16 @@ function App() {
           setShowTodayInHistory(true)
         }}
         onRandomExplore={handleRandomExplore}
+      />
+
+      <CuratedPaths
+        open={showCuratedPaths}
+        onClose={() => setShowCuratedPaths(false)}
+        events={state.filteredEvents}
+        onSelectEvent={(event) => {
+          state.setSelectedEvent(event)
+          setShowCuratedPaths(false)
+        }}
       />
     </div>
   )

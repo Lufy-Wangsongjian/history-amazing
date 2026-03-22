@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import type { HistoricalEvent, Region } from '@/data/types'
-import { CATEGORY_CONFIG, REGION_CONFIG, formatYear, getEra } from '@/data/types'
+import { CATEGORY_CONFIG, formatYear, getEra } from '@/data/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { RegionFlag } from './RegionFlag'
 
 interface CompareViewProps {
   events: HistoricalEvent[]
@@ -200,7 +201,6 @@ function CompareEventChip({
   onClick: () => void
 }) {
   const catCfg = CATEGORY_CONFIG[event.category]
-  const regCfg = REGION_CONFIG[event.region]
   const sideColor = side === 'east' ? 'rgba(244,63,94,' : 'rgba(59,130,246,'
 
   return (
@@ -217,7 +217,7 @@ function CompareEventChip({
       }}
     >
       <div className={`flex items-center gap-1.5 ${side === 'east' ? 'flex-row-reverse' : 'flex-row'}`}>
-        <span className="text-sm flex-shrink-0">{regCfg.flag}</span>
+        <RegionFlag region={event.region} size={14} className="flex-shrink-0" />
         <span
           className="text-[10px] font-semibold truncate max-w-[160px] md:max-w-[220px]"
           style={{ color: catCfg.color }}
