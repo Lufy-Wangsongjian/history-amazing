@@ -194,6 +194,19 @@ export const israelHistoryEvents: HistoricalEvent[] = [
     image: 'https://picsum.photos/seed/chrono-il022/1200/800',
     relatedIds: ['il021'],
   },
+
+  // ─── 补充间隙 ──────────────────────────────
+  { id: 'il023', year: -930, endYear: -586, title: '分裂王国时期（以色列与犹大）', description: '南北两个犹太王国并存约350年，先后被亚述和巴比伦灭亡。', category: 'history', region: 'israel', significance: 1 },
+  { id: 'il024', year: -586, endYear: -332, title: '巴比伦之囚与波斯统治', description: '犹太人经历巴比伦流亡后在波斯允许下回归重建第二圣殿。', category: 'history', region: 'israel', significance: 2 },
+  { id: 'il025', year: 135, endYear: 638, title: '罗马-拜占庭统治', description: '犹太人被逐出耶路撒冷后，巴勒斯坦先后在罗马和拜占庭帝国统治下。基督教成为主导宗教。', category: 'history', region: 'israel', significance: 1 },
+  { id: 'il026', year: 638, endYear: 1099, title: '阿拉伯-法蒂玛统治', description: '伊斯兰征服后巴勒斯坦成为阿拉伯世界的一部分，圆顶清真寺建成。', category: 'history', region: 'israel', significance: 1 },
+  { id: 'il027', year: 1291, endYear: 1517, title: '马穆鲁克统治', description: '十字军被驱逐后马穆鲁克苏丹国控制巴勒斯坦至奥斯曼征服。', category: 'history', region: 'israel', significance: 1 },
+  { id: 'il028', year: 1917, endYear: 1948, title: '英国托管巴勒斯坦', description: '贝尔福宣言后英国托管期间犹太移民不断增加，阿犹冲突日益激化。', category: 'history', region: 'israel', significance: 2 },
+  { id: 'il029', year: 1948, endYear: 2030, title: '现代以色列国', description: '从建国战争到六日战争、奥斯陆和平进程和巴以冲突延续至今。', category: 'history', region: 'israel', significance: 3 },
+  // 以色列间隙补充
+  { id: 'il030', year: -1200, endYear: -1020, title: '士师时代', description: '以色列部落定居迦南后约180年的无王时期，底波拉、基甸、参孙等士师领导抵抗外敌。', category: 'history', region: 'israel', significance: 1 },
+  { id: 'il031', year: -63, endYear: -37, title: '罗马共和国控制期', description: '庞培攻占耶路撒冷后犹太成为罗马附庸，哈斯蒙尼末裔在罗马扶持下名义统治。', category: 'history', region: 'israel', significance: 1 },
+  { id: 'il032', year: -4, endYear: 135, title: '罗马直辖·犹太起义时代', description: '希律死后犹太被分割为罗马行省，经历耶稣时代、第一次犹太起义（70年圣殿被毁）和巴尔·科赫巴起义（135年）。', category: 'history', region: 'israel', significance: 2 },
 ]
 
 // 批量设置图片兜底

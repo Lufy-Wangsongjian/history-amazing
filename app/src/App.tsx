@@ -3,6 +3,7 @@ import { TimelineView } from '@/components/TimelineView'
 import { MatrixView } from '@/components/MatrixView'
 import { StatsView } from '@/components/StatsView'
 import { CompareView } from '@/components/CompareView'
+import { CivilizationMapView } from '@/components/CivilizationMapView'
 import { EventDetail } from '@/components/EventDetail'
 import { TodayInHistory } from '@/components/TodayInHistory'
 import { EraNavigator } from '@/components/EraNavigator'
@@ -244,6 +245,11 @@ function App() {
               />
             ) : state.viewMode === 'compare' ? (
               <CompareView
+                events={state.filteredEvents}
+                onSelectEvent={state.setSelectedEvent}
+              />
+            ) : state.viewMode === 'civilizations' ? (
+              <CivilizationMapView
                 events={state.filteredEvents}
                 onSelectEvent={state.setSelectedEvent}
               />

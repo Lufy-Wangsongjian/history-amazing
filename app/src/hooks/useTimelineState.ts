@@ -3,7 +3,7 @@ import type { Category, Region, HistoricalEvent } from '@/data/types'
 import { getEffectiveRegionFilters } from '@/data/regions'
 import { fetchAllEvents, fetchStats } from '@/lib/api'
 
-export type ViewMode = 'timeline' | 'matrix' | 'stats' | 'compare'
+export type ViewMode = 'timeline' | 'matrix' | 'stats' | 'compare' | 'civilizations'
 
 export const DEFAULT_YEAR_RANGE: [number, number] = [-4000, 2030]
 const EVENTS_PAGE_SIZE = 2000
@@ -15,9 +15,11 @@ function parseFiniteNumber(value: string | null) {
   return Number.isFinite(parsed) ? parsed : undefined
 }
 
+const VALID_VIEW_MODES: readonly string[] = ['timeline', 'matrix', 'stats', 'compare', 'civilizations']
+
 function parseViewMode(value: string | null): ViewMode | undefined {
-  if (value === 'timeline' || value === 'matrix' || value === 'stats' || value === 'compare') {
-    return value
+  if (value && VALID_VIEW_MODES.includes(value)) {
+    return value as ViewMode
   }
 
   return undefined

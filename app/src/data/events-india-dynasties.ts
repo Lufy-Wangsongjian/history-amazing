@@ -312,6 +312,43 @@ export const indiaDynastyEvents: HistoricalEvent[] = [
     category: 'history', region: 'india', significance: 2, figure: '曼莫汉·辛格',
     image: 'https://picsum.photos/seed/chrono-in038/1200/800',
   },
+
+  // ─── 补充间隙（让时间线连贯）──────────────────────
+  {
+    id: 'in039', year: -185, endYear: 30, title: '后孔雀时代·巽伽与印度-希腊诸王国',
+    description: '孔雀帝国衰落后北印度陷入分裂，巽伽、甘婆、印度-希腊和印度-斯基泰等多个政权并存。',
+    category: 'history', region: 'india', significance: 1,
+  },
+  {
+    id: 'in040', year: 550, endYear: 606, title: '后笈多时代·北印度碎片化',
+    description: '笈多帝国瓦解后嚈哒人被逐，北印度分裂为多个小王国，直到戒日王短暂统一。',
+    category: 'history', region: 'india', significance: 1,
+  },
+  {
+    id: 'in041', year: 647, endYear: 1206, title: '拉杰普特时代·诸王争霸',
+    description: '戒日王死后至德里苏丹国建立前的近600年间，拉杰普特武士王国（如普拉蒂哈拉、朱罗、帕拉）割据北南印度。',
+    category: 'history', region: 'india', significance: 2,
+  },
+  {
+    id: 'in042', year: 1526, endYear: 1857, title: '莫卧儿帝国（完整时期）',
+    description: '从巴布尔建国到末代皇帝巴哈杜尔·沙被英国废黜，莫卧儿帝国统治印度超过330年。',
+    category: 'history', region: 'india', significance: 3, figure: '巴布尔/阿克巴/沙贾汗',
+  },
+  {
+    id: 'in043', year: 1757, endYear: 1947, title: '英属印度（完整时期）',
+    description: '从普拉西战役到印度独立，英国对印度的殖民统治持续了190年。',
+    category: 'history', region: 'india', significance: 3,
+  },
+  {
+    id: 'in044', year: 1947, endYear: 2030, title: '现代印度共和国',
+    description: '从独立到世界最大民主国家，印度经历了尼赫鲁社会主义、英迪拉·甘地时代和1991年经济自由化。',
+    category: 'history', region: 'india', significance: 2,
+  },
+  // 印度间隙补充
+  { id: 'in045', year: -232, endYear: -185, title: '孔雀帝国晚期', description: '阿育王之后孔雀帝国迅速衰落，中央控制力瓦解，约50年后被将领推翻。', category: 'history', region: 'india', significance: 1 },
+  { id: 'in046', year: 250, endYear: 320, title: '后贵霜·西总督与地方王国', description: '贵霜衰落后北印度分裂为多个地方势力（西总督、纳加人等），直到笈多崛起。', category: 'history', region: 'india', significance: 1 },
+  { id: 'in047', year: 415, endYear: 550, title: '笈多晚期与嚈哒入侵', description: '超日王后笈多帝国渐衰，嚈哒人入侵重创北印度，帝国约550年终结。', category: 'history', region: 'india', significance: 1 },
+  { id: 'in048', year: 1849, endYear: 1947, title: '英属印度（后期殖民统治）', description: '锡克帝国被吞并后英国完成对整个次大陆的控制，直至1947年独立。', category: 'history', region: 'india', significance: 2 },
 ]
 
 // 批量设置图片兜底

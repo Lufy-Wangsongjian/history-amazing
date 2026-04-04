@@ -350,6 +350,83 @@ export const egyptDynastyEvents: HistoricalEvent[] = [
     category: 'history', region: 'egypt', significance: 3, figure: '纳赛尔',
     image: 'https://picsum.photos/seed/chrono-eg045/1200/800',
   },
+
+  // ─── 补充间隙（让时间线连贯）──────────────────────
+  {
+    id: 'eg046', year: -2686, endYear: -2613, title: '第三王朝',
+    description: '古王国首个王朝，左塞尔法老时期伊姆霍特普设计了阶梯金字塔。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg047', year: -2055, endYear: -1985, title: '第十一王朝统一期',
+    description: '门图霍特普二世重新统一埃及后的巩固时期，中王国初创。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg048', year: -1773, endYear: -1650, title: '第二中间期前段（第十三至十四王朝）',
+    description: '中王国衰落后的过渡时期，中央权力碎片化，多个地方王朝并存。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg049', year: -1550, endYear: -1479, title: '新王国初期（第十八王朝前段）',
+    description: '阿赫摩斯驱逐希克索斯后，图特摩斯一世和二世持续巩固新王国基业。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg050', year: -1425, endYear: -1353, title: '新王国鼎盛期',
+    description: '阿蒙霍特普二世至三世时期，埃及帝国达到富裕与繁荣的巅峰。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg051', year: -1155, endYear: -1069, title: '第二十王朝后期·新王国终章',
+    description: '拉美西斯三世之后的法老权力持续衰落，帝王谷遭盗墓，新王国走向终结。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg052', year: -525, endYear: -404, title: '第一次波斯统治（第二十七王朝）',
+    description: '波斯阿契美尼德帝国统治埃及约120年，埃及成为帝国行省。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg053', year: -343, endYear: -332, title: '第二次波斯统治（第三十一王朝）',
+    description: '波斯再次征服埃及，直到亚历山大大帝的到来。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg054', year: -30, endYear: 641, title: '罗马与拜占庭统治',
+    description: '埃及作为罗马帝国粮仓持续670年，基督教传入并成为主流宗教，科普特文化形成。',
+    category: 'history', region: 'egypt', significance: 2,
+  },
+  {
+    id: 'eg055', year: 641, endYear: 969, title: '阿拉伯征服至法蒂玛前',
+    description: '阿拉伯人征服埃及后，先后由正统哈里发、倭马亚和阿拔斯王朝的总督统治，伊斯兰教逐渐成为主流。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg056', year: 969, endYear: 1171, title: '法蒂玛王朝',
+    description: '什叶派法蒂玛王朝统治埃及约200年，建造开罗城和爱资哈尔清真寺。',
+    category: 'history', region: 'egypt', significance: 2,
+  },
+  {
+    id: 'eg057', year: 1171, endYear: 1250, title: '阿尤布王朝',
+    description: '萨拉丁建立的王朝，统一埃及与叙利亚，收复耶路撒冷。',
+    category: 'history', region: 'egypt', significance: 2, figure: '萨拉丁',
+  },
+  {
+    id: 'eg058', year: 1517, endYear: 1805, title: '奥斯曼帝国统治时期',
+    description: '埃及作为奥斯曼帝国行省长达近300年，马穆鲁克仍保有地方实权。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg059', year: 1848, endYear: 1952, title: '赫迪夫时期与英国占领',
+    description: '穆罕默德·阿里后裔以赫迪夫（副王）身份统治，1882年英国军事占领埃及，实际控制至1952年。',
+    category: 'history', region: 'egypt', significance: 1,
+  },
+  {
+    id: 'eg060', year: 1952, endYear: 2030, title: '现代埃及共和国',
+    description: '从纳赛尔到萨达特、穆巴拉克、塞西——埃及共和国经历了泛阿拉伯主义、中东战争、经济改革和阿拉伯之春。',
+    category: 'history', region: 'egypt', significance: 2,
+  },
 ]
 
 // 批量设置图片兜底

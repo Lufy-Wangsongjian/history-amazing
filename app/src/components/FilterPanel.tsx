@@ -11,7 +11,7 @@ import {
   Landmark, Cog, Building2, Search, X, RotateCcw,
   Grid3X3, AlignJustify, ChevronLeft, ChevronRight,
   ChevronDown, ChevronUp, BarChart3, CheckSquare,
-  Church, Swords, Compass, HeartPulse, Columns,
+  Church, Swords, Compass, HeartPulse, Columns, Layers,
 } from 'lucide-react'
 import type { ViewMode } from '@/hooks/useTimelineState'
 import { formatYear } from '@/data/types'
@@ -288,6 +288,15 @@ export function FilterPanel({
               >
                 <BarChart3 size={12} />
                 统计
+              </Button>
+              <Button
+                variant={viewMode === 'civilizations' ? 'secondary' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('civilizations')}
+                className="h-7 text-xs gap-1 col-span-2"
+              >
+                <Layers size={12} />
+                文明图谱
               </Button>
             </div>
           </div>

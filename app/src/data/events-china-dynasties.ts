@@ -272,6 +272,32 @@ export const chinaDynastyEvents: HistoricalEvent[] = [
     image: 'https://picsum.photos/seed/chrono-cn031/1200/800',
     relatedIds: ['cn030'],
   },
+
+  // ─── 补充间隙朝代 ──────────────────────────────
+  {
+    id: 'cn032', year: 265, endYear: 316, title: '西晋·短暂统一',
+    description: '司马炎代魏建晋，280年灭吴统一全国。但"八王之乱"使帝国陷入内战，随后"五胡乱华"，316年西晋灭亡。',
+    category: 'history', region: 'china', significance: 1, figure: '司马炎',
+    relatedIds: ['cn013', 'cn014'],
+  },
+  {
+    id: 'cn033', year: 756, endYear: 907, title: '唐朝中后期·藩镇割据',
+    description: '安史之乱后唐朝虽延续了150年，但藩镇割据、宦官专权和党争不断，黄巢起义（875-884年）给帝国以致命一击，907年朱温篡唐。',
+    category: 'history', region: 'china', significance: 1,
+    relatedIds: ['cn018', 'cn019'],
+  },
+  {
+    id: 'cn034', year: 1912, endYear: 1949, title: '中华民国',
+    description: '辛亥革命后建立的中华民国，历经北洋军阀混战、北伐战争、南京国民政府时期和抗日战争，1949年迁台。',
+    category: 'history', region: 'china', significance: 2, figure: '孙中山/蒋介石',
+    relatedIds: ['cn028', 'cn029', 'cn030'],
+  },
+  {
+    id: 'cn035', year: 1949, endYear: 2030, title: '中华人民共和国',
+    description: '1949年建立至今，从社会主义改造到改革开放，中国成长为世界第二大经济体。',
+    category: 'history', region: 'china', significance: 3, figure: '毛泽东/邓小平',
+    relatedIds: ['cn030', 'cn031'],
+  },
 ]
 
 // 批量设置图片兜底

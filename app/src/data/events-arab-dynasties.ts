@@ -207,6 +207,23 @@ export const arabDynastyEvents: HistoricalEvent[] = [
     category: 'history', region: 'global', significance: 3,
     image: 'https://picsum.photos/seed/chrono-ab024/1200/800',
   },
+
+  // ─── 补充连贯时段 ──────────────────────────────
+  { id: 'ab025', year: 610, endYear: 661, title: '伊斯兰教兴起与正统哈里发', description: '穆罕默德传教至四大哈里发时期，阿拉伯帝国雏形。', category: 'history', region: 'saudi-arabia', significance: 3 },
+  { id: 'ab026', year: 661, endYear: 1258, title: '倭马亚-阿拔斯时代·伊拉克', description: '从大马士革到巴格达，阿拉伯帝国鼎盛的600年。', category: 'history', region: 'iraq', significance: 3 },
+  { id: 'ab027', year: 1258, endYear: 1534, title: '蒙古与帖木儿·伊拉克', description: '蒙古毁灭巴格达后伊拉克先后被伊尔汗国、札剌亦儿和帖木儿帝国统治。', category: 'history', region: 'iraq', significance: 1 },
+  { id: 'ab028', year: 1534, endYear: 1920, title: '奥斯曼帝国统治·伊拉克', description: '伊拉克作为奥斯曼行省近400年。', category: 'history', region: 'iraq', significance: 1 },
+  { id: 'ab029', year: 1920, endYear: 2030, title: '现代伊拉克', description: '英国托管→哈希姆王国→共和革命→萨达姆→美国入侵→战后重建。', category: 'history', region: 'iraq', significance: 2 },
+  { id: 'ab030', year: 1299, endYear: 1922, title: '奥斯曼帝国（完整时期）', description: '横跨三大洲的帝国延续623年。', category: 'history', region: 'turkey', significance: 3 },
+  { id: 'ab031', year: 1923, endYear: 2030, title: '土耳其共和国', description: '凯末尔世俗化改革后的现代土耳其。', category: 'history', region: 'turkey', significance: 2 },
+  { id: 'ab032', year: 1932, endYear: 2030, title: '沙特阿拉伯王国', description: '从沙漠部落统一到石油大国。', category: 'history', region: 'saudi-arabia', significance: 2 },
+  // 阿拉伯间隙补充
+  // 伊拉克：602→661, 809→1258
+  { id: 'ab033', year: 602, endYear: 661, title: '萨珊-阿拉伯过渡（伊拉克）', description: '萨珊波斯统治末期至阿拉伯征服，636年卡迪西亚战役后伊拉克进入伊斯兰世界。', category: 'history', region: 'iraq', significance: 1 },
+  { id: 'ab034', year: 809, endYear: 1258, title: '阿拔斯王朝中晚期（伊拉克）', description: '哈伦·拉希德之后阿拔斯哈里发渐沦为傀儡，突厥禁卫军、布韦希王朝和塞尔柱突厥人先后掌权，直至蒙古灭亡。', category: 'history', region: 'iraq', significance: 2 },
+  // 沙特：-115→610, 661→1932
+  { id: 'ab035', year: -115, endYear: 610, title: '前伊斯兰阿拉伯半岛', description: '示巴衰落后阿拉伯半岛以游牧部落为主，希姆亚尔王国、坎达王国先后兴起，麦加成为贸易和朝圣中心。', category: 'history', region: 'saudi-arabia', significance: 1 },
+  { id: 'ab036', year: 661, endYear: 1932, title: '阿拉伯半岛：从倭马亚到沙特建国', description: '倭马亚迁都大马士革后阿拉伯半岛不再是帝国中心，先后归倭马亚、阿拔斯、马穆鲁克和奥斯曼管辖，18世纪瓦哈比运动兴起。', category: 'history', region: 'saudi-arabia', significance: 1 },
 ]
 
 // 批量设置图片兜底

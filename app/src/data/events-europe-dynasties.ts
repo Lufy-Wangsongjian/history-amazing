@@ -254,6 +254,57 @@ export const europeDynastyEvents: HistoricalEvent[] = [
     image: 'https://picsum.photos/seed/chrono-eu029/1200/800',
     relatedIds: ['eu028'],
   },
+
+  // ─── 补充连贯时段（让文明图谱无空白）──────────────────
+  // 法国
+  { id: 'eu030', year: 843, endYear: 987, title: '西法兰克王国', description: '凡尔登条约三分帝国后的法兰西雏形，加洛林末裔与卡佩家族交替为王。', category: 'history', region: 'france', significance: 1 },
+  { id: 'eu031', year: 987, endYear: 1589, title: '卡佩-瓦卢瓦王朝', description: '卡佩王朝及其瓦卢瓦分支统治法国约600年，经历百年战争和宗教战争。', category: 'history', region: 'france', significance: 2, figure: '路易九世/查理七世' },
+  { id: 'eu032', year: 1589, endYear: 1789, title: '波旁王朝', description: '亨利四世建立波旁王朝，路易十四"太阳王"将法国推向欧洲霸权巅峰。', category: 'history', region: 'france', significance: 3, figure: '路易十四' },
+  { id: 'eu033', year: 1815, endYear: 1870, title: '复辟与第二帝国', description: '拿破仑战败后波旁复辟、七月王朝、第二共和、拿破仑三世第二帝国交替。', category: 'history', region: 'france', significance: 1 },
+  { id: 'eu034', year: 1870, endYear: 2030, title: '法兰西共和国（第三至第五共和）', description: '从第三共和国至今，法国经历了两次世界大战并成为欧盟核心国家。', category: 'history', region: 'france', significance: 2 },
+  // 英国
+  { id: 'eu035', year: 1066, endYear: 1485, title: '诺曼-金雀花王朝', description: '从威廉征服到玫瑰战争，英国封建王权与议会制度并行发展。', category: 'history', region: 'uk', significance: 2 },
+  { id: 'eu036', year: 1603, endYear: 1714, title: '斯图亚特王朝', description: '苏格兰斯图亚特家族入主英格兰，经历内战、共和和光荣革命。', category: 'history', region: 'uk', significance: 2 },
+  { id: 'eu037', year: 1714, endYear: 2030, title: '汉诺威至温莎王朝', description: '乔治王朝、维多利亚时代的大英帝国鼎盛，两次世界大战后帝国解体，至今仍为君主立宪国。', category: 'history', region: 'uk', significance: 2 },
+  // 德国
+  { id: 'eu038', year: 1871, endYear: 1918, title: '德意志帝国', description: '俾斯麦统一后的德意志帝国，工业化飞速发展，但一战战败后崩溃。', category: 'history', region: 'germany', significance: 2 },
+  { id: 'eu039', year: 1918, endYear: 1933, title: '魏玛共和国', description: '德国第一个民主共和国，在经济危机和政治极化中孕育了纳粹主义。', category: 'history', region: 'germany', significance: 2 },
+  { id: 'eu040', year: 1933, endYear: 1945, title: '纳粹德国（第三帝国）', description: '希特勒的独裁统治、二战和大屠杀——人类历史上最黑暗的篇章之一。', category: 'history', region: 'germany', significance: 3, figure: '希特勒' },
+  { id: 'eu041', year: 1949, endYear: 2030, title: '联邦德国（战后至今）', description: '从废墟中重建的经济奇迹、东西分裂、1990年统一到欧盟领导国。', category: 'history', region: 'germany', significance: 2 },
+  // 俄罗斯
+  { id: 'eu042', year: 862, endYear: 1240, title: '基辅罗斯', description: '东斯拉夫文明的摇篮，988年皈依东正教，1240年蒙古入侵后分裂。', category: 'history', region: 'russia', significance: 2 },
+  { id: 'eu043', year: 1240, endYear: 1480, title: '蒙古统治时期（金帐汗国宗主权）', description: '约240年的蒙古宗主权深刻影响了俄罗斯的政治文化——专制集权传统部分源于此。', category: 'history', region: 'russia', significance: 1 },
+  { id: 'eu044', year: 1480, endYear: 1613, title: '莫斯科大公国至混乱时期', description: '伊凡三世摆脱蒙古后莫斯科崛起，经历伊凡雷帝和动荡的"混乱时期"。', category: 'history', region: 'russia', significance: 2 },
+  { id: 'eu045', year: 1613, endYear: 1917, title: '罗曼诺夫王朝', description: '从米哈伊尔一世到末代沙皇尼古拉二世，罗曼诺夫家族统治俄国304年。', category: 'history', region: 'russia', significance: 3 },
+  { id: 'eu046', year: 1917, endYear: 1991, title: '苏联', description: '从十月革命到苏联解体，世界第一个社会主义大国存在了74年。', category: 'history', region: 'russia', significance: 3 },
+  { id: 'eu047', year: 1991, endYear: 2030, title: '俄罗斯联邦', description: '苏联解体后建立的俄罗斯联邦，经历叶利钦时代和普京长期执政。', category: 'history', region: 'russia', significance: 2 },
+  // 意大利
+  { id: 'eu048', year: -27, endYear: 476, title: '罗马帝国（西部）', description: '从奥古斯都到西罗马灭亡的五百年帝国。', category: 'history', region: 'italy', significance: 3 },
+  { id: 'eu049', year: 476, endYear: 1861, title: '意大利分裂时期', description: '从西罗马灭亡到统一的1400年间，意大利分裂为众多城邦、公国和外国统治区。', category: 'history', region: 'italy', significance: 1 },
+  { id: 'eu050', year: 1861, endYear: 2030, title: '意大利王国与共和国', description: '1861年统一后的意大利王国，1946年废除君主制成为共和国。', category: 'history', region: 'italy', significance: 2 },
+  // 西班牙
+  { id: 'eu051', year: 711, endYear: 1492, title: '伊斯兰统治与收复运动', description: '穆斯林征服伊比利亚后800年间基督教王国逐步南推，1492年收复格拉纳达。', category: 'history', region: 'spain', significance: 2 },
+  { id: 'eu052', year: 1492, endYear: 1700, title: '西班牙哈布斯堡王朝', description: '发现美洲后西班牙成为"日不落帝国"，但1588年无敌舰队覆灭后逐渐衰落。', category: 'history', region: 'spain', significance: 3 },
+  { id: 'eu053', year: 1700, endYear: 2030, title: '波旁王朝与现代西班牙', description: '西班牙波旁王朝经历衰落、拿破仑入侵、内战和佛朗哥独裁，1978年民主化。', category: 'history', region: 'spain', significance: 2 },
+  // 希腊
+  { id: 'eu054', year: -508, endYear: -146, title: '古典希腊与希腊化时代', description: '从雅典民主到亚历山大帝国再到罗马征服。', category: 'history', region: 'greece', significance: 3 },
+  { id: 'eu055', year: -146, endYear: 1453, title: '罗马-拜占庭统治', description: '希腊先为罗马行省，后为拜占庭帝国核心，1453年君士坦丁堡陷落。', category: 'history', region: 'greece', significance: 2 },
+  { id: 'eu056', year: 1453, endYear: 1821, title: '奥斯曼统治时期', description: '希腊在奥斯曼帝国统治下长达近400年。', category: 'history', region: 'greece', significance: 1 },
+  { id: 'eu057', year: 1821, endYear: 2030, title: '现代希腊', description: '1821年独立战争后建立的现代希腊国家。', category: 'history', region: 'greece', significance: 2 },
+  // 欧洲间隙补充
+  // 法国：751→843
+  { id: 'eu058', year: 751, endYear: 843, title: '加洛林帝国（法兰克）', description: '矮子丕平建立加洛林王朝，查理曼将帝国推向巅峰，843年凡尔登条约三分帝国。', category: 'history', region: 'france', significance: 2, figure: '查理曼' },
+  // 德国：1806→1871
+  { id: 'eu059', year: 1806, endYear: 1871, title: '德意志邦联时期', description: '神圣罗马帝国解散后，39个德意志邦国组成松散的邦联，普鲁士和奥地利争夺领导权。', category: 'history', region: 'germany', significance: 1 },
+  // 俄罗斯：1584→1613, 1725→1917
+  { id: 'eu060', year: 1584, endYear: 1613, title: '混乱时期（俄罗斯）', description: '伊凡雷帝之子费奥多尔绝嗣后俄国陷入无政府状态，外国干涉和伪沙皇接连登场，直到罗曼诺夫家族建立新王朝。', category: 'history', region: 'russia', significance: 1 },
+  { id: 'eu061', year: 1725, endYear: 1917, title: '罗曼诺夫王朝后期', description: '从彼得大帝去世到末代沙皇，经历叶卡捷琳娜大帝、拿破仑战争、克里米亚战争和1861年废除农奴制。', category: 'history', region: 'russia', significance: 2, figure: '叶卡捷琳娜二世/亚历山大二世' },
+  // 西班牙：1031→1492
+  { id: 'eu062', year: 1031, endYear: 1492, title: '收复运动后期（泰法诸国至统一）', description: '科尔多瓦哈里发国崩溃后伊比利亚分裂为泰法小国，卡斯蒂利亚和阿拉贡逐步南推，1492年攻陷格拉纳达完成收复。', category: 'history', region: 'spain', significance: 2 },
+  // 希腊：-404→-146
+  { id: 'eu063', year: -404, endYear: -146, title: '马其顿-希腊化时代', description: '伯罗奔尼撒战争后希腊城邦衰落，马其顿的腓力二世和亚历山大大帝崛起，希腊化文明传遍地中海至中亚。', category: 'history', region: 'greece', significance: 3, figure: '亚历山大大帝' },
+  // 土耳其：1566→1923
+  { id: 'eu064', year: 1566, endYear: 1923, title: '奥斯曼帝国后期', description: '苏莱曼之后帝国由盛转衰，经历数百年缓慢衰落，一战战败后被肢解，1923年凯末尔建立共和国。', category: 'history', region: 'turkey', significance: 2 },
 ]
 
 // 批量设置图片兜底

@@ -11,6 +11,7 @@ import { chinaDynastyEvents } from './events-china-dynasties'
 import { arabDynastyEvents } from './events-arab-dynasties'
 import { israelHistoryEvents } from './events-israel-history'
 import { europeDynastyEvents } from './events-europe-dynasties'
+import { globalDynastyEvents } from './events-global-dynasties'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -29,6 +30,7 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...arabDynastyEvents,
   ...israelHistoryEvents,
   ...europeDynastyEvents,
+  ...globalDynastyEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER

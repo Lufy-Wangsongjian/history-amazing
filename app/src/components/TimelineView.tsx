@@ -66,7 +66,7 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear }
 
   const eraGroups = useMemo(() => {
     const groups: { era: string; color: string; yearGroups: YearGroup[] }[] = []
-    let currentEra = ''
+    let currentEra: string | null = null
 
     yearGroups.forEach((yearGroup) => {
       if (yearGroup.era !== currentEra) {
