@@ -74,7 +74,7 @@ export function CompareView({ events, onSelectEvent }: CompareViewProps) {
   // 按时代分组
   const eraGroups = useMemo(() => {
     const groups: { era: string; color: string; rows: EraCompareRow[] }[] = []
-    let currentEra = ''
+    let currentEra: string | null = null
     compareData.forEach(row => {
       if (row.era !== currentEra) {
         currentEra = row.era

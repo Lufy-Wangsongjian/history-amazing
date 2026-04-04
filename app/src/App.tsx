@@ -10,13 +10,17 @@ import { EraNavigator } from '@/components/EraNavigator'
 import { ActiveFiltersBar } from '@/components/ActiveFiltersBar'
 import { WelcomeDialog } from '@/components/WelcomeDialog'
 import { CuratedPaths } from '@/components/CuratedPaths'
+import { TimeWarpOverlay } from '@/components/TimeWarpOverlay'
+import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { DEFAULT_YEAR_RANGE, useTimelineState } from '@/hooks/useTimelineState'
 import { useTheme } from '@/hooks/useTheme'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 import { ALL_REGIONS, getVisibleSelectedRegions } from '@/data/regions'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear } from '@/data/types'
+import type { HistoricalEvent } from '@/data/types'
 import { Globe, Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import './App.css'
 
 const WELCOME_STORAGE_KEY = 'chrono-atlas-welcome-dismissed'
@@ -25,6 +29,15 @@ function App() {
   const state = useTimelineState()
   const { theme, toggleTheme } = useTheme()
   const isMobile = useIsMobile()
+
+  // 全局键盘快捷键
+  useKeyboardShortcuts({
+    events: state.filteredEvents,
+    selectedEvent: state.selectedEvent,
+    setSelectedEvent: state.setSelectedEvent,
+    setFocusYear: state.setFocusYear,
+  })
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showTodayInHistory, setShowTodayInHistory] = useState(false)
   const [showCuratedPaths, setShowCuratedPaths] = useState(false)
@@ -33,18 +46,37 @@ function App() {
     return !window.localStorage.getItem(WELCOME_STORAGE_KEY)
   })
 
+  // 穿越动画状态
+  const [warpActive, setWarpActive] = useState(false)
+  const [warpTarget, setWarpTarget] = useState<HistoricalEvent | null>(null)
+  const warpTargetRef = useRef<HistoricalEvent | null>(null)
+
   const dismissWelcome = () => {
     window.localStorage.setItem(WELCOME_STORAGE_KEY, '1')
     setShowWelcome(false)
   }
 
-  const handleRandomExplore = () => {
+  /** 增强版穿越：尊重当前筛选条件 + 播放时空隧道动画 */
+  const handleRandomExplore = useCallback(() => {
     const events = state.filteredEvents
     if (events.length === 0) return
     const idx = Math.floor(Math.random() * events.length)
-    state.setSelectedEvent(events[idx])
+    const target = events[idx]
     dismissWelcome()
-  }
+
+    // 启动穿越动画
+    warpTargetRef.current = target
+    setWarpTarget(target)
+    setWarpActive(true)
+  }, [state.filteredEvents])
+
+  /** 穿越动画结束回调 — openDetail=true 时打开事件详情 */
+  const handleWarpComplete = useCallback((openDetail?: boolean) => {
+    setWarpActive(false)
+    if (openDetail && warpTargetRef.current) {
+      state.setSelectedEvent(warpTargetRef.current)
+    }
+  }, [state.setSelectedEvent])
 
   const activeFilters: Array<{ id: string; label: string; onRemove: () => void }> = []
   const visibleSelectedRegions = getVisibleSelectedRegions(state.selectedRegions)
@@ -213,6 +245,8 @@ function App() {
             coreOnly={state.coreOnly}
             setCoreOnly={state.setCoreOnly}
             onMobileClose={isMobile ? () => setMobileMenuOpen(false) : undefined}
+            events={state.filteredEvents}
+            onSelectEvent={state.setSelectedEvent}
           />
         </div>
 
@@ -306,6 +340,15 @@ function App() {
           setShowCuratedPaths(false)
         }}
       />
+
+      <TimeWarpOverlay
+        active={warpActive}
+        targetEvent={warpTarget}
+        allEvents={state.filteredEvents}
+        onComplete={handleWarpComplete}
+      />
+
+      <KeyboardShortcutsHelp />
     </div>
   )
 }

@@ -242,12 +242,15 @@ export function CivilizationMapView({ onSelectEvent }: CivilizationMapViewProps)
     return result
   }, [columns])
 
-  // 初始滚动
+  // 初始滚动（仅首次加载完成时执行，缩放时不重置位置）
+  const hasScrolledRef = useRef(false)
   useEffect(() => {
-    if (containerRef.current && !loading) {
-      containerRef.current.scrollTop = Math.max(0, yearToY(-3000) - 60)
+    if (containerRef.current && !loading && !hasScrolledRef.current) {
+      hasScrolledRef.current = true
+      const initialYearPx = BASE_YEAR_PX * 1
+      containerRef.current.scrollTop = Math.max(0, (-3000 - MIN_YEAR) * initialYearPx - 60)
     }
-  }, [yearToY, loading])
+  }, [loading])
 
   const handleZoomIn = () => setZoom(z => Math.min(z * 1.4, 5))
   const handleZoomOut = () => setZoom(z => Math.max(z / 1.4, 0.2))

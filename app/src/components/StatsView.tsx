@@ -4,6 +4,7 @@ import { CATEGORY_CONFIG, ERAS, REGION_CONFIG, formatYear } from '@/data/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CONTINENT_GROUPS } from '@/data/regions'
 import { RegionFlag } from './RegionFlag'
+import { EventDensityChart } from './EventDensityChart'
 
 interface StatsViewProps {
   events: HistoricalEvent[]
@@ -69,6 +70,18 @@ export function StatsView({ events, onSelectEvent }: StatsViewProps) {
             <p className="text-xs text-muted-foreground">
               当前展示 <strong className="text-foreground">{events.length}</strong> 条历史事件的统计分析
             </p>
+          </div>
+
+          {/* 文明活跃度曲线 — 时间密度折线图 */}
+          <div className="bg-card/50 rounded-xl border border-border/50 p-5 mb-6">
+            <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+              <span className="w-1 h-4 rounded-full bg-gradient-to-b from-amber-500 to-blue-500" />
+              文明活跃度曲线
+              <span className="text-[10px] text-muted-foreground font-normal ml-1">
+                每百年事件密度分布 · 点击柱段可跳转
+              </span>
+            </h3>
+            <EventDensityChart events={events} />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

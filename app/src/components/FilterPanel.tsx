@@ -1,14 +1,15 @@
 import { CATEGORY_CONFIG, REGION_CONFIG } from '@/data/types'
-import type { Category, Region } from '@/data/types'
+import type { Category, Region, HistoricalEvent } from '@/data/types'
 import { ALL_REGIONS, CONTINENT_GROUPS } from '@/data/regions'
 import { Badge } from '@/components/ui/badge'
 import { Slider } from '@/components/ui/slider'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { SearchAutocomplete } from './SearchAutocomplete'
 import {
   BookOpen, FlaskConical, Music, Palette, Brain,
-  Landmark, Cog, Building2, Search, X, RotateCcw,
+  Landmark, Cog, Building2, RotateCcw,
   Grid3X3, AlignJustify, ChevronLeft, ChevronRight,
   ChevronDown, ChevronUp, BarChart3, CheckSquare,
   Church, Swords, Compass, HeartPulse, Columns, Layers,
@@ -19,7 +20,6 @@ import { useState, useCallback, useEffect, useMemo } from 'react'
 
 const TIMELINE_MIN_YEAR = -4000
 const TIMELINE_MAX_YEAR = 2030
-const POPULAR_SEARCHES = ['丝绸之路', '文艺复兴', '工业革命']
 
 const categoryIcons: Record<Category, React.ReactNode> = {
   literature: <BookOpen size={14} />,
@@ -64,6 +64,10 @@ interface FilterPanelProps {
   coreOnly: boolean
   setCoreOnly: (v: boolean) => void
   onMobileClose?: () => void
+  /** 用于搜索联想的已加载事件列表 */
+  events: HistoricalEvent[]
+  /** 选中联想结果事件的回调 */
+  onSelectEvent: (event: HistoricalEvent) => void
 }
 
 function clampYear(year: number) {
@@ -80,6 +84,7 @@ export function FilterPanel({
   filteredCount, totalCount,
   coreOnly, setCoreOnly,
   onMobileClose,
+  events, onSelectEvent,
 }: FilterPanelProps) {
   const [collapsed, setCollapsed] = useState(false)
   const [expandedContinents, setExpandedContinents] = useState<Set<string>>(new Set(['东亚', '欧洲']))
@@ -199,35 +204,12 @@ export function FilterPanel({
       <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
         <div className="p-4 space-y-5">
           <div>
-            <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
-              <Input
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder="搜索事件、人物..."
-                className="pl-8 h-8 text-xs bg-background/50"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  aria-label="清空搜索词"
-                >
-                  <X size={12} />
-                </button>
-              )}
-            </div>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {POPULAR_SEARCHES.map(keyword => (
-                <button
-                  key={keyword}
-                  onClick={() => setSearchQuery(keyword)}
-                  className="rounded-full border border-border/60 bg-background/60 px-2 py-0.5 text-[10px] text-muted-foreground transition-colors hover:border-border hover:text-foreground"
-                >
-                  {keyword}
-                </button>
-              ))}
-            </div>
+            <SearchAutocomplete
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              events={events}
+              onSelectEvent={onSelectEvent}
+            />
           </div>
 
           <div className="flex items-center justify-between">
