@@ -36,6 +36,7 @@ interface HistoricalEvent {
   significance: 1 | 2 | 3
   figure?: string
   icon?: string
+  image?: string
   relatedIds?: string[]
 }
 
@@ -68,8 +69,8 @@ async function seed() {
 
   // 准备批量插入语句
   const insertEvent = db.prepare(`
-    INSERT OR REPLACE INTO events (id, year, end_year, title, description, details, category, region, significance, figure, icon)
-    VALUES (@id, @year, @endYear, @title, @description, @details, @category, @region, @significance, @figure, @icon)
+    INSERT OR REPLACE INTO events (id, year, end_year, title, description, details, category, region, significance, figure, icon, image)
+    VALUES (@id, @year, @endYear, @title, @description, @details, @category, @region, @significance, @figure, @icon, @image)
   `)
 
   const insertRelation = db.prepare(`
@@ -92,6 +93,7 @@ async function seed() {
         significance: e.significance,
         figure: e.figure ?? null,
         icon: e.icon ?? null,
+        image: e.image ?? null,
       })
     }
 

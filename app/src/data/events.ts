@@ -5,6 +5,12 @@ import { axialEvents, empireEvents } from './events-axial'
 import { medievalEvents, preRenaissanceEvents } from './events-medieval'
 import { renaissanceEvents, scientificRevolutionEvents } from './events-renaissance'
 import { industrialEvents, modernEvents } from './events-modern'
+import { egyptDynastyEvents } from './events-egypt-dynasties'
+import { indiaDynastyEvents } from './events-india-dynasties'
+import { chinaDynastyEvents } from './events-china-dynasties'
+import { arabDynastyEvents } from './events-arab-dynasties'
+import { israelHistoryEvents } from './events-israel-history'
+import { europeDynastyEvents } from './events-europe-dynasties'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -17,6 +23,12 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...scientificRevolutionEvents,
   ...industrialEvents,
   ...modernEvents,
+  ...egyptDynastyEvents,
+  ...indiaDynastyEvents,
+  ...chinaDynastyEvents,
+  ...arabDynastyEvents,
+  ...israelHistoryEvents,
+  ...europeDynastyEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER

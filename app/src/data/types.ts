@@ -118,6 +118,7 @@ export interface HistoricalEvent {
   significance: 1 | 2 | 3    // 重要程度：1普通 2重要 3里程碑
   figure?: string             // 相关人物
   icon?: string               // 图标名
+  image?: string              // 配图 URL（Wikimedia Commons 等公共领域图片）
   relatedIds?: string[]       // 关联事件 ID（因果链）
 }
 

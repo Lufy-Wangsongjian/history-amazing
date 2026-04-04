@@ -35,7 +35,8 @@ function initSchema(db: Database.Database) {
       region        TEXT NOT NULL,
       significance  INTEGER NOT NULL CHECK (significance BETWEEN 1 AND 3),
       figure        TEXT,
-      icon          TEXT
+      icon          TEXT,
+      image         TEXT
     );
 
     CREATE TABLE IF NOT EXISTS event_relations (
@@ -75,6 +76,24 @@ function initSchema(db: Database.Database) {
       VALUES (new.rowid, new.title, new.description, new.figure, new.details);
     END;
   `)
+
+  ensureColumnExists(db, 'events', 'image', 'TEXT')
+}
+
+function ensureColumnExists(
+  db: Database.Database,
+  tableName: string,
+  columnName: string,
+  columnDefinition: string
+) {
+  const columns = db
+    .prepare(`PRAGMA table_info(${tableName})`)
+    .all() as Array<{ name: string }>
+
+  const hasColumn = columns.some(column => column.name === columnName)
+  if (!hasColumn) {
+    db.exec(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnDefinition}`)
+  }
 }
 
 export function closeDB() {

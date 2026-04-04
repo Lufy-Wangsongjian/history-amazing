@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear, getEra } from '@/data/types'
 import { buildEventDetailPreview } from '@/lib/event-detail'
@@ -20,12 +20,18 @@ interface EventCardProps {
 
 export function EventCard({ event, onClick, isSelected, layout = 'timeline', animationDelay = 0, causalRole = null }: EventCardProps) {
   const [expanded, setExpanded] = useState(false)
+  const [isThumbError, setIsThumbError] = useState(false)
   const catCfg = CATEGORY_CONFIG[event.category]
   const regionCfg = REGION_CONFIG[event.region]
   const detailPreview = buildEventDetailPreview(event)
   const isMilestone = event.significance === 3
   const isTurningPoint = event.significance === 2
   const eventEra = isMilestone ? getEra(event.year) : undefined
+  const thumbnailUrl = event.image
+
+  useEffect(() => {
+    setIsThumbError(false)
+  }, [event.id])
 
   /** 里程碑事件的时代装饰 SVG 纹样 */
   const eraDecorPattern = isMilestone && eventEra ? getEraDecorSvg(eventEra.name, catCfg.color) : null
@@ -62,6 +68,15 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
             style={{ backgroundColor: catCfg.color }}
           />
           <span className="text-[10px] text-muted-foreground">{formatYear(event.year)}</span>
+          {thumbnailUrl && !isThumbError && (
+            <img
+              src={thumbnailUrl}
+              alt={event.title}
+              loading="lazy"
+              className="h-6 w-8 rounded object-cover border border-border/40 flex-shrink-0"
+              onError={() => setIsThumbError(true)}
+            />
+          )}
           <span className="text-xs font-medium truncate">{event.title}</span>
           {isMilestone && <span className="text-amber-500 text-[9px] flex-shrink-0">★</span>}
         </div>
@@ -206,6 +221,18 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
           </div>
           </div>
         </div>
+
+        {thumbnailUrl && !isThumbError && (
+          <div className="mb-2 rounded-lg overflow-hidden border border-border/40 bg-muted/20">
+            <img
+              src={thumbnailUrl}
+              alt={event.title}
+              loading="lazy"
+              className="w-full h-24 object-cover"
+              onError={() => setIsThumbError(true)}
+            />
+          </div>
+        )}
 
         <p className={cn(
           'text-muted-foreground leading-relaxed',

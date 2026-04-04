@@ -29,6 +29,7 @@ interface EventRow {
   significance: number
   figure: string | null
   icon: string | null
+  image: string | null
 }
 
 interface ListQuery {
@@ -87,6 +88,7 @@ function mapEventRow(row: EventRow, relatedIds: string[] = []) {
     significance: row.significance,
     figure: row.figure ?? undefined,
     icon: row.icon ?? undefined,
+    image: row.image ?? undefined,
     relatedIds: relatedIds.length ? relatedIds : undefined,
   }
 }

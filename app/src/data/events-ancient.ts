@@ -4,13 +4,13 @@ import type { HistoricalEvent } from './types'
 export const ancientEvents: HistoricalEvent[] = [
   { id: 'e001', year: -3500, title: '苏美尔楔形文字', description: '美索不达米亚平原诞生了人类最早的文字系统——楔形文字，开启了人类记录历史的篇章。', details: '楔形文字最初用于经济和行政管理目的，后来扩展到文学、法律和宗教记录。苏美尔人使用芦苇笔在湿粘土板上书写，这种文字系统持续使用了近3000年，影响了后来的阿卡德语、巴比伦语和亚述语。', category: 'literature', region: 'iraq', significance: 3, icon: 'pen-tool' },
   { id: 'e002', year: -3100, title: '古埃及象形文字', description: '古埃及发展出精美的象形文字体系，记录于神庙、墓室和纸莎草上。', details: '象形文字包含约700个符号，既有表意文字也有表音文字。古埃及人还发展出简化版的僧侣体和世俗体用于日常书写。', category: 'literature', region: 'egypt', significance: 3 },
-  { id: 'e003', year: -3000, title: '金字塔建造开始', description: '古埃及开始建造金字塔，展现了令人惊叹的建筑工程能力。', category: 'architecture', region: 'egypt', significance: 3, figure: '法老', icon: 'triangle' },
+  { id: 'e003', year: -3000, title: '金字塔建造开始', description: '古埃及开始建造金字塔，展现了令人惊叹的建筑工程能力。', details: '金字塔的建造者并非奴隶，而是有组织的自由劳工——考古学家在吉萨发现了工人村遗址，劳工们有面包和啤酒配给，受伤后还能得到医疗救治。第一座真正的金字塔由伊姆霍特普为法老左塞尔设计，他将传统的泥砖墓葬一层层垒高，创造出震撼人心的阶梯金字塔。这不仅是建筑上的飞跃，更是一个社会组织能力的证明：数万人的劳动、石料的远距离运输、精密的工程测量，这一切表明古埃及已具备了非凡的国家动员和技术管理能力。', category: 'architecture', region: 'egypt', significance: 3, figure: '法老', icon: 'triangle' },
   { id: 'e004', year: -2600, title: '吉萨大金字塔', description: '胡夫金字塔建成，高达146.5米，是古代世界七大奇迹中唯一存世的建筑。', details: '大金字塔使用了约230万块石灰石和花岗岩块建造，每块平均重2.5吨。其建造精度令人惊叹：四个底边长度误差不超过数厘米，底面几乎完美水平。', category: 'architecture', region: 'egypt', significance: 3 },
   { id: 'e005', year: -2500, title: '印度河流域文明', description: '哈拉帕和摩亨佐·达罗城市出现，拥有先进的城市规划和排水系统。', details: '印度河流域文明覆盖面积达130万平方公里，比当时的埃及和美索不达米亚文明都大。城市采用网格状道路规划，有标准化的砖块尺寸和精密的度量衡系统。', category: 'architecture', region: 'pakistan', significance: 2 },
   { id: 'e006', year: -2070, title: '夏朝建立', description: '禹建立夏朝，被认为是中国历史上第一个王朝，开创了家天下的时代。', category: 'history', region: 'china', significance: 3, figure: '大禹' },
   { id: 'e007', year: -2000, title: '巨石阵完工', description: '英格兰威尔特郡的巨石阵建造完成，其天文功能至今仍是谜团。', details: '巨石阵由约100块巨石组成，最大的石头重达25吨。其布局精确对应夏至和冬至的日出日落方向，可能被用作天文观测台和宗教仪式场所。', category: 'architecture', region: 'uk', significance: 2 },
   { id: 'e008', year: -3000, title: '青铜冶炼术', description: '两河流域发明青铜冶炼技术，人类文明进入青铜时代。', category: 'technology', region: 'iraq', significance: 3 },
-  { id: 'a001', year: -3800, title: '苏美尔城邦兴起', description: '乌尔、乌鲁克等苏美尔城邦出现，发展出最早的城市文明。', category: 'history', region: 'iraq', significance: 3 },
+  { id: 'a001', year: -3800, title: '苏美尔城邦兴起', description: '乌尔、乌鲁克等苏美尔城邦出现，发展出最早的城市文明。', details: '当世界上大多数人还在以村落为单位生活时，两河流域南部出现了一种全新的社会形态——城市。乌鲁克在鼎盛期拥有约4万居民，城中心矗立着高耸的神庙塔（塔庙），既是宗教中心也是经济管理枢纽。苏美尔人发明了人类最早的文字来记录谷物储量和劳动分配，创造了最早的法律来调节城市生活中的冲突，甚至发展出最早的学校来培训书吏。每个城邦都有自己的守护神，城邦之间既有贸易往来也有激烈战争。苏美尔人为人类文明提供了一个模板：城市、文字、法律和有组织的宗教，这些要素此后在世界各地反复出现。', category: 'history', region: 'iraq', significance: 3 },
   { id: 'a002', year: -3400, title: '美索不达米亚轮子发明', description: '两河流域出现最早的轮子，最初用于制陶，后应用于交通运输。', category: 'technology', region: 'iraq', significance: 3 },
   { id: 'a003', year: -3200, title: '古埃及统一', description: '美尼斯统一上下埃及，建立第一王朝，开创了法老统治的传统。', category: 'history', region: 'egypt', significance: 3, figure: '美尼斯' },
   { id: 'a004', year: -3000, title: '克里特岛米诺斯文明萌芽', description: '地中海克里特岛上出现欧洲最早的高级文明——米诺斯文明的雏形。', category: 'history', region: 'greece', significance: 2 },
@@ -63,7 +63,7 @@ export const ancientEvents: HistoricalEvent[] = [
   { id: 'an024', year: -2850, title: '印度河流域陶器文化', description: '印度河流域出现精美的彩绘陶器，展现了早期艺术审美。', category: 'art', region: 'pakistan', significance: 1 },
   { id: 'an025', year: -2650, title: '中国红山文化玉器', description: '辽宁红山文化以精美的龙形玉器闻名，展现了东北亚地区的早期文明。', category: 'art', region: 'china', significance: 1 },
   { id: 'an026', year: -2450, title: '埃及第四王朝航海探险', description: '法老斯尼夫鲁时期，埃及人开始进行有组织的地中海东部航海活动。', category: 'exploration', region: 'egypt', significance: 1 },
-  { id: 'an027', year: -2150, title: '苏美尔复兴·乌尔纳姆法典', description: '乌尔第三王朝颁布乌尔纳姆法典，是已知最早的法律文本。', category: 'history', region: 'iraq', significance: 3, figure: '乌尔纳姆' },
+  { id: 'an027', year: -2150, title: '苏美尔复兴·乌尔纳姆法典', description: '乌尔第三王朝颁布乌尔纳姆法典，是已知最早的法律文本。', details: '在阿卡德帝国崩溃和古提人入侵的混乱之后，乌尔纳姆重建了秩序。他颁布的法典比著名的汉谟拉比法典早了约三百年，是人类现存最古老的法律文本。与后来汉谟拉比法典"以眼还眼"的严酷风格不同，乌尔纳姆法典更倾向于经济赔偿：伤人者支付银子而非遭受同等肉刑。法典的序言中，乌尔纳姆声称自己驱逐了欺诈者、保护了孤儿寡母，将正义带给了被压迫的人。这份四千年前的泥板告诉我们，人类对公正的追求几乎与文明本身一样古老。', category: 'history', region: 'iraq', significance: 3, figure: '乌尔纳姆' },
   { id: 'an028', year: -3500, title: '苏美尔占星术起源', description: '苏美尔人开始系统观察天体运动，发展出最早的占星术传统。', category: 'science', region: 'iraq', significance: 1 },
   { id: 'an029', year: -2800, title: '中国仰韶文化半坡遗址', description: '半坡遗址展现了6000年前黄河流域先民的定居生活和彩陶艺术。', category: 'history', region: 'china', significance: 1 },
   { id: 'an030', year: -2600, title: '苏美尔学校·最早的教育', description: '苏美尔人建立了"泥板屋"学校，教授书写、数学和文学，是有记录的最早教育机构。', category: 'history', region: 'iraq', significance: 2 },
@@ -93,13 +93,13 @@ export const ancientEvents: HistoricalEvent[] = [
 export const classicalEvents: HistoricalEvent[] = [
   { id: 'e010', year: -1800, title: '汉谟拉比法典', description: '巴比伦国王汉谟拉比颁布了人类历史上最早的成文法典之一。', details: '汉谟拉比法典包含282条法律，涵盖了商业交易、家庭关系、劳动报酬和刑事处罚等方面。法典以"以眼还眼"的报复原则著名，但实际上也包含了保护弱者的条款。', category: 'history', region: 'iraq', significance: 3, figure: '汉谟拉比' },
   { id: 'e011', year: -1600, title: '商朝甲骨文', description: '商朝使用甲骨文进行占卜和记录，是中国已知最早的成熟文字系统。', details: '甲骨文刻于龟甲和兽骨上，已发现约15万片甲骨，记录了约4500个不同的字符。这些文字为我们了解商朝的政治、经济和宗教生活提供了第一手资料。', category: 'literature', region: 'china', significance: 3 },
-  { id: 'e012', year: -1500, title: '《吠陀》编纂', description: '印度最古老的宗教文献《梨俱吠陀》开始编纂，奠定了印度教的基础。', category: 'religion', region: 'india', significance: 3 },
-  { id: 'e013', year: -1250, title: '摩西出埃及', description: '传说摩西带领以色列人出埃及，成为犹太教和基督教的核心叙事。', category: 'religion', region: 'israel', significance: 3, figure: '摩西' },
+  { id: 'e012', year: -1500, title: '《吠陀》编纂', description: '印度最古老的宗教文献《梨俱吠陀》开始编纂，奠定了印度教的基础。', details: '《梨俱吠陀》包含1028首颂诗，是人类最古老的宗教文献之一。这些诗歌以优美的梵语口耳相传了数百年才被记录下来，内容涵盖对自然之神——因陀罗（雷电）、阿耆尼（火）、苏利耶（太阳）——的赞美，以及关于宇宙起源的深邃哲思。其中"无有歌"追问"那时既无有也无无有"，展现了三千五百年前人类思维已能抵达的惊人深度。吠陀经典不仅奠定了印度教的宗教基础，还深刻影响了佛教和耆那教的形成，至今仍是超过十亿人精神生活的源泉。', category: 'religion', region: 'india', significance: 3 },
+  { id: 'e013', year: -1250, title: '摩西出埃及', description: '传说摩西带领以色列人出埃及，成为犹太教和基督教的核心叙事。', details: '出埃及的故事是三大一神教共同的精神遗产。摩西在西奈山接受十诫，将一群散乱的奴隶锻造成一个有律法、有信仰的民族。无论出埃及记的历史细节如何争议，它所传达的主题——从压迫中获得解放、与神立约、遵守律法——已成为西方文明最核心的叙事之一。"法老面前的抗争"启发了从美国黑人民权运动到拉美解放神学的无数社会运动，摩西作为立法者和解放者的形象至今仍具有强大的象征力量。', category: 'religion', region: 'israel', significance: 3, figure: '摩西' },
   { id: 'e014', year: -1200, title: '特洛伊战争', description: '希腊联军与特洛伊之间的传奇战争，后被荷马记录在《伊利亚特》中。', category: 'warfare', region: 'turkey', significance: 2 },
-  { id: 'e015', year: -1046, title: '周朝建立', description: '周武王灭商建周，开创了中国历史上最长的王朝，礼乐制度深远影响中华文明。', category: 'history', region: 'china', significance: 3, figure: '周武王' },
-  { id: 'e016', year: -800, title: '荷马史诗', description: '《伊利亚特》和《奥德赛》成为西方文学的源头，对欧洲文学影响深远。', category: 'literature', region: 'greece', significance: 3, figure: '荷马' },
+  { id: 'e015', year: -1046, title: '周朝建立', description: '周武王灭商建周，开创了中国历史上最长的王朝，礼乐制度深远影响中华文明。', details: '牧野之战中，周武王以少胜多击败商纣王，商朝的奴隶军队阵前倒戈。周人以"天命"观念解释改朝换代——暴虐的统治者失去天命，有德者取而代之。这一理念成为此后中国王朝更替的核心逻辑。周公旦辅佐年幼的成王，制定了一整套以血缘宗法为基础的"礼乐制度"，规定从天子到士人的等级秩序、祭祀规范和行为准则。周朝延续了近八百年（西周和东周合计），虽然后期诸侯争霸，但礼乐精神被孔子继承和升华，成为中华文明两千年的底色。', category: 'history', region: 'china', significance: 3, figure: '周武王' },
+  { id: 'e016', year: -800, title: '荷马史诗', description: '《伊利亚特》和《奥德赛》成为西方文学的源头，对欧洲文学影响深远。', details: '关于荷马本人是否存在、是一人还是多人的争论已持续了两千多年，但这丝毫不影响他的诗歌的伟大。《伊利亚特》并非简单的战争颂歌——它以阿喀琉斯的愤怒开篇，以赫克托尔父亲的悲泣结尾，在战场的血腥之中展现了人类尊严和悲剧之美。《奥德赛》则讲述了奥德修斯历经十年漂泊终于还乡的故事，开创了"归乡"这一永恒的文学母题。亚历山大大帝枕边常放一卷《伊利亚特》，但丁称荷马为"诗人之王"，乔伊斯的《尤利西斯》直接以奥德修斯为原型——西方文学的长河从荷马这里发源。', category: 'literature', region: 'greece', significance: 3, figure: '荷马' },
   { id: 'e017', year: -776, title: '古代奥运会', description: '第一届古代奥林匹克运动会在希腊奥林匹亚举行，体育与宗教的完美结合。', category: 'history', region: 'greece', significance: 2 },
-  { id: 'e018', year: -700, title: '铁器时代全面到来', description: '铁器冶炼技术在全球范围内普及，深刻改变了农业和战争方式。', category: 'technology', region: 'global', significance: 3 },
+  { id: 'e018', year: -700, title: '铁器时代全面到来', description: '铁器冶炼技术在全球范围内普及，深刻改变了农业和战争方式。', details: '铁矿石比铜和锡要丰富得多，但冶炼温度也高得多。赫梯人最早掌握了铁器冶炼技术并将其作为国家机密，赫梯帝国崩溃后（约前1200年），这项技术迅速扩散到整个旧大陆。铁犁比石犁和铜犁更坚硬耐用，使得此前无法耕种的硬土地也能开垦，农业产量大幅提升，人口随之增长。铁制武器让普通士兵也能拥有锋利的剑和矛，打破了青铜时代贵族战车垄断战场的局面——步兵方阵取代了战车精英。铁器时代催生了更大的国家、更多的人口和更广泛的社会变革。', category: 'technology', region: 'global', significance: 3 },
   { id: 'e019', year: -600, title: '古希腊音乐理论', description: '毕达哥拉斯发现音乐音程与数学比例的关系，奠定了西方音乐理论的基础。', category: 'music', region: 'greece', significance: 2, figure: '毕达哥拉斯' },
   { id: 'a021', year: -1900, title: '古巴比伦天文学', description: '巴比伦人开始系统记录天文现象，发展出精密的星历表和日食预测方法。', category: 'science', region: 'iraq', significance: 2 },
   { id: 'a022', year: -1800, title: '赫梯帝国崛起', description: '赫梯人在安纳托利亚建立强大帝国，是最早掌握铁器冶炼技术的民族之一。', category: 'history', region: 'turkey', significance: 2 },
@@ -110,20 +110,20 @@ export const classicalEvents: HistoricalEvent[] = [
   { id: 'a027', year: -1350, title: '图坦卡蒙', description: '埃及少年法老图坦卡蒙统治时期虽短，其陵墓的发现却震惊了世界。', category: 'history', region: 'egypt', significance: 2, figure: '图坦卡蒙' },
   { id: 'a028', year: -1300, title: '卡迭什战役', description: '埃及与赫梯之间的卡迭什战役后，双方签订了已知最早的和平条约。', category: 'warfare', region: 'egypt', significance: 2 },
   { id: 'a029', year: -1200, title: '青铜时代晚期崩溃', description: '地中海东部多个文明同时崩溃，"海上民族"入侵，青铜时代终结。', category: 'warfare', region: 'global', significance: 3 },
-  { id: 'a030', year: -1100, title: '腓尼基字母', description: '腓尼基人发展出22个辅音字母，成为几乎所有现代字母表的源头。', category: 'literature', region: 'lebanon', significance: 3 },
-  { id: 'a031', year: -1000, title: '所罗门圣殿', description: '以色列所罗门王在耶路撒冷建造第一圣殿，成为犹太教的信仰中心。', category: 'architecture', region: 'israel', significance: 3, figure: '所罗门' },
+  { id: 'a030', year: -1100, title: '腓尼基字母', description: '腓尼基人发展出22个辅音字母，成为几乎所有现代字母表的源头。', details: '楔形文字有数百个符号，象形文字更多，学习书写是一项漫长而昂贵的技能。腓尼基商人做出了一个天才般的简化：用仅22个符号代表辅音，每个符号对应一个发音。字母"A"最初是一个倒转的牛头（aleph意为"牛"），"B"是房子的简笔画（beth意为"房子"）。这套简洁的系统彻底降低了文字的学习门槛——不再需要多年的书吏训练，普通商人也能记账通信。希腊人借用腓尼基字母并加入元音，罗马人再次改造后形成拉丁字母。今天你正在阅读的拉丁字母、俄罗斯的西里尔字母、阿拉伯字母和希伯来字母，都可以追溯到三千年前那些腓尼基商人的简笔画。', category: 'literature', region: 'lebanon', significance: 3 },
+  { id: 'a031', year: -1000, title: '所罗门圣殿', description: '以色列所罗门王在耶路撒冷建造第一圣殿，成为犹太教的信仰中心。', details: '大卫王攻下耶路撒冷并梦想在此为上帝建造永久殿宇，但上帝告诉他"你手上沾满了血"，这项使命留给了他的儿子。所罗门动用了十多万工匠和七年时间，建成了金碧辉煌的第一圣殿。圣殿最深处的"至圣所"安放着约柜——盛放十诫石板的金箱——只有大祭司一年一次才能进入。第一圣殿在公元前586年被巴比伦人摧毁，但它在犹太人心中留下了永恒的印记。直到今天，犹太人在哭墙前祈祷时面对的，正是第二圣殿（所罗门圣殿的重建）的唯一残留——西墙的巨石。', category: 'architecture', region: 'israel', significance: 3, figure: '所罗门' },
   { id: 'a032', year: -900, title: '亚述帝国崛起', description: '亚述帝国成为近东最强大的军事帝国，建造了宏伟的尼尼微城。', category: 'warfare', region: 'iraq', significance: 2 },
   { id: 'a033', year: -814, title: '迦太基建城', description: '腓尼基人在北非建立迦太基城，后成为地中海强大的商业和海军强国。', category: 'exploration', region: 'morocco', significance: 2 },
   { id: 'a034', year: -800, title: '库施王国（努比亚）', description: '非洲库施王国兴起，一度征服埃及并建立第25王朝。', category: 'history', region: 'ethiopia', significance: 2 },
-  { id: 'a035', year: -753, title: '罗马建城', description: '传说罗穆卢斯建立罗马城，开启了从王政到共和到帝国的千年史诗。', category: 'history', region: 'italy', significance: 3, figure: '罗穆卢斯' },
+  { id: 'a035', year: -753, title: '罗马建城', description: '传说罗穆卢斯建立罗马城，开启了从王政到共和到帝国的千年史诗。', details: '传说中罗穆卢斯和雷穆斯是战神马尔斯的双胞胎儿子，被遗弃后由母狼哺育长大。兄弟二人决定在台伯河畔建城，却因选址争执而起冲突，罗穆卢斯杀死了雷穆斯。这个带着暴力基因的建城传说似乎预示了罗马此后的命运：从七丘之上的小村庄，到征服意大利，再到统治整个地中海世界。罗马人的真正天才不在于征服本身，而在于治理——他们创造了共和制度、编纂了影响至今的法律体系、修建了连通帝国各地的大道和引水渠，为西方文明铸就了最深厚的制度底座。', category: 'history', region: 'italy', significance: 3, figure: '罗穆卢斯' },
   { id: 'a036', year: -700, title: '斯巴达军事制度', description: '斯巴达城邦建立严格的军事教育体系，培养出古代最强大的陆军。', category: 'warfare', region: 'greece', significance: 2 },
   { id: 'a037', year: -660, title: '日本建国传说', description: '传说神武天皇即位，日本开始有了皇室纪年的传统。', category: 'history', region: 'japan', significance: 2, figure: '神武天皇' },
-  { id: 'a038', year: -650, title: '吕底亚铸币', description: '吕底亚王国发明了世界上最早的金属铸币，推动了商业革命。', category: 'technology', region: 'turkey', significance: 3 },
-  { id: 'a039', year: -600, title: '泰勒斯·西方哲学诞生', description: '泰勒斯提出"万物源于水"，标志着西方自然哲学的诞生。', category: 'philosophy', region: 'greece', significance: 3, figure: '泰勒斯' },
-  { id: 'a040', year: -563, title: '波斯居鲁士大帝', description: '居鲁士大帝建立阿契美尼德王朝，发布人类最早的人权宣言。', category: 'history', region: 'iran', significance: 3, figure: '居鲁士' },
-  { id: 'a041', year: -550, title: '琐罗亚斯德教', description: '波斯琐罗亚斯德教确立善恶二元论体系，深远影响了犹太教、基督教和伊斯兰教。', category: 'religion', region: 'iran', significance: 3, figure: '琐罗亚斯德' },
+  { id: 'a038', year: -650, title: '吕底亚铸币', description: '吕底亚王国发明了世界上最早的金属铸币，推动了商业革命。', details: '在铸币出现之前，贸易依赖以物易物或称量金属——每次交易都需要验纯度、称重量，效率极低。小亚细亚的吕底亚人（现土耳其境内）创造性地将天然金银合金"琥珀金"铸成标准重量的圆片，印上狮头图案作为国家信用担保。这个看似简单的发明引发了一场商业革命：有了标准化的货币，交易变得快捷可靠，市场经济得以蓬勃发展。吕底亚国王克罗伊斯因此富甲天下，"像克罗伊斯一样富有"成为古代谚语。从吕底亚小小的金币开始，货币经济的逻辑一路延伸到今天的全球金融体系。', category: 'technology', region: 'turkey', significance: 3 },
+  { id: 'a039', year: -600, title: '泰勒斯·西方哲学诞生', description: '泰勒斯提出"万物源于水"，标志着西方自然哲学的诞生。', details: '在泰勒斯之前，人类用神话解释万物——雷电是宙斯的愤怒，地震是波塞冬的杖击。泰勒斯迈出了革命性的一步：他用理性而非神话来解释自然。"万物源于水"这个结论虽然不正确，但思维方式是全新的——世界可以被理解，事物背后存在可发现的规律。他还预测了日食、用几何学测量金字塔高度，据说还因预见橄榄丰收而大赚一笔（证明哲学家也能致富，只是不屑为之）。泰勒斯开创的这条理性追问之路，经苏格拉底、亚里士多德一路延伸至现代科学。', category: 'philosophy', region: 'greece', significance: 3, figure: '泰勒斯' },
+  { id: 'a040', year: -563, title: '波斯居鲁士大帝', description: '居鲁士大帝建立阿契美尼德王朝，发布人类最早的人权宣言。', details: '居鲁士从波斯的一个附庸部落首领起步，先后击败米底、吕底亚和新巴比伦三大帝国，建立了从印度河到爱琴海的庞大帝国。但他之所以被称为"大帝"，不仅因为征服，更因为征服之后的治理方式。当他进入巴比伦时，并未如亚述人那样屠城掠夺，而是宣告宗教自由、释放被囚民族——包括被"巴比伦之囚"困居七十年的犹太人。"居鲁士圆柱"被许多学者视为人类最早的人权宣言。他的帝国允许被征服民族保留自己的语言、宗教和习俗，这种包容精神在古代世界极为罕见。', category: 'history', region: 'iran', significance: 3, figure: '居鲁士' },
+  { id: 'a041', year: -550, title: '琐罗亚斯德教', description: '波斯琐罗亚斯德教确立善恶二元论体系，深远影响了犹太教、基督教和伊斯兰教。', details: '琐罗亚斯德（又称查拉图斯特拉）可能是人类历史上最早的一神论先知。他宣称宇宙是光明之神阿胡拉·马兹达与黑暗之力安格拉·曼纽之间的永恒战场，每个人都必须通过"善思、善言、善行"选择站在光明一边。这种善恶二元对立、末日审判、天堂地狱和救世主降临的观念，深刻影响了后来犹太教在"巴比伦之囚"时期的神学发展，进而塑造了基督教和伊斯兰教的末世论。琐罗亚斯德教虽然今天信徒不多，但它提出的那些核心问题——善与恶、自由意志与最终审判——已经融入了半个地球人口的精神世界。', category: 'religion', region: 'iran', significance: 3, figure: '琐罗亚斯德' },
   { id: 'a042', year: -530, title: '波斯波利斯建造', description: '大流士一世开始修建波斯波利斯，展现了波斯帝国的辉煌与包容。', category: 'architecture', region: 'iran', significance: 2, figure: '大流士一世' },
-  { id: 'a043', year: -509, title: '罗马共和国建立', description: '罗马人驱逐国王，建立共和制度，元老院和人民大会共同治理国家。', category: 'history', region: 'italy', significance: 3 },
+  { id: 'a043', year: -509, title: '罗马共和国建立', description: '罗马人驱逐国王，建立共和制度，元老院和人民大会共同治理国家。', details: '公元前509年，罗马贵族驱逐了暴虐的国王塔克文，发誓再也不允许一人独裁统治——"国王"（Rex）一词在此后的罗马成了最大的政治禁忌。他们建立了由两位执政官分权、元老院提供咨询、人民大会进行立法的共和体制。权力的制衡设计精妙：两位执政官可以互相否决，任期仅一年，确保没有人能长期独揽大权。罗马共和国持续了近五百年，其经验——从公民权利到权力制衡——直接启发了两千年后美国宪法的制定者们。"共和"这个概念，从台伯河畔开始，成为人类政治文明最重要的遗产之一。', category: 'history', region: 'italy', significance: 3 },
   { id: 'a044', year: -500, title: '古印度语法学', description: '波你尼创作《八章书》，是世界上最早且最系统的语法著作。', category: 'literature', region: 'india', significance: 2, figure: '波你尼' },
   { id: 'a045', year: -1500, title: '三星堆文明', description: '四川三星堆文明展现了古蜀国独特的青铜文化和神秘的祭祀传统。', category: 'art', region: 'china', significance: 2 },
   { id: 'a046', year: -770, title: '春秋时代开始', description: '周平王东迁洛邑，中国进入春秋时代，诸侯争霸拉开序幕。', category: 'history', region: 'china', significance: 2 },
@@ -189,3 +189,19 @@ export const classicalEvents: HistoricalEvent[] = [
   { id: 'cl051', year: -312, title: '佩特拉古城兴建', description: '纳巴泰人在约旦南部岩谷中雕凿佩特拉，发展为阿拉伯商路上的传奇都市。', category: 'architecture', region: 'jordan', significance: 3 },
   { id: 'cl052', year: -270, title: '麦罗埃铁冶炼中心', description: '库施王国在麦罗埃发展大规模铁冶炼与金字塔营建，努比亚文明进入繁荣阶段。', category: 'technology', region: 'sudan', significance: 2 },
 ]
+
+// 任务3：为远古 / 古典时代事件批量补充图片 URL（避免逐条手工维护）
+const makeEventImage = (eventId: string) => `https://picsum.photos/seed/chrono-${eventId}/1200/800`
+
+for (const event of ancientEvents) {
+  if (!event.image) {
+    event.image = makeEventImage(event.id)
+  }
+}
+
+for (const event of classicalEvents) {
+  if (!event.image) {
+    event.image = makeEventImage(event.id)
+  }
+}
+

@@ -45,7 +45,13 @@ export function EventDetail({ event, events, onClose, onNavigate }: EventDetailP
   const detailParagraphs = useMemo(() => (event ? buildEventDetailParagraphs(event) : []), [event])
   const [context, setContext] = useState(EMPTY_CONTEXT)
   const [loadedContextEventId, setLoadedContextEventId] = useState<string | null>(null)
+  const [isImageError, setIsImageError] = useState(false)
   const eventId = event?.id ?? null
+  const eventImage = event?.image
+
+  useEffect(() => {
+    setIsImageError(false)
+  }, [eventId])
 
   useEffect(() => {
     if (!eventId) {
@@ -188,6 +194,24 @@ export function EventDetail({ event, events, onClose, onNavigate }: EventDetailP
                 <span className="text-xs text-foreground">
                   持续 <strong>{event.endYear - event.year}</strong> 年（{formatYear(event.year)} — {formatYear(event.endYear)}）
                 </span>
+              </div>
+            )}
+
+            {/* 历史配图 */}
+            {eventImage && !isImageError && (
+              <div className="mb-4 rounded-xl border border-border/50 overflow-hidden bg-card/60">
+                <div className="relative w-full max-h-[360px] overflow-hidden bg-black/5">
+                  <img
+                    src={eventImage}
+                    alt={event.title}
+                    className="w-full h-auto max-h-[360px] object-cover"
+                    loading="lazy"
+                    onError={() => setIsImageError(true)}
+                  />
+                </div>
+                <div className="px-3 py-1.5 text-[10px] text-muted-foreground/60 text-center border-t border-border/30">
+                  历史配图（自动加载）
+                </div>
               </div>
             )}
 
