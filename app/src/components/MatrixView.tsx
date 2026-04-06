@@ -9,11 +9,13 @@ interface MatrixViewProps {
   events: HistoricalEvent[]
   selectedEvent: HistoricalEvent | null
   onSelectEvent: (event: HistoricalEvent) => void
+  /** 点击单元格时跳转到时间线并应用对应筛选 */
+  onDrillDown?: (eraName: string, category: Category) => void
 }
 
 const MATRIX_CATEGORIES = Object.keys(CATEGORY_CONFIG) as Category[]
 
-export function MatrixView({ events, selectedEvent, onSelectEvent }: MatrixViewProps) {
+export function MatrixView({ events, selectedEvent, onSelectEvent, onDrillDown }: MatrixViewProps) {
   const [activeCell, setActiveCell] = useState<{ era: string; cat: Category } | null>(null)
 
   // Group events by era x category
@@ -214,12 +216,22 @@ export function MatrixView({ events, selectedEvent, onSelectEvent }: MatrixViewP
                 <span style={{ color: CATEGORY_CONFIG[activeCell.cat].color }}>{CATEGORY_CONFIG[activeCell.cat].label}</span>
                 <span className="text-muted-foreground font-normal ml-2">({activeCellEvents.length} 条)</span>
               </span>
-              <button
-                onClick={() => setActiveCell(null)}
-                className="text-[10px] text-muted-foreground hover:text-foreground"
-              >
-                关闭
-              </button>
+              <div className="flex items-center gap-2">
+                {onDrillDown && (
+                  <button
+                    onClick={() => onDrillDown(activeCell.era, activeCell.cat)}
+                    className="text-[10px] text-primary hover:text-primary/80 font-medium transition-colors"
+                  >
+                    在时间线中查看 →
+                  </button>
+                )}
+                <button
+                  onClick={() => setActiveCell(null)}
+                  className="text-[10px] text-muted-foreground hover:text-foreground"
+                >
+                  关闭
+                </button>
+              </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
               {activeCellEvents.map(event => {

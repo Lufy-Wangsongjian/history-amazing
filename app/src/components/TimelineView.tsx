@@ -11,6 +11,10 @@ interface TimelineViewProps {
   selectedEvent: HistoricalEvent | null
   onSelectEvent: (event: HistoricalEvent) => void
   focusYear: number | null
+  /** 收藏 ID 集合 */
+  favoriteIds?: Set<string>
+  /** 切换收藏 */
+  onToggleFavorite?: (eventId: string) => void
 }
 
 interface YearGroup {
@@ -34,7 +38,7 @@ const ERA_MOOD_MAP: Record<string, string> = {
   '现代': 'modern',
 }
 
-export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear }: TimelineViewProps) {
+export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, favoriteIds, onToggleFavorite }: TimelineViewProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [activeEra, setActiveEra] = useState<string>('')
   const [eraMood, setEraMood] = useState<string>('modern')
@@ -381,6 +385,8 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear }
                               isSelected={selectedEvent?.id === event.id}
                               animationDelay={delay}
                               causalRole={causalRole}
+                              isFavorite={favoriteIds?.has(event.id)}
+                              onToggleFavorite={onToggleFavorite}
                             />
                           )
                         })}

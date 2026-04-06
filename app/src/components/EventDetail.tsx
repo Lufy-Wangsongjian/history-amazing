@@ -15,6 +15,8 @@ import {
   ChevronRight,
   X,
   PanelRightOpen,
+  Heart,
+  Share2,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { RegionFlag } from './RegionFlag'
@@ -30,6 +32,12 @@ interface EventDetailProps {
   events: HistoricalEvent[]
   onClose: () => void
   onNavigate: (event: HistoricalEvent) => void
+  /** 是否已收藏当前事件 */
+  isFavorite?: boolean
+  /** 切换收藏状态 */
+  onToggleFavorite?: () => void
+  /** 分享事件卡片 */
+  onShare?: () => void
 }
 
 const EMPTY_CONTEXT = {
@@ -38,7 +46,7 @@ const EMPTY_CONTEXT = {
   relatedEvents: [] as HistoricalEvent[],
 }
 
-export function EventDetail({ event, events, onClose, onNavigate }: EventDetailProps) {
+export function EventDetail({ event, events, onClose, onNavigate, isFavorite, onToggleFavorite, onShare }: EventDetailProps) {
   const catCfg = event ? CATEGORY_CONFIG[event.category] : null
   const regionCfg = event ? REGION_CONFIG[event.region] : null
   const era = event ? getEra(event.year) : null
@@ -125,6 +133,30 @@ export function EventDetail({ event, events, onClose, onNavigate }: EventDetailP
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
+                {onToggleFavorite && (
+                  <button
+                    onClick={onToggleFavorite}
+                    className={`inline-flex min-h-10 items-center gap-1 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${
+                      isFavorite
+                        ? 'border-rose-500/30 bg-rose-500/10 text-rose-500 hover:bg-rose-500/20'
+                        : 'border-border/60 text-muted-foreground hover:bg-accent hover:text-rose-500'
+                    }`}
+                    title={isFavorite ? '取消收藏' : '收藏此事件'}
+                  >
+                    <Heart size={14} fill={isFavorite ? 'currentColor' : 'none'} />
+                    <span className="hidden sm:inline">{isFavorite ? '已收藏' : '收藏'}</span>
+                  </button>
+                )}
+                {onShare && (
+                  <button
+                    onClick={onShare}
+                    className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-border/60 px-3 py-2 text-xs text-muted-foreground font-medium transition-all hover:bg-accent hover:text-foreground"
+                    title="生成分享卡片"
+                  >
+                    <Share2 size={14} />
+                    <span className="hidden sm:inline">分享</span>
+                  </button>
+                )}
                 <button
                   onClick={() => previousEvent && handleNavigate(previousEvent)}
                   disabled={!previousEvent}

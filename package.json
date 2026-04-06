@@ -9,9 +9,13 @@
     "build:app": "npm --prefix app run build",
     "seed": "npm --prefix server run seed",
     "start:server": "npm --prefix server run start",
-    "install:all": "npm --prefix app install && npm --prefix server install"
+    "install:all": "npm --prefix app install && npm --prefix server install",
+    "test:e2e": "npx playwright test",
+    "test:e2e:headed": "npx playwright test --headed",
+    "test:e2e:report": "npx playwright show-report"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "concurrently": "^9.2.1"
   }
 }

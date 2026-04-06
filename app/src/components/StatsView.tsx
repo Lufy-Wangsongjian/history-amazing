@@ -5,13 +5,19 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { CONTINENT_GROUPS } from '@/data/regions'
 import { RegionFlag } from './RegionFlag'
 import { EventDensityChart } from './EventDensityChart'
+import { FigureWordCloud } from './FigureWordCloud'
+import { RegionEraHeatmap } from './RegionEraHeatmap'
 
 interface StatsViewProps {
   events: HistoricalEvent[]
   onSelectEvent: (event: HistoricalEvent) => void
+  /** 搜索跳转（用于词云点击） */
+  onSearch?: (query: string) => void
+  /** 跳转到时间线筛选（用于条形图点击） */
+  onDrillDown?: (yearRange: [number, number], category?: Category) => void
 }
 
-export function StatsView({ events, onSelectEvent }: StatsViewProps) {
+export function StatsView({ events, onSelectEvent, onSearch, onDrillDown }: StatsViewProps) {
   // 按时代统计
   const eraStats = useMemo(() => {
     const counts = new Map<string, number>()
@@ -93,8 +99,13 @@ export function StatsView({ events, onSelectEvent }: StatsViewProps) {
               </h3>
               <div className="space-y-2.5">
                 {eraStats.map(era => (
-                  <div key={era.name} className="flex items-center gap-3">
-                    <span className="text-[10px] font-medium w-24 text-right flex-shrink-0 truncate" style={{ color: era.color }}>
+                  <button
+                    key={era.name}
+                    className="flex items-center gap-3 group"
+                    onClick={() => onDrillDown?.([era.startYear, era.endYear])}
+                    title={`点击查看 ${era.name} 的时间线`}
+                  >
+                    <span className="text-[10px] font-medium w-24 text-right flex-shrink-0 truncate group-hover:underline" style={{ color: era.color }}>
                       {era.name}
                     </span>
                     <div className="flex-1 h-6 bg-muted/30 rounded-md overflow-hidden relative">
@@ -109,7 +120,7 @@ export function StatsView({ events, onSelectEvent }: StatsViewProps) {
                         {era.count}
                       </span>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -217,6 +228,27 @@ export function StatsView({ events, onSelectEvent }: StatsViewProps) {
                   )
                 })}
               </div>
+            </div>
+          </div>
+
+          {/* 人物词云 + 地域×时代热力图 */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <div className="bg-card/50 rounded-xl border border-border/50 p-5">
+              <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                <span className="w-1 h-4 rounded-full bg-purple-500" />
+                历史人物词云
+                <span className="text-[10px] text-muted-foreground font-normal ml-1">点击人物可搜索</span>
+              </h3>
+              <FigureWordCloud events={events} onSearch={onSearch} />
+            </div>
+
+            <div className="bg-card/50 rounded-xl border border-border/50 p-5">
+              <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                <span className="w-1 h-4 rounded-full bg-cyan-500" />
+                地域 × 时代活跃度
+                <span className="text-[10px] text-muted-foreground font-normal ml-1">哪些地区在哪些时代最活跃</span>
+              </h3>
+              <RegionEraHeatmap events={events} />
             </div>
           </div>
         </div>

@@ -34,7 +34,8 @@ function parseURLState() {
   const view = parseViewMode(params.get('view'))
   const search = params.get('q') || undefined
   const coreOnly = params.get('core') === '0' ? false : true
-  return { categories, regions, yearMin, yearMax, view, search, coreOnly }
+  const eventId = params.get('event') || undefined
+  return { categories, regions, yearMin, yearMax, view, search, coreOnly, eventId }
 }
 
 function syncURLState(state: {
@@ -44,6 +45,7 @@ function syncURLState(state: {
   viewMode: ViewMode
   searchQuery: string
   coreOnly: boolean
+  selectedEventId: string | null
 }) {
   const params = new URLSearchParams()
   const effectiveRegions = getEffectiveRegionFilters(state.selectedRegions)
@@ -55,6 +57,7 @@ function syncURLState(state: {
   if (state.viewMode !== 'timeline') params.set('view', state.viewMode)
   if (state.searchQuery) params.set('q', state.searchQuery)
   if (!state.coreOnly) params.set('core', '0')
+  if (state.selectedEventId) params.set('event', state.selectedEventId)
   const str = params.toString()
   const url = str ? `${window.location.pathname}?${str}` : window.location.pathname
   window.history.replaceState(null, '', url)
@@ -78,7 +81,7 @@ export function useTimelineState() {
   )
   const [viewMode, setViewMode] = useState<ViewMode>(urlState.view ?? 'timeline')
   const [searchQuery, setSearchQuery] = useState(urlState.search ?? '')
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(urlState.eventId ?? null)
   const [focusYear, setFocusYear] = useState<number | null>(null)
   const [filteredEvents, setFilteredEvents] = useState<HistoricalEvent[]>([])
   const [statsTotal, setStatsTotal] = useState(0)
@@ -98,8 +101,9 @@ export function useTimelineState() {
       viewMode,
       searchQuery: normalizedSearch,
       coreOnly,
+      selectedEventId,
     })
-  }, [selectedCategories, selectedRegions, yearRange, viewMode, normalizedSearch, coreOnly])
+  }, [selectedCategories, selectedRegions, yearRange, viewMode, normalizedSearch, coreOnly, selectedEventId])
 
   const query = useMemo(() => {
     const categories = Array.from(selectedCategories)

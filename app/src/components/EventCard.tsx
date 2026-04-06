@@ -3,7 +3,7 @@ import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear, getEra } from '@/data/types'
 import { buildEventDetailPreview } from '@/lib/event-detail'
 import { cn } from '@/lib/utils'
-import { ChevronDown, Clock, MapPin, User, Star, Tag, PanelRightOpen, Zap } from 'lucide-react'
+import { ChevronDown, Clock, MapPin, User, Star, Tag, PanelRightOpen, Zap, Heart } from 'lucide-react'
 import { CategoryIcon } from './CategoryIcon'
 import { RegionFlag } from './RegionFlag'
 
@@ -16,9 +16,13 @@ interface EventCardProps {
   animationDelay?: number
   /** 因果关联分类（当有事件选中时）：'related' | 'unrelated' | null */
   causalRole?: 'related' | 'unrelated' | null
+  /** 是否已收藏 */
+  isFavorite?: boolean
+  /** 切换收藏回调 */
+  onToggleFavorite?: (eventId: string) => void
 }
 
-export function EventCard({ event, onClick, isSelected, layout = 'timeline', animationDelay = 0, causalRole = null }: EventCardProps) {
+export function EventCard({ event, onClick, isSelected, layout = 'timeline', animationDelay = 0, causalRole = null, isFavorite = false, onToggleFavorite }: EventCardProps) {
   const [expanded, setExpanded] = useState(false)
   const [isThumbError, setIsThumbError] = useState(false)
   const catCfg = CATEGORY_CONFIG[event.category]
@@ -308,9 +312,24 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
           </div>
 
           <div className="mt-3 flex items-center justify-between gap-2">
-            <span className="text-[10px] text-muted-foreground">
-              点击卡片可展开 / 收起摘要
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-muted-foreground">
+                点击卡片可展开 / 收起摘要
+              </span>
+              {onToggleFavorite && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); onToggleFavorite(event.id) }}
+                  className={cn(
+                    'inline-flex items-center gap-1 text-[11px] transition-colors',
+                    isFavorite ? 'text-rose-500 hover:text-rose-400' : 'text-muted-foreground hover:text-rose-500'
+                  )}
+                  title={isFavorite ? '取消收藏' : '收藏'}
+                >
+                  <Heart size={11} fill={isFavorite ? 'currentColor' : 'none'} />
+                  {isFavorite ? '已收藏' : '收藏'}
+                </button>
+              )}
+            </div>
             <button
               onClick={handleOpenDetail}
               className="text-[11px] text-primary hover:text-primary/80 transition-colors inline-flex items-center gap-1"

@@ -89,6 +89,7 @@ export function CompareView({ events, onSelectEvent }: CompareViewProps) {
   const eastTotal = compareData.reduce((sum, r) => sum + r.eastEvents.length, 0)
   const westTotal = compareData.reduce((sum, r) => sum + r.westEvents.length, 0)
   const excludedTotal = Math.max(0, events.length - eastTotal - westTotal)
+  const resonanceCount = compareData.filter(r => r.eastEvents.length > 0 && r.westEvents.length > 0).length
 
   return (
     <div className="flex-1 min-h-0 overflow-hidden">
@@ -109,6 +110,12 @@ export function CompareView({ events, onSelectEvent }: CompareViewProps) {
                 <div className="w-3 h-3 rounded-full bg-blue-500/60" />
                 <span className="text-xs text-muted-foreground">西方 ({westTotal})</span>
               </div>
+              {resonanceCount > 0 && (
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-0.5 border-t border-dashed border-amber-500/60" />
+                  <span className="text-xs text-muted-foreground">共振 ({resonanceCount})</span>
+                </div>
+              )}
             </div>
             {excludedTotal > 0 && (
               <p className="mt-3 text-[11px] text-muted-foreground">
@@ -142,44 +149,86 @@ export function CompareView({ events, onSelectEvent }: CompareViewProps) {
                   </div>
 
                   <div className="space-y-2">
-                    {group.rows.map(row => (
-                      <div key={row.year} className="flex gap-2 items-stretch min-h-[40px]">
-                        {/* East side */}
-                        <div className="flex-1 flex flex-col gap-1 items-end">
-                          {row.eastEvents.map(event => (
-                            <CompareEventChip
-                              key={event.id}
-                              event={event}
-                              side="east"
-                              onClick={() => onSelectEvent(event)}
-                            />
-                          ))}
-                        </div>
+                    {group.rows.map(row => {
+                      const hasBothSides = row.eastEvents.length > 0 && row.westEvents.length > 0
+                      return (
+                        <div key={row.year} className="flex gap-2 items-stretch min-h-[40px] relative">
+                          {/* East side */}
+                          <div className="flex-1 flex flex-col gap-1 items-end">
+                            {row.eastEvents.map(event => (
+                              <CompareEventChip
+                                key={event.id}
+                                event={event}
+                                side="east"
+                                onClick={() => onSelectEvent(event)}
+                              />
+                            ))}
+                          </div>
 
-                        {/* Center year */}
-                        <div className="w-[80px] md:w-[100px] flex-shrink-0 flex flex-col items-center justify-center">
-                          <div
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: row.eraColor }}
-                          />
-                          <span className="text-[9px] font-mono text-muted-foreground mt-0.5 text-center leading-tight">
-                            {formatYear(row.year)}
-                          </span>
-                        </div>
-
-                        {/* West side */}
-                        <div className="flex-1 flex flex-col gap-1 items-start">
-                          {row.westEvents.map(event => (
-                            <CompareEventChip
-                              key={event.id}
-                              event={event}
-                              side="west"
-                              onClick={() => onSelectEvent(event)}
+                          {/* Center year + 共振连线 */}
+                          <div className="w-[80px] md:w-[100px] flex-shrink-0 flex flex-col items-center justify-center relative">
+                            {/* 共振连线装饰 — 东西方同时有事件时画连线 */}
+                            {hasBothSides && (
+                              <svg
+                                className="absolute inset-0 w-full h-full pointer-events-none"
+                                preserveAspectRatio="none"
+                              >
+                                <line
+                                  x1="0" y1="50%"
+                                  x2="100%" y2="50%"
+                                  stroke={row.eraColor}
+                                  strokeWidth="1"
+                                  strokeOpacity="0.35"
+                                  strokeDasharray="3 3"
+                                />
+                                {/* 中心光点 */}
+                                <circle
+                                  cx="50%" cy="50%"
+                                  r="3"
+                                  fill={row.eraColor}
+                                  opacity="0.5"
+                                >
+                                  <animate
+                                    attributeName="opacity"
+                                    values="0.3;0.7;0.3"
+                                    dur="2s"
+                                    repeatCount="indefinite"
+                                  />
+                                </circle>
+                              </svg>
+                            )}
+                            <div
+                              className={`w-2 h-2 rounded-full z-[1] ${hasBothSides ? 'ring-2 ring-offset-1 ring-offset-background' : ''}`}
+                              style={{
+                                backgroundColor: row.eraColor,
+                                ...(hasBothSides ? { ringColor: `${row.eraColor}40` } : {}),
+                              }}
                             />
-                          ))}
+                            <span className="text-[9px] font-mono text-muted-foreground mt-0.5 text-center leading-tight z-[1]">
+                              {formatYear(row.year)}
+                            </span>
+                            {/* 共振标签 */}
+                            {hasBothSides && (
+                              <span className="text-[7px] text-muted-foreground/60 mt-0.5 z-[1]">
+                                共振
+                              </span>
+                            )}
+                          </div>
+
+                          {/* West side */}
+                          <div className="flex-1 flex flex-col gap-1 items-start">
+                            {row.westEvents.map(event => (
+                              <CompareEventChip
+                                key={event.id}
+                                event={event}
+                                side="west"
+                                onClick={() => onSelectEvent(event)}
+                              />
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </div>
               ))

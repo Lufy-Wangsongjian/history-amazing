@@ -26,3 +26,7 @@ npm-debug.log*
 
 # CodeBuddy
 .codebuddy/
+
+# Playwright
+playwright-report/
+test-results/

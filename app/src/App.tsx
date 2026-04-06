@@ -12,15 +12,25 @@ import { WelcomeDialog } from '@/components/WelcomeDialog'
 import { CuratedPaths } from '@/components/CuratedPaths'
 import { TimeWarpOverlay } from '@/components/TimeWarpOverlay'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
+import { HistoryQuiz } from '@/components/HistoryQuiz'
+import { FavoritesPanel } from '@/components/FavoritesPanel'
+import { MobileTabBar } from '@/components/MobileTabBar'
+import { AutoExplore } from '@/components/AutoExplore'
+import { FigureGallery } from '@/components/FigureGallery'
+import { AchievementsPanel } from '@/components/AchievementsPanel'
 import { DEFAULT_YEAR_RANGE, useTimelineState } from '@/hooks/useTimelineState'
 import { useTheme } from '@/hooks/useTheme'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
+import { useFavorites } from '@/hooks/useFavorites'
+import { useReadProgress, useAchievements } from '@/hooks/useProgress'
+import { useRandomFact } from '@/lib/fun-facts'
+import { downloadShareCard } from '@/lib/share-card'
 import { ALL_REGIONS, getVisibleSelectedRegions } from '@/data/regions'
-import { CATEGORY_CONFIG, REGION_CONFIG, formatYear } from '@/data/types'
-import type { HistoricalEvent } from '@/data/types'
-import { Globe, Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen } from 'lucide-react'
-import { useState, useCallback, useRef } from 'react'
+import { CATEGORY_CONFIG, REGION_CONFIG, ERAS, formatYear } from '@/data/types'
+import type { HistoricalEvent, Category } from '@/data/types'
+import { Globe, Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard } from 'lucide-react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import './App.css'
 
 const WELCOME_STORAGE_KEY = 'chrono-atlas-welcome-dismissed'
@@ -29,6 +39,17 @@ function App() {
   const state = useTimelineState()
   const { theme, toggleTheme } = useTheme()
   const isMobile = useIsMobile()
+  const favs = useFavorites()
+  const progress = useReadProgress()
+  const achievements = useAchievements(progress.readIds, state.filteredEvents)
+  const randomFact = useRandomFact(state.filteredEvents)
+
+  // 自动标记已读：当用户打开事件详情时
+  useEffect(() => {
+    if (state.selectedEvent) {
+      progress.markRead(state.selectedEvent.id)
+    }
+  }, [state.selectedEvent])
 
   // 全局键盘快捷键
   useKeyboardShortcuts({
@@ -41,9 +62,16 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showTodayInHistory, setShowTodayInHistory] = useState(false)
   const [showCuratedPaths, setShowCuratedPaths] = useState(false)
+  const [showQuiz, setShowQuiz] = useState(false)
+  const [showFavorites, setShowFavorites] = useState(false)
+  const [showAutoExplore, setShowAutoExplore] = useState(false)
+  const [showFigureGallery, setShowFigureGallery] = useState(false)
+  const [showAchievements, setShowAchievements] = useState(false)
   const [showWelcome, setShowWelcome] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return !window.localStorage.getItem(WELCOME_STORAGE_KEY)
+    try {
+      if (typeof window === 'undefined') return false
+      return !window.localStorage.getItem(WELCOME_STORAGE_KEY)
+    } catch { return false }
   })
 
   // 穿越动画状态
@@ -52,7 +80,7 @@ function App() {
   const warpTargetRef = useRef<HistoricalEvent | null>(null)
 
   const dismissWelcome = () => {
-    window.localStorage.setItem(WELCOME_STORAGE_KEY, '1')
+    try { window.localStorage.setItem(WELCOME_STORAGE_KEY, '1') } catch {}
     setShowWelcome(false)
   }
 
@@ -77,6 +105,31 @@ function App() {
       state.setSelectedEvent(warpTargetRef.current)
     }
   }, [state.setSelectedEvent])
+
+  /** 矩阵下钻：切换到时间线视图 + 设置时代年份范围 + 设置类目筛选 */
+  const handleMatrixDrillDown = useCallback((eraName: string, category: Category) => {
+    const era = ERAS.find(e => e.name === eraName)
+    state.clearFilters()
+    if (era) {
+      state.setYearRange([era.startYear, era.endYear])
+    }
+    state.toggleCategory(category)
+    state.setViewMode('timeline')
+  }, [state.clearFilters, state.setYearRange, state.toggleCategory, state.setViewMode])
+
+  /** StatsView 下钻：设置年份范围 + 可选类目 → 切到时间线 */
+  const handleStatsDrillDown = useCallback((yearRange: [number, number], category?: Category) => {
+    state.clearFilters()
+    state.setYearRange(yearRange)
+    if (category) state.toggleCategory(category)
+    state.setViewMode('timeline')
+  }, [state.clearFilters, state.setYearRange, state.toggleCategory, state.setViewMode])
+
+  /** 搜索跳转（词云点击） */
+  const handleSearchJump = useCallback((query: string) => {
+    state.setSearchQuery(query)
+    state.setViewMode('timeline')
+  }, [state.setSearchQuery, state.setViewMode])
 
   const activeFilters: Array<{ id: string; label: string; onRemove: () => void }> = []
   const visibleSelectedRegions = getVisibleSelectedRegions(state.selectedRegions)
@@ -178,6 +231,82 @@ function App() {
           </button>
 
           <button
+            onClick={() => {
+              dismissWelcome()
+              setShowQuiz(true)
+            }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20
+              text-pink-600 dark:text-pink-400 hover:from-pink-500/20 hover:to-rose-500/20
+              transition-all duration-200 hover:shadow-sm"
+            title="历史知识测验"
+          >
+            <Brain size={14} />
+            <span className="hidden sm:inline">测验</span>
+          </button>
+
+          <button
+            onClick={() => {
+              dismissWelcome()
+              setShowFavorites(true)
+            }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-rose-500/10 to-red-500/10 border border-rose-500/20
+              text-rose-600 dark:text-rose-400 hover:from-rose-500/20 hover:to-red-500/20
+              transition-all duration-200 hover:shadow-sm relative"
+            title="我的收藏"
+          >
+            <Heart size={14} />
+            <span className="hidden sm:inline">收藏</span>
+            {favs.count > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center px-1">
+                {favs.count > 99 ? '99+' : favs.count}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => { dismissWelcome(); setShowFigureGallery(true) }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-indigo-500/10 to-blue-500/10 border border-indigo-500/20
+              text-indigo-600 dark:text-indigo-400 hover:from-indigo-500/20 hover:to-blue-500/20
+              transition-all duration-200 hover:shadow-sm hidden md:flex"
+            title="历史人物图鉴"
+          >
+            <Users size={14} />
+            <span className="hidden lg:inline">人物</span>
+          </button>
+
+          <button
+            onClick={() => { dismissWelcome(); setShowAutoExplore(true) }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-500/20
+              text-cyan-600 dark:text-cyan-400 hover:from-cyan-500/20 hover:to-teal-500/20
+              transition-all duration-200 hover:shadow-sm hidden md:flex"
+            title="连续穿越（自动探索）"
+          >
+            <Clapperboard size={14} />
+            <span className="hidden lg:inline">漫游</span>
+          </button>
+
+          <button
+            onClick={() => { dismissWelcome(); setShowAchievements(true) }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/20
+              text-amber-600 dark:text-amber-400 hover:from-amber-500/20 hover:to-yellow-500/20
+              transition-all duration-200 hover:shadow-sm relative hidden md:flex"
+            title="文明成就"
+          >
+            <Trophy size={14} />
+            <span className="hidden lg:inline">成就</span>
+            {achievements.unlockedCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 rounded-full bg-amber-500 text-white text-[9px] font-bold flex items-center justify-center px-1">
+                {achievements.unlockedCount}
+              </span>
+            )}
+          </button>
+
+          <button
             onClick={handleRandomExplore}
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
               bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20
@@ -201,6 +330,14 @@ function App() {
               <span className="text-[10px] text-primary">同步中…</span>
             )}
           </div>
+
+          {/* 冷知识提示 — 桌面端 */}
+          {randomFact && !state.isLoading && (
+            <div className="hidden xl:flex items-center gap-1.5 max-w-[280px]" title={randomFact.text}>
+              <span className="text-sm flex-shrink-0">{randomFact.emoji}</span>
+              <span className="text-[10px] text-muted-foreground/70 truncate">{randomFact.text}</span>
+            </div>
+          )}
 
           <button
             onClick={toggleTheme}
@@ -270,12 +407,15 @@ function App() {
                 selectedEvent={state.selectedEvent}
                 onSelectEvent={state.setSelectedEvent}
                 focusYear={state.focusYear}
+                favoriteIds={favs.favorites}
+                onToggleFavorite={favs.toggleFavorite}
               />
             ) : state.viewMode === 'matrix' ? (
               <MatrixView
                 events={state.filteredEvents}
                 selectedEvent={state.selectedEvent}
                 onSelectEvent={state.setSelectedEvent}
+                onDrillDown={handleMatrixDrillDown}
               />
             ) : state.viewMode === 'compare' ? (
               <CompareView
@@ -291,6 +431,8 @@ function App() {
               <StatsView
                 events={state.filteredEvents}
                 onSelectEvent={state.setSelectedEvent}
+                onSearch={handleSearchJump}
+                onDrillDown={handleStatsDrillDown}
               />
             )}
           </div>
@@ -299,6 +441,13 @@ function App() {
             events={state.filteredEvents}
             onSelectYear={state.setFocusYear}
           />
+
+          {isMobile && (
+            <MobileTabBar
+              viewMode={state.viewMode}
+              setViewMode={state.setViewMode}
+            />
+          )}
         </div>
       </div>
 
@@ -307,6 +456,9 @@ function App() {
         events={state.filteredEvents}
         onClose={() => state.setSelectedEvent(null)}
         onNavigate={(event) => state.setSelectedEvent(event)}
+        isFavorite={state.selectedEvent ? favs.isFavorite(state.selectedEvent.id) : false}
+        onToggleFavorite={state.selectedEvent ? () => favs.toggleFavorite(state.selectedEvent!.id) : undefined}
+        onShare={state.selectedEvent ? () => downloadShareCard(state.selectedEvent!) : undefined}
       />
 
       <TodayInHistory
@@ -349,6 +501,58 @@ function App() {
       />
 
       <KeyboardShortcutsHelp />
+
+      <HistoryQuiz
+        open={showQuiz}
+        onClose={() => setShowQuiz(false)}
+        events={state.filteredEvents}
+        onSelectEvent={(event) => {
+          state.setSelectedEvent(event)
+          setShowQuiz(false)
+        }}
+      />
+
+      <FavoritesPanel
+        open={showFavorites}
+        onClose={() => setShowFavorites(false)}
+        events={state.filteredEvents}
+        favoriteIds={favs.favorites}
+        onSelectEvent={(event) => {
+          state.setSelectedEvent(event)
+          setShowFavorites(false)
+        }}
+        onToggleFavorite={favs.toggleFavorite}
+        onClearAll={favs.clearAll}
+      />
+
+      <AutoExplore
+        open={showAutoExplore}
+        onClose={() => setShowAutoExplore(false)}
+        events={state.filteredEvents}
+        onSelectEvent={(event) => {
+          state.setSelectedEvent(event)
+          setShowAutoExplore(false)
+        }}
+      />
+
+      <FigureGallery
+        open={showFigureGallery}
+        onClose={() => setShowFigureGallery(false)}
+        events={state.filteredEvents}
+        onSelectEvent={(event) => {
+          state.setSelectedEvent(event)
+          setShowFigureGallery(false)
+        }}
+      />
+
+      <AchievementsPanel
+        open={showAchievements}
+        onClose={() => setShowAchievements(false)}
+        unlocked={achievements.unlocked}
+        locked={achievements.locked}
+        readCount={progress.readCount}
+        totalEvents={state.totalEvents}
+      />
     </div>
   )
 }
