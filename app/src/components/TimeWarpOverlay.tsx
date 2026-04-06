@@ -21,7 +21,7 @@ type WarpPhase = 'idle' | 'tunnel' | 'arrive' | 'reveal' | 'fadeout'
 
 /** 根据年份计算在 6000 年时间线中的百分比 */
 function getTimelinePercent(year: number): number {
-  const MIN_YEAR = -4000
+  const MIN_YEAR = -20000
   const MAX_YEAR = 2030
   const pct = ((year - MIN_YEAR) / (MAX_YEAR - MIN_YEAR)) * 100
   return Math.max(0, Math.min(100, pct))
@@ -36,7 +36,7 @@ function generateYearSequence(targetYear: number, count: number): number[] {
     const progress = i / count
     const randomRange = span * (1 - progress * progress)
     const year = Math.round(targetYear + (Math.random() - 0.5) * randomRange)
-    years.push(Math.max(-4000, Math.min(2030, year)))
+    years.push(Math.max(-20000, Math.min(2030, year)))
   }
   // 最后几个一定是目标年份
   years[count - 3] = targetYear + Math.round((Math.random() - 0.5) * 50)

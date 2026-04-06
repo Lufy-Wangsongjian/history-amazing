@@ -32,6 +32,8 @@ import { psychologyEvents, sociologyEvents, nationalLiberationEvents, maritimeEv
 import { currencyEvents, insuranceEvents, espionageEvents, gamingEvents, comicsEvents, advertisingEvents, museumEvents, conservationEvents, firefightingEvents, judicialEvents, abolitionEvents, agricultureEvents, energyEvents } from './events-enrichment-11'
 // Round 11 扩充包（特性 271-300）
 import { railwayEvents, aviationEvents, automobileEvents, archaeologyEvents, migrationEvents, festivalEvents, foodCultureEvents, spiceTradeEvents, cartographyEvents, measurementEvents } from './events-enrichment-12'
+// 非洲文明早期事件补充
+import { africaEarlyEvents } from './events-africa-early'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -156,6 +158,8 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...spiceTradeEvents,
   ...cartographyEvents,
   ...measurementEvents,
+  // 非洲文明早期补充
+  ...africaEarlyEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER

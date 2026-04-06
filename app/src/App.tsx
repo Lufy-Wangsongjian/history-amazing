@@ -241,7 +241,7 @@ function App() {
           </div>
           <div className="min-w-0">
             <h1 className="text-sm font-bold text-foreground tracking-tight truncate">Chrono Atlas</h1>
-            <p className="text-[10px] text-muted-foreground -mt-0.5 hidden sm:block">6000 年人类文明时间线</p>
+            <p className="text-[10px] text-muted-foreground -mt-0.5 hidden sm:block">人类文明时间线</p>
           </div>
         </div>
 

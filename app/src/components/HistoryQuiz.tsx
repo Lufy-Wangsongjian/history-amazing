@@ -46,7 +46,7 @@ function generateQuestion(event: HistoricalEvent, allEvents: HistoricalEvent[]):
         if (decoys.size >= 3) break
         const y = event.year + offset
         const fy = formatYear(y)
-        if (fy !== correctYear && y > -4000 && y < 2030) decoys.add(fy)
+        if (fy !== correctYear && y > -20000 && y < 2030) decoys.add(fy)
       }
       if (decoys.size < 3) return null
       const options = [correctYear, ...Array.from(decoys).slice(0, 3)].sort(() => Math.random() - 0.5)

@@ -10,7 +10,7 @@ interface EventDensityChartProps {
 
 /** 将事件按世纪分桶，计算每个桶的事件数量 */
 function buildDensityBuckets(events: HistoricalEvent[], bucketSize: number = 100) {
-  const MIN_YEAR = -4000
+  const MIN_YEAR = -20000
   const MAX_YEAR = 2030
   const bucketCount = Math.ceil((MAX_YEAR - MIN_YEAR) / bucketSize)
 
@@ -78,7 +78,7 @@ export function EventDensityChart({ events, onSelectRange }: EventDensityChartPr
 
   // 时代背景色段
   const eraRects = useMemo(() => {
-    const MIN_YEAR = -4000
+    const MIN_YEAR = -20000
     const MAX_YEAR = 2030
     const totalRange = MAX_YEAR - MIN_YEAR
     return ERAS.map(era => ({

@@ -5,7 +5,7 @@ import { fetchAllEvents, fetchStats } from '@/lib/api'
 
 export type ViewMode = 'timeline' | 'matrix' | 'stats' | 'compare' | 'civilizations'
 
-export const DEFAULT_YEAR_RANGE: [number, number] = [-4000, 2030]
+export const DEFAULT_YEAR_RANGE: [number, number] = [-20000, 2030]
 const EVENTS_PAGE_SIZE = 2000
 const DERIVED_EVENT_PATTERN = /_(?:context|acceleration|diffusion|legacy)$/
 

@@ -167,7 +167,7 @@ interface CivilizationMapViewProps {
   onSelectEvent: (event: HistoricalEvent) => void
 }
 
-const MIN_YEAR = -4000
+const MIN_YEAR = -20000
 const MAX_YEAR = 2030
 const BASE_YEAR_PX = 0.16
 const COL_WIDTH = 88

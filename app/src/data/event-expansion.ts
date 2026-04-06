@@ -23,7 +23,7 @@ const CATEGORY_ASPECT: Record<Category, string> = {
   medicine: '诊疗体系与公共健康',
 }
 
-const TIMELINE_MIN_YEAR = -4000
+const TIMELINE_MIN_YEAR = -20000
 const TIMELINE_MAX_YEAR = 2029
 
 export const HISTORICAL_EVENTS_MULTIPLIER = DERIVED_PHASES.length + 1

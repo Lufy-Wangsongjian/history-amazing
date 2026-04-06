@@ -18,7 +18,7 @@ import type { ViewMode } from '@/hooks/useTimelineState'
 import { formatYear } from '@/data/types'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 
-const TIMELINE_MIN_YEAR = -4000
+const TIMELINE_MIN_YEAR = -20000
 const TIMELINE_MAX_YEAR = 2030
 
 const categoryIcons: Record<Category, React.ReactNode> = {
@@ -37,11 +37,11 @@ const categoryIcons: Record<Category, React.ReactNode> = {
 }
 
 const ERA_PRESETS = [
-  { label: '远古', range: [-4000, -500] as [number, number] },
+  { label: '远古', range: [-20000, -500] as [number, number] },
   { label: '古典', range: [-500, 500] as [number, number] },
   { label: '中世纪', range: [500, 1400] as [number, number] },
   { label: '近现代', range: [1400, 2030] as [number, number] },
-  { label: '全部', range: [-4000, 2030] as [number, number] },
+  { label: '全部', range: [-20000, 2030] as [number, number] },
 ]
 
 const HIDDEN_REGIONS: Region[] = ['global']

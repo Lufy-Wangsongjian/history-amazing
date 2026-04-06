@@ -61,7 +61,7 @@ export function EraNavigator({ events, onSelectYear }: EraNavigatorProps) {
 
   // 里程碑位置标记
   const milestoneMarkers = useMemo(() => {
-    const MIN_YEAR = -4000
+    const MIN_YEAR = -20000
     const MAX_YEAR = 2030
     const totalRange = MAX_YEAR - MIN_YEAR
     return events
