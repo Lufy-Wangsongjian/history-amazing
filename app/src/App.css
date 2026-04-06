@@ -547,9 +547,13 @@
    穿越时空隧道动画 (P1 #4 — 穿越功能增强)
    ============================================================ */
 
-/* 整体覆盖层 */
+/* 整体覆盖层：动画不再阻断页面上的其他快捷操作，只有揭示卡片保留交互 */
 .time-warp-overlay {
-  pointer-events: all;
+  pointer-events: none;
+}
+
+.time-warp-reveal {
+  pointer-events: auto;
 }
 
 /* 背景入场 */

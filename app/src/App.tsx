@@ -1,37 +1,42 @@
 import { FilterPanel } from '@/components/FilterPanel'
 import { TimelineView } from '@/components/TimelineView'
-import { MatrixView } from '@/components/MatrixView'
-import { StatsView } from '@/components/StatsView'
-import { CompareView } from '@/components/CompareView'
-import { CivilizationMapView } from '@/components/CivilizationMapView'
 import { EventDetail } from '@/components/EventDetail'
-import { TodayInHistory } from '@/components/TodayInHistory'
 import { EraNavigator } from '@/components/EraNavigator'
 import { ActiveFiltersBar } from '@/components/ActiveFiltersBar'
-import { WelcomeDialog } from '@/components/WelcomeDialog'
-import { CuratedPaths } from '@/components/CuratedPaths'
-import { TimeWarpOverlay } from '@/components/TimeWarpOverlay'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
-import { HistoryQuiz } from '@/components/HistoryQuiz'
-import { FavoritesPanel } from '@/components/FavoritesPanel'
 import { MobileTabBar } from '@/components/MobileTabBar'
-import { AutoExplore } from '@/components/AutoExplore'
-import { FigureGallery } from '@/components/FigureGallery'
-import { AchievementsPanel } from '@/components/AchievementsPanel'
 import { DEFAULT_YEAR_RANGE, useTimelineState } from '@/hooks/useTimelineState'
 import { useTheme } from '@/hooks/useTheme'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 import { useFavorites } from '@/hooks/useFavorites'
 import { useReadProgress, useAchievements } from '@/hooks/useProgress'
+import { useExplorerMissions, type ExplorerMission } from '@/hooks/useExplorerMissions'
 import { useRandomFact } from '@/lib/fun-facts'
 import { downloadShareCard } from '@/lib/share-card'
 import { ALL_REGIONS, getVisibleSelectedRegions } from '@/data/regions'
 import { CATEGORY_CONFIG, REGION_CONFIG, ERAS, formatYear } from '@/data/types'
 import type { HistoricalEvent, Category } from '@/data/types'
-import { Globe, Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard } from 'lucide-react'
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { Globe, Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard, Target, Swords } from 'lucide-react'
+import { useState, useCallback, useRef, useEffect, useMemo, lazy, Suspense } from 'react'
 import './App.css'
+
+// 非核心视图和弹窗组件 lazy load（code-splitting）
+const MatrixView = lazy(() => import('@/components/MatrixView').then(m => ({ default: m.MatrixView })))
+const StatsView = lazy(() => import('@/components/StatsView').then(m => ({ default: m.StatsView })))
+const CompareView = lazy(() => import('@/components/CompareView').then(m => ({ default: m.CompareView })))
+const CivilizationMapView = lazy(() => import('@/components/CivilizationMapView').then(m => ({ default: m.CivilizationMapView })))
+const WelcomeDialog = lazy(() => import('@/components/WelcomeDialog').then(m => ({ default: m.WelcomeDialog })))
+const TodayInHistory = lazy(() => import('@/components/TodayInHistory').then(m => ({ default: m.TodayInHistory })))
+const CuratedPaths = lazy(() => import('@/components/CuratedPaths').then(m => ({ default: m.CuratedPaths })))
+const TimeWarpOverlay = lazy(() => import('@/components/TimeWarpOverlay').then(m => ({ default: m.TimeWarpOverlay })))
+const HistoryQuiz = lazy(() => import('@/components/HistoryQuiz').then(m => ({ default: m.HistoryQuiz })))
+const FavoritesPanel = lazy(() => import('@/components/FavoritesPanel').then(m => ({ default: m.FavoritesPanel })))
+const AutoExplore = lazy(() => import('@/components/AutoExplore').then(m => ({ default: m.AutoExplore })))
+const FigureGallery = lazy(() => import('@/components/FigureGallery').then(m => ({ default: m.FigureGallery })))
+const ExplorerMissions = lazy(() => import('@/components/ExplorerMissions').then(m => ({ default: m.ExplorerMissions })))
+const TimelineChallenge = lazy(() => import('@/components/TimelineChallenge').then(m => ({ default: m.TimelineChallenge })))
+const AchievementsPanel = lazy(() => import('@/components/AchievementsPanel').then(m => ({ default: m.AchievementsPanel })))
 
 const WELCOME_STORAGE_KEY = 'chrono-atlas-welcome-dismissed'
 
@@ -42,7 +47,19 @@ function App() {
   const favs = useFavorites()
   const progress = useReadProgress()
   const achievements = useAchievements(progress.readIds, state.filteredEvents)
+  const missions = useExplorerMissions(state.filteredEvents, progress.readIds)
   const randomFact = useRandomFact(state.filteredEvents)
+  const passportEras = useMemo(() => ERAS.map(era => ({
+    label: era.name,
+    unlocked: state.filteredEvents.some(event =>
+      progress.readIds.has(event.id) && event.year >= era.startYear && event.year < era.endYear
+    ),
+  })), [progress.readIds, state.filteredEvents])
+  const passportCategories = useMemo(() => (Object.entries(CATEGORY_CONFIG) as Array<[Category, typeof CATEGORY_CONFIG[Category]]>).map(([category, config]) => ({
+    label: config.label,
+    tone: config.color,
+    unlocked: state.filteredEvents.some(event => progress.readIds.has(event.id) && event.category === category),
+  })), [progress.readIds, state.filteredEvents])
 
   // 自动标记已读：当用户打开事件详情时
   useEffect(() => {
@@ -63,6 +80,8 @@ function App() {
   const [showTodayInHistory, setShowTodayInHistory] = useState(false)
   const [showCuratedPaths, setShowCuratedPaths] = useState(false)
   const [showQuiz, setShowQuiz] = useState(false)
+  const [showMissions, setShowMissions] = useState(false)
+  const [showTimelineChallenge, setShowTimelineChallenge] = useState(false)
   const [showFavorites, setShowFavorites] = useState(false)
   const [showAutoExplore, setShowAutoExplore] = useState(false)
   const [showFigureGallery, setShowFigureGallery] = useState(false)
@@ -130,6 +149,33 @@ function App() {
     state.setSearchQuery(query)
     state.setViewMode('timeline')
   }, [state.setSearchQuery, state.setViewMode])
+
+  const handleApplyMission = useCallback((mission: ExplorerMission) => {
+    dismissWelcome()
+    setShowMissions(false)
+    state.clearFilters()
+    state.setViewMode('timeline')
+
+    if (mission.payload.type === 'era') {
+      state.setYearRange(mission.payload.yearRange)
+      state.setFocusYear(mission.payload.yearRange[0])
+      state.setSelectedEvent(null)
+      return
+    }
+
+    if (mission.payload.type === 'category') {
+      state.toggleCategory(mission.payload.category)
+      state.setSelectedEvent(null)
+      return
+    }
+
+    const payload = mission.payload
+    if (payload.type !== 'chain') return
+    state.setSearchQuery(payload.search)
+    state.setFocusYear(payload.focusYear)
+    const anchorEvent = state.filteredEvents.find(event => event.id === payload.anchorId) || null
+    state.setSelectedEvent(anchorEvent)
+  }, [state.clearFilters, state.filteredEvents, state.setFocusYear, state.setSearchQuery, state.setSelectedEvent, state.setViewMode, state.setYearRange, state.toggleCategory])
 
   const activeFilters: Array<{ id: string; label: string; onRemove: () => void }> = []
   const visibleSelectedRegions = getVisibleSelectedRegions(state.selectedRegions)
@@ -243,6 +289,38 @@ function App() {
           >
             <Brain size={14} />
             <span className="hidden sm:inline">测验</span>
+          </button>
+
+          <button
+            onClick={() => {
+              dismissWelcome()
+              setShowMissions(true)
+            }}
+            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20
+              text-amber-600 dark:text-amber-400 hover:from-amber-500/20 hover:to-orange-500/20
+              transition-all duration-200 hover:shadow-sm hidden md:flex"
+            title="今日文明挑战"
+            data-testid="open-missions"
+          >
+            <Target size={14} />
+            <span className="hidden lg:inline">挑战</span>
+          </button>
+
+          <button
+            onClick={() => {
+              dismissWelcome()
+              setShowTimelineChallenge(true)
+            }}
+            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-violet-500/10 to-indigo-500/10 border border-violet-500/20
+              text-violet-600 dark:text-violet-400 hover:from-violet-500/20 hover:to-indigo-500/20
+              transition-all duration-200 hover:shadow-sm hidden md:flex"
+            title="时间对决"
+            data-testid="open-timeline-challenge"
+          >
+            <Swords size={14} />
+            <span className="hidden lg:inline">对决</span>
           </button>
 
           <button
@@ -401,6 +479,7 @@ function App() {
           />
 
           <div key={state.viewMode} className="flex-1 min-h-0 flex flex-col view-transition-enter">
+            <Suspense fallback={<div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">加载中…</div>}>
             {state.viewMode === 'timeline' ? (
               <TimelineView
                 events={state.filteredEvents}
@@ -435,12 +514,15 @@ function App() {
                 onDrillDown={handleStatsDrillDown}
               />
             )}
+            </Suspense>
           </div>
 
-          <EraNavigator
-            events={state.filteredEvents}
-            onSelectYear={state.setFocusYear}
-          />
+          {state.viewMode === 'timeline' && (
+            <EraNavigator
+              events={state.filteredEvents}
+              onSelectYear={state.setFocusYear}
+            />
+          )}
 
           {isMobile && (
             <MobileTabBar
@@ -461,6 +543,9 @@ function App() {
         onShare={state.selectedEvent ? () => downloadShareCard(state.selectedEvent!) : undefined}
       />
 
+      <KeyboardShortcutsHelp />
+
+      <Suspense fallback={null}>
       <TodayInHistory
         open={showTodayInHistory}
         onClose={() => setShowTodayInHistory(false)}
@@ -500,8 +585,6 @@ function App() {
         onComplete={handleWarpComplete}
       />
 
-      <KeyboardShortcutsHelp />
-
       <HistoryQuiz
         open={showQuiz}
         onClose={() => setShowQuiz(false)}
@@ -509,6 +592,23 @@ function App() {
         onSelectEvent={(event) => {
           state.setSelectedEvent(event)
           setShowQuiz(false)
+        }}
+      />
+
+      <ExplorerMissions
+        open={showMissions}
+        onClose={() => setShowMissions(false)}
+        missions={missions}
+        onApplyMission={handleApplyMission}
+      />
+
+      <TimelineChallenge
+        open={showTimelineChallenge}
+        onClose={() => setShowTimelineChallenge(false)}
+        events={state.filteredEvents}
+        onSelectEvent={(event) => {
+          state.setSelectedEvent(event)
+          setShowTimelineChallenge(false)
         }}
       />
 
@@ -552,7 +652,11 @@ function App() {
         locked={achievements.locked}
         readCount={progress.readCount}
         totalEvents={state.totalEvents}
+        passportEras={passportEras}
+        passportCategories={passportCategories}
+        nextUnlocks={achievements.locked.slice(0, 3)}
       />
+      </Suspense>
     </div>
   )
 }

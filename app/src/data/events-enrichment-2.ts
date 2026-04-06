@@ -26,6 +26,18 @@ export const musicEnrichmentEvents: HistoricalEvent[] = [
   { id: 'mus018', year: 1877, title: '爱迪生发明留声机', description: '人类第一次可以录制和回放声音，音乐不再只是现场体验。', category: 'music', region: 'usa', significance: 3, figure: '爱迪生' },
   { id: 'mus019', year: 1950, title: '印度古典音乐走向世界', description: '拉维·香卡将西塔琴和拉格音乐带到西方，深刻影响了披头士等音乐人。', category: 'music', region: 'india', significance: 2, figure: '拉维·香卡' },
   { id: 'mus020', year: 1990, title: 'K-Pop崛起', description: '韩国流行音乐产业开始系统化发展，"练习生"体系培养出全球性偶像团体。', category: 'music', region: 'korea', significance: 2 },
+  // ── 新增音乐事件补充 ──
+  { id: 'mus021', year: 1935, title: '聂耳《义勇军进行曲》', description: '聂耳为电影《风云儿女》作曲，这首歌后来成为中华人民共和国国歌。', category: 'music', region: 'china', significance: 3, figure: '聂耳' },
+  { id: 'mus022', year: 1959, title: '迈尔斯·戴维斯《Kind of Blue》', description: '迈尔斯·戴维斯录制了爵士乐历史上销量最高的专辑，开创了模态爵士风格。', category: 'music', region: 'usa', significance: 2, figure: '迈尔斯·戴维斯' },
+  { id: 'mus023', year: 1970, title: '费拉·库蒂与非洲节奏', description: '尼日利亚音乐家费拉·库蒂创造了"非洲节奏"（Afrobeat），融合了爵士、放克和约鲁巴传统音乐。', category: 'music', region: 'nigeria', significance: 2, figure: '费拉·库蒂' },
+  { id: 'mus024', year: 1970, title: '桑巴与波萨诺瓦黄金期', description: '若昂·吉尔贝托和安东尼奥·卡洛斯·若宾将巴西波萨诺瓦推向全球，《伊帕内玛的女孩》成为最广为人知的巴西歌曲。', category: 'music', region: 'brazil', significance: 2, figure: '若宾' },
+  { id: 'mus025', year: 1977, title: '电子音乐先驱·Kraftwerk', description: '德国乐队 Kraftwerk 发行《跨欧快车》，开创了电子音乐和合成器流行的先河。', category: 'music', region: 'germany', significance: 2, figure: 'Kraftwerk' },
+  { id: 'mus026', year: 1988, title: '酸性浩室与电子舞曲爆发', description: '芝加哥和底特律的地下俱乐部催生了浩室和科技舞曲，电子舞曲席卷全球。', category: 'music', region: 'usa', significance: 2 },
+  { id: 'mus027', year: 1986, title: '崔健《一无所有》', description: '崔健在北京工人体育馆唱出中国第一首摇滚歌曲，被誉为"中国摇滚之父"。', category: 'music', region: 'china', significance: 2, figure: '崔健' },
+  { id: 'mus028', year: 2004, title: '周杰伦与华语流行音乐新纪元', description: '周杰伦以融合中国风和嘻哈的独特风格重新定义了华语流行音乐。', category: 'music', region: 'china', significance: 2, figure: '周杰伦' },
+  { id: 'mus029', year: 2015, title: '流媒体革命', description: 'Spotify 和 Apple Music 等流媒体平台超越实体唱片销售，音乐消费模式被彻底颠覆。', category: 'music', region: 'global', significance: 2 },
+  { id: 'mus030', year: 1936, title: '罗伯特·约翰逊与十字路口传说', description: '传说密西西比三角洲蓝调吉他手罗伯特·约翰逊在十字路口与魔鬼交易了灵魂，换取了超凡的吉他技艺。他的29首录音成为所有摇滚和蓝调音乐的精神源头。', category: 'music', region: 'usa', significance: 2, figure: '罗伯特·约翰逊' },
+  { id: 'mus031', year: 1842, title: '维也纳爱乐乐团成立', description: '世界上最负盛名的管弦乐团之一在维也纳成立，延续了莫扎特、贝多芬的音乐传统。', category: 'music', region: 'austria', significance: 2 },
 ]
 
 export const medicineEnrichmentEvents: HistoricalEvent[] = [

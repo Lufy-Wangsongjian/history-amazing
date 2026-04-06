@@ -124,6 +124,36 @@ export function generateFunFacts(events: HistoricalEvent[]): FunFact[] {
     })
   }
 
+  // 9. 文学事件统计
+  const litEvents = events.filter(e => e.category === 'literature')
+  if (litEvents.length > 0) {
+    const oldestLit = litEvents.reduce((min, e) => e.year < min.year ? e : min, litEvents[0])
+    facts.push({
+      emoji: '📚',
+      text: `文学类事件共 ${litEvents.length} 条，最古老的是「${oldestLit.title}」（${formatYear(oldestLit.year)}）——人类用文字记录故事的传统比很多帝国都要长寿。`,
+    })
+  }
+
+  // 10. 音乐事件统计
+  const musicEvents = events.filter(e => e.category === 'music')
+  if (musicEvents.length > 0) {
+    const musicRegions = new Set(musicEvents.map(e => e.region))
+    facts.push({
+      emoji: '🎵',
+      text: `音乐类事件覆盖了 ${musicRegions.size} 个国家和地区——从苏美尔竖琴到韩国流行乐，音乐真的是人类的通用语言。`,
+    })
+  }
+
+  // 11. 文学 vs 音乐里程碑对比
+  const litMilestones = litEvents.filter(e => e.significance === 3).length
+  const musicMilestones = musicEvents.filter(e => e.significance === 3).length
+  if (litMilestones > 0 && musicMilestones > 0) {
+    facts.push({
+      emoji: '🏆',
+      text: `文学有 ${litMilestones} 个里程碑事件，音乐有 ${musicMilestones} 个——${litMilestones > musicMilestones ? '文学在"改变世界的事件"上略胜一筹' : musicMilestones > litMilestones ? '音乐在"改变世界的事件"上略胜一筹' : '两者势均力敌'}。`,
+    })
+  }
+
   return facts
 }
 

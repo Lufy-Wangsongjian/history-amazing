@@ -273,14 +273,10 @@ export function TimeWarpOverlay({ active, targetEvent, allEvents, onComplete }: 
   return (
     <div
       className={`fixed inset-0 z-[100] flex items-center justify-center time-warp-overlay time-warp-${phase}`}
-      onClick={() => {
-        if (phase === 'reveal') {
-          handleDismiss(false)
-        }
-      }}
+      style={{ pointerEvents: 'none' }}
     >
       {/* 背景暗层 */}
-      <div className="absolute inset-0 bg-slate-950/95 time-warp-backdrop" />
+      <div className="absolute inset-0 bg-slate-950/95 time-warp-backdrop pointer-events-none" />
 
       {/* Canvas 粒子隧道 */}
       {(phase === 'tunnel' || phase === 'arrive') && (
@@ -308,14 +304,14 @@ export function TimeWarpOverlay({ active, targetEvent, allEvents, onComplete }: 
 
       {/* 到达阶段 — 白色闪光 */}
       {phase === 'arrive' && (
-        <div className="absolute inset-0 bg-white/20 time-warp-flash" />
+        <div className="absolute inset-0 bg-white/20 time-warp-flash pointer-events-none" />
       )}
 
       {/* 揭示阶段 — 目标事件信息 */}
       {phase === 'reveal' && timelineContext && (
         <div
           className="relative z-10 flex flex-col items-center gap-5 px-6 max-w-xl mx-auto time-warp-reveal"
-          onClick={(e) => e.stopPropagation()}
+          style={{ pointerEvents: 'auto' }}
         >
           {/* 时间位置上下文 */}
           <div className="flex items-center gap-3 text-xs text-slate-400">

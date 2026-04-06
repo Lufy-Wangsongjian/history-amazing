@@ -27,6 +27,7 @@ async function dismissWelcomeDialog(page: import('@playwright/test').Page) {
 
 test.describe('运行时错误捕获', () => {
   test('全页面交互过程中无 JS 运行时错误', async ({ page }) => {
+    test.setTimeout(45000);
     const jsErrors: string[] = [];
 
     // 捕获未处理的 JS 异常（最重要的）

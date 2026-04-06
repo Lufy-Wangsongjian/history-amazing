@@ -1,6 +1,6 @@
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear, getEra } from '@/data/types'
-import { buildEventDetailParagraphs } from '@/lib/event-detail'
+import { buildEventDetailParagraphs, generateDidYouKnow, buildCausalNarrative, generateExternalLinks } from '@/lib/event-detail'
 import { fetchEventContext } from '@/lib/api'
 import {
   Clock,
@@ -11,6 +11,8 @@ import {
   ArrowRight,
   Link2,
   ScrollText,
+  Lightbulb,
+  ExternalLink as ExternalLinkIcon,
   ChevronLeft,
   ChevronRight,
   X,
@@ -51,6 +53,8 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
   const regionCfg = event ? REGION_CONFIG[event.region] : null
   const era = event ? getEra(event.year) : null
   const detailParagraphs = useMemo(() => (event ? buildEventDetailParagraphs(event) : []), [event])
+  const didYouKnowFacts = useMemo(() => (event ? generateDidYouKnow(event) : []), [event])
+  const externalLinks = useMemo(() => (event ? generateExternalLinks(event) : []), [event])
   const [context, setContext] = useState(EMPTY_CONTEXT)
   const [loadedContextEventId, setLoadedContextEventId] = useState<string | null>(null)
   const [isImageError, setIsImageError] = useState(false)
@@ -284,6 +288,23 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
               </div>
             </div>
 
+            {didYouKnowFacts.length > 0 && (
+              <div className="mb-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+                <h3 className="text-sm font-semibold mb-3 text-foreground flex items-center gap-2">
+                  <Lightbulb size={14} className="text-amber-500" />
+                  你知道吗
+                </h3>
+                <div className="space-y-2.5">
+                  {didYouKnowFacts.map((fact, index) => (
+                    <div key={`${event.id}-dyk-${index}`} className="flex items-start gap-2.5">
+                      <span className="text-base flex-shrink-0 mt-0.5">{fact.emoji}</span>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{fact.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {isContextLoading && (
               <div className="mb-6 px-3 py-2 rounded-lg border border-dashed border-border text-xs text-muted-foreground">
                 正在从数据库加载关联事件…
@@ -301,30 +322,37 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                     const relatedCategory = CATEGORY_CONFIG[relatedEvent.category]
                     const relatedRegion = REGION_CONFIG[relatedEvent.region]
                     const isCurrent = relatedEvent.year <= event.year
+                    const causalText = buildCausalNarrative(event, relatedEvent)
 
                     return (
-                      <button
-                        key={relatedEvent.id}
-                        onClick={() => handleNavigate(relatedEvent)}
-                        className={`
-                          w-full text-left p-2.5 rounded-lg border transition-all
-                          hover:border-purple-300/80 hover:bg-purple-500/5
-                          ${isCurrent ? 'border-border/50 bg-card/50' : 'border-border/30'}
-                        `}
-                      >
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <div
-                            className="w-1.5 h-1.5 rounded-full"
-                            style={{ backgroundColor: relatedCategory.color }}
-                          />
-                          <span className="text-[10px] text-muted-foreground font-mono">{formatYear(relatedEvent.year)}</span>
-                          <span className="text-[10px]">{relatedRegion.flag}</span>
-                          {index < relatedEvents.length - 1 && (
-                            <ArrowRight size={8} className="text-muted-foreground/50 ml-auto" />
-                          )}
-                        </div>
-                        <p className="text-xs font-medium line-clamp-1">{relatedEvent.title}</p>
-                      </button>
+                      <div key={relatedEvent.id}>
+                        <button
+                          onClick={() => handleNavigate(relatedEvent)}
+                          className={`
+                            w-full text-left p-2.5 rounded-lg border transition-all
+                            hover:border-purple-300/80 hover:bg-purple-500/5
+                            ${isCurrent ? 'border-border/50 bg-card/50' : 'border-border/30'}
+                          `}
+                        >
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <div
+                              className="w-1.5 h-1.5 rounded-full"
+                              style={{ backgroundColor: relatedCategory.color }}
+                            />
+                            <span className="text-[10px] text-muted-foreground font-mono">{formatYear(relatedEvent.year)}</span>
+                            <span className="text-[10px]">{relatedRegion.flag}</span>
+                            {index < relatedEvents.length - 1 && (
+                              <ArrowRight size={8} className="text-muted-foreground/50 ml-auto" />
+                            )}
+                          </div>
+                          <p className="text-xs font-medium line-clamp-1">{relatedEvent.title}</p>
+                        </button>
+                        {causalText && (
+                          <p className="mt-1 ml-2 text-[11px] text-muted-foreground/70 leading-relaxed italic pl-2 border-l-2 border-purple-200/30">
+                            {causalText}
+                          </p>
+                        )}
+                      </div>
                     )
                   })}
                 </div>
@@ -396,6 +424,30 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                     )
                   })}
                 </div>
+              </div>
+            )}
+
+            {externalLinks.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-border/30">
+                <h3 className="text-sm font-semibold mb-3 text-foreground flex items-center gap-2">
+                  <ExternalLinkIcon size={14} className="text-blue-500" />
+                  延伸阅读
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {externalLinks.map((link, idx) => (
+                    <a
+                      key={`${event.id}-ext-${idx}`}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border/50 text-xs text-muted-foreground hover:text-foreground hover:border-border hover:bg-accent/50 transition-all"
+                    >
+                      <ExternalLinkIcon size={10} />
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+                <p className="mt-2 text-[10px] text-muted-foreground/50">链接指向维基百科搜索页，可能需要进一步筛选结果。</p>
               </div>
             )}
           </div>

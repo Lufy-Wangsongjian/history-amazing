@@ -1,5 +1,7 @@
 import type { HistoricalEvent } from './types'
 import { expandHistoricalEvents, HISTORICAL_EVENTS_MULTIPLIER } from './event-expansion'
+import { injectCausalChains } from './causal-chains'
+import { injectMilestoneDetails } from './milestone-details-patch'
 import { ancientEvents, classicalEvents } from './events-ancient'
 import { axialEvents, empireEvents } from './events-axial'
 import { medievalEvents, preRenaissanceEvents } from './events-medieval'
@@ -20,6 +22,16 @@ import { medievalEnrichmentEvents, enlightenmentEnrichmentEvents, modernGlobaliz
 import { chinaDeepEvents, japanDeepEvents, koreaDeepEvents, religionDeepEvents, literatureDeepEvents, eurasiaDeepEvents, worldDeepEvents } from './events-enrichment-4'
 import { indiaDeepEvents, warfareDeepEvents, techDeepEvents, smallRegionEvents, figureAndExchangeEvents } from './events-enrichment-5'
 import { womenHistoryEvents, economicsEvents, languageEvents, lawAndRightsEvents, dailyLifeEvents, scienceAndFutureEvents } from './events-enrichment-6'
+// Round 5-7 扩充包（特性 101-200）
+import { cinemaEvents, theaterEvents, danceEvents, architectureDeepEvents, educationEvents, environmentEvents, diplomacyEvents, sportsEvents, mediaEvents, fashionEvents, photographyEvents, urbanEvents } from './events-enrichment-7'
+import { centralAsiaEvents, balkanEvents, caribbeanPacificEvents, africaDeepEvents, chinaModernEvents, scientistEvents, inventorEvents, philosophyDeepEvents, coldWarEvents, religionDeepEvents as religionDeep2Events, mathEvents } from './events-enrichment-8'
+import { prehistoryEvents, lateAntiquityEvents, industrialDeepEvents, worldWarEvents, disasterEvents, spaceDeepEvents, culturalExchangeEvents, digitalAgeEvents } from './events-enrichment-9'
+// Round 9 扩充包（特性 201-235）
+import { psychologyEvents, sociologyEvents, nationalLiberationEvents, maritimeEvents, astronomyEvents, cryptographyEvents, libraryEvents, postalEvents, meteorologyEvents, miningEvents, textileEvents, ceramicsEvents, gardenEvents } from './events-enrichment-10'
+// Round 10 扩充包（特性 236-270）
+import { currencyEvents, insuranceEvents, espionageEvents, gamingEvents, comicsEvents, advertisingEvents, museumEvents, conservationEvents, firefightingEvents, judicialEvents, abolitionEvents, agricultureEvents, energyEvents } from './events-enrichment-11'
+// Round 11 扩充包（特性 271-300）
+import { railwayEvents, aviationEvents, automobileEvents, archaeologyEvents, migrationEvents, festivalEvents, foodCultureEvents, spiceTradeEvents, cartographyEvents, measurementEvents } from './events-enrichment-12'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -71,8 +83,84 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...lawAndRightsEvents,
   ...dailyLifeEvents,
   ...scienceAndFutureEvents,
+  // Round 5: 电影/戏剧/舞蹈/建筑/教育/环保/外交/体育/传媒/时尚/摄影/城市
+  ...cinemaEvents,
+  ...theaterEvents,
+  ...danceEvents,
+  ...architectureDeepEvents,
+  ...educationEvents,
+  ...environmentEvents,
+  ...diplomacyEvents,
+  ...sportsEvents,
+  ...mediaEvents,
+  ...fashionEvents,
+  ...photographyEvents,
+  ...urbanEvents,
+  // Round 6: 中亚/巴尔干/加勒比/非洲深化/中国近现代/科学家/发明家/哲学/冷战/宗教/数学
+  ...centralAsiaEvents,
+  ...balkanEvents,
+  ...caribbeanPacificEvents,
+  ...africaDeepEvents,
+  ...chinaModernEvents,
+  ...scientistEvents,
+  ...inventorEvents,
+  ...philosophyDeepEvents,
+  ...coldWarEvents,
+  ...religionDeep2Events,
+  ...mathEvents,
+  // Round 7: 史前/古典晚期/工业革命/世界大战/灾难/太空/文化交流/AI
+  ...prehistoryEvents,
+  ...lateAntiquityEvents,
+  ...industrialDeepEvents,
+  ...worldWarEvents,
+  ...disasterEvents,
+  ...spaceDeepEvents,
+  ...culturalExchangeEvents,
+  ...digitalAgeEvents,
+  // Round 9: 心理学/社会学/民族运动/海洋/天文/密码学/图书馆/邮政/气象/矿业/纺织/陶瓷/园林
+  ...psychologyEvents,
+  ...sociologyEvents,
+  ...nationalLiberationEvents,
+  ...maritimeEvents,
+  ...astronomyEvents,
+  ...cryptographyEvents,
+  ...libraryEvents,
+  ...postalEvents,
+  ...meteorologyEvents,
+  ...miningEvents,
+  ...textileEvents,
+  ...ceramicsEvents,
+  ...gardenEvents,
+  // Round 10: 货币/保险/间谍/游戏/漫画/广告/博物馆/动物保护/消防/司法/奴隶废除/农业/能源
+  ...currencyEvents,
+  ...insuranceEvents,
+  ...espionageEvents,
+  ...gamingEvents,
+  ...comicsEvents,
+  ...advertisingEvents,
+  ...museumEvents,
+  ...conservationEvents,
+  ...firefightingEvents,
+  ...judicialEvents,
+  ...abolitionEvents,
+  ...agricultureEvents,
+  ...energyEvents,
+  // Round 11: 铁路/航空/汽车/考古/迁徙/节日/饮食/香料/地图/度量衡
+  ...railwayEvents,
+  ...aviationEvents,
+  ...automobileEvents,
+  ...archaeologyEvents,
+  ...migrationEvents,
+  ...festivalEvents,
+  ...foodCultureEvents,
+  ...spiceTradeEvents,
+  ...cartographyEvents,
+  ...measurementEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER
 
-export const historicalEvents: HistoricalEvent[] = expandHistoricalEvents(baseHistoricalEvents)
+const baseWithCausalChains = injectCausalChains(baseHistoricalEvents)
+const baseWithDetails = injectMilestoneDetails(baseWithCausalChains)
+
+export const historicalEvents: HistoricalEvent[] = expandHistoricalEvents(baseWithDetails)
