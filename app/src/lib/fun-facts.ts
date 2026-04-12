@@ -154,6 +154,36 @@ export function generateFunFacts(events: HistoricalEvent[]): FunFact[] {
     })
   }
 
+  // 12. 诗歌事件统计
+  const poetryEvents = events.filter(e => e.category === 'literature' && /诗|poem|poetry|抒情|词|俳句|十四行|sonnet|离骚|草叶/i.test(`${e.title} ${e.description}`))
+  if (poetryEvents.length >= 3) {
+    facts.push({
+      emoji: '🖊️',
+      text: `收录了 ${poetryEvents.length} 条与诗歌相关的事件——从三千年前的《诗经》到现代主义的《荒原》，诗歌是人类坚持得最久的艺术形式。`,
+    })
+  }
+
+  // 13. 音乐剧事件统计
+  const musicalEvents = events.filter(e => /音乐剧|musical|百老汇|Broadway|西区故事|歌剧魅影|猫|汉密尔顿|Hamilton|韦伯|魔法坏女巫/i.test(`${e.title} ${e.description}`))
+  if (musicalEvents.length >= 3) {
+    facts.push({
+      emoji: '🎭',
+      text: `收录了 ${musicalEvents.length} 条音乐剧相关事件——百老汇每年吸引超过 1400 万观众，一条不到一公里的街道承载着全球最集中的现场表演艺术。`,
+    })
+  }
+
+  // 14. 中国古典诗词统计
+  const chinaPoetryEvents = events.filter(e =>
+    e.region === 'china' && e.category === 'literature' &&
+    /诗经|楚辞|离骚|唐诗|宋词|元曲|李白|杜甫|苏轼|李清照|辛弃疾|白居易|王维|柳永|关汉卿|马致远|窦娥|西厢|牡丹亭|诗人|词|曲|建安|乐府|国风/i.test(`${e.title} ${e.description}`)
+  )
+  if (chinaPoetryEvents.length >= 5) {
+    facts.push({
+      emoji: '📜',
+      text: `中国古典诗词相关事件有 ${chinaPoetryEvents.length} 条——从《诗经》到元曲跨越两千多年。"唐诗宋词元曲"是中国人的精神家底，也是汉语最精美的结晶。`,
+    })
+  }
+
   return facts
 }
 

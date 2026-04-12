@@ -114,7 +114,29 @@ export const ALL_ACHIEVEMENTS: Achievement[] = [
     }
     return eras.size >= 3
   }},
+
+  // 类目专属深度成就 — 每个类目浏览 10 个事件解锁专属称号
+  { id: 'cat-deep-literature', title: '文曲星', description: '浏览 10 个文学事件', emoji: '✒️', category: 'special', check: ctx => countCategoryReads(ctx, 'literature') >= 10 },
+  { id: 'cat-deep-science', title: '求真者', description: '浏览 10 个科学事件', emoji: '🔭', category: 'special', check: ctx => countCategoryReads(ctx, 'science') >= 10 },
+  { id: 'cat-deep-music', title: '知音人', description: '浏览 10 个音乐事件', emoji: '🎼', category: 'special', check: ctx => countCategoryReads(ctx, 'music') >= 10 },
+  { id: 'cat-deep-art', title: '丹青妙手', description: '浏览 10 个艺术事件', emoji: '🎨', category: 'special', check: ctx => countCategoryReads(ctx, 'art') >= 10 },
+  { id: 'cat-deep-philosophy', title: '思想者', description: '浏览 10 个哲学事件', emoji: '🦉', category: 'special', check: ctx => countCategoryReads(ctx, 'philosophy') >= 10 },
+  { id: 'cat-deep-history', title: '太史令', description: '浏览 10 个历史事件', emoji: '📜', category: 'special', check: ctx => countCategoryReads(ctx, 'history') >= 10 },
+  { id: 'cat-deep-technology', title: '造物主', description: '浏览 10 个技术事件', emoji: '⚡', category: 'special', check: ctx => countCategoryReads(ctx, 'technology') >= 10 },
+  { id: 'cat-deep-architecture', title: '营造法师', description: '浏览 10 个建筑事件', emoji: '🏛️', category: 'special', check: ctx => countCategoryReads(ctx, 'architecture') >= 10 },
+  { id: 'cat-deep-religion', title: '悟道者', description: '浏览 10 个宗教事件', emoji: '☸️', category: 'special', check: ctx => countCategoryReads(ctx, 'religion') >= 10 },
+  { id: 'cat-deep-warfare', title: '兵法家', description: '浏览 10 个军事事件', emoji: '🗡️', category: 'special', check: ctx => countCategoryReads(ctx, 'warfare') >= 10 },
+  { id: 'cat-deep-exploration', title: '航海家', description: '浏览 10 个探索事件', emoji: '🧭', category: 'special', check: ctx => countCategoryReads(ctx, 'exploration') >= 10 },
+  { id: 'cat-deep-medicine', title: '岐黄传人', description: '浏览 10 个医学事件', emoji: '💉', category: 'special', check: ctx => countCategoryReads(ctx, 'medicine') >= 10 },
 ]
+
+function countCategoryReads(ctx: AchievementContext, category: string): number {
+  let count = 0
+  for (const [id] of ctx.readIds.entries()) {
+    if (ctx.eventCategories.get(id) === category) count++
+  }
+  return count
+}
 
 /** 计算已解锁的成就 */
 export function useAchievements(

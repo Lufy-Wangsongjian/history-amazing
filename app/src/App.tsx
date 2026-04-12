@@ -541,6 +541,7 @@ function App() {
         isFavorite={state.selectedEvent ? favs.isFavorite(state.selectedEvent.id) : false}
         onToggleFavorite={state.selectedEvent ? () => favs.toggleFavorite(state.selectedEvent!.id) : undefined}
         onShare={state.selectedEvent ? () => downloadShareCard(state.selectedEvent!) : undefined}
+        readIds={progress.readIds}
       />
 
       <KeyboardShortcutsHelp />

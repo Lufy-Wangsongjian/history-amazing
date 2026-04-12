@@ -1,6 +1,8 @@
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear, getEra } from '@/data/types'
 import { buildEventDetailParagraphs, generateDidYouKnow, buildCausalNarrative, generateExternalLinks } from '@/lib/event-detail'
+import { findQuotesForEvent } from '@/lib/literary-quotes'
+import { generateRecommendations } from '@/lib/recommendations'
 import { fetchEventContext } from '@/lib/api'
 import {
   Clock,
@@ -19,9 +21,11 @@ import {
   PanelRightOpen,
   Heart,
   Share2,
+  Sparkles,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { RegionFlag } from './RegionFlag'
+import { CausalNetworkGraph } from './CausalNetworkGraph'
 import {
   Dialog,
   DialogContent,
@@ -40,6 +44,8 @@ interface EventDetailProps {
   onToggleFavorite?: () => void
   /** 分享事件卡片 */
   onShare?: () => void
+  /** 已阅读事件 ID 集合（用于智能推荐） */
+  readIds?: Set<string>
 }
 
 const EMPTY_CONTEXT = {
@@ -48,13 +54,15 @@ const EMPTY_CONTEXT = {
   relatedEvents: [] as HistoricalEvent[],
 }
 
-export function EventDetail({ event, events, onClose, onNavigate, isFavorite, onToggleFavorite, onShare }: EventDetailProps) {
+export function EventDetail({ event, events, onClose, onNavigate, isFavorite, onToggleFavorite, onShare, readIds }: EventDetailProps) {
   const catCfg = event ? CATEGORY_CONFIG[event.category] : null
   const regionCfg = event ? REGION_CONFIG[event.region] : null
   const era = event ? getEra(event.year) : null
   const detailParagraphs = useMemo(() => (event ? buildEventDetailParagraphs(event) : []), [event])
   const didYouKnowFacts = useMemo(() => (event ? generateDidYouKnow(event) : []), [event])
   const externalLinks = useMemo(() => (event ? generateExternalLinks(event) : []), [event])
+  const literaryQuotes = useMemo(() => (event ? findQuotesForEvent(event) : []), [event])
+  const recommendations = useMemo(() => (event && readIds ? generateRecommendations(event, events, readIds, 4) : []), [event, events, readIds])
   const [context, setContext] = useState(EMPTY_CONTEXT)
   const [loadedContextEventId, setLoadedContextEventId] = useState<string | null>(null)
   const [isImageError, setIsImageError] = useState(false)
@@ -102,6 +110,28 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
 
   const previousEvent = currentIndex > 0 ? events[currentIndex - 1] : null
   const nextEvent = currentIndex >= 0 && currentIndex < events.length - 1 ? events[currentIndex + 1] : null
+
+  // 键盘导航：← → 方向键切换上一条/下一条，Esc 关闭
+  useEffect(() => {
+    if (!event) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 避免在输入框中触发
+      const tag = (e.target as HTMLElement)?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return
+
+      if (e.key === 'ArrowLeft' && previousEvent) {
+        e.preventDefault()
+        handleNavigate(previousEvent)
+      } else if (e.key === 'ArrowRight' && nextEvent) {
+        e.preventDefault()
+        handleNavigate(nextEvent)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [event, previousEvent, nextEvent, handleNavigate])
 
   if (!event || !catCfg || !regionCfg) {
     return null
@@ -165,6 +195,7 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                   onClick={() => previousEvent && handleNavigate(previousEvent)}
                   disabled={!previousEvent}
                   className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-border/60 px-3 py-2 text-xs text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
+                  title="上一条 (←)"
                 >
                   <ChevronLeft size={14} />
                   <span className="hidden sm:inline">上一条</span>
@@ -173,6 +204,7 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                   onClick={() => nextEvent && handleNavigate(nextEvent)}
                   disabled={!nextEvent}
                   className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-border/60 px-3 py-2 text-xs text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
+                  title="下一条 (→)"
                 >
                   <span className="hidden sm:inline">下一条</span>
                   <ChevronRight size={14} />
@@ -274,6 +306,9 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
               </div>
             )}
 
+            {/* 时间线位置指示器 */}
+            <TimelinePositionIndicator year={event.year} eraColor={era?.color} />
+
             <div className="mb-6 rounded-xl border border-border/50 bg-card/60 p-4">
               <h3 className="text-sm font-semibold mb-3 text-foreground flex items-center gap-2">
                 <ScrollText size={14} className="text-primary" />
@@ -287,6 +322,32 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                 ))}
               </div>
             </div>
+
+            {literaryQuotes.length > 0 && (
+              <div className="mb-6 rounded-xl border border-amber-600/20 bg-gradient-to-br from-amber-500/5 to-orange-500/5 p-4">
+                <h3 className="text-sm font-semibold mb-3 text-foreground flex items-center gap-2">
+                  <ScrollText size={14} className="text-amber-600" />
+                  经典引文
+                </h3>
+                <div className="space-y-3">
+                  {literaryQuotes.map((quote, idx) => (
+                    <div key={`${event.id}-quote-${idx}`} className="relative pl-4 border-l-2 border-amber-500/40">
+                      <p className="text-sm leading-relaxed text-foreground/90 whitespace-pre-line font-serif italic">
+                        {quote.text}
+                      </p>
+                      {quote.translation && (
+                        <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
+                          {quote.translation}
+                        </p>
+                      )}
+                      <p className="text-[11px] text-amber-600/70 dark:text-amber-400/70 mt-1.5 font-medium">
+                        —— {quote.source}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {didYouKnowFacts.length > 0 && (
               <div className="mb-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
@@ -309,6 +370,14 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
               <div className="mb-6 px-3 py-2 rounded-lg border border-dashed border-border text-xs text-muted-foreground">
                 正在从数据库加载关联事件…
               </div>
+            )}
+
+            {relatedEvents.length > 0 && (
+              <CausalNetworkGraph
+                event={event}
+                relatedEvents={relatedEvents}
+                onSelectEvent={handleNavigate}
+              />
             )}
 
             {relatedEvents.length > 0 && (
@@ -450,9 +519,90 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                 <p className="mt-2 text-[10px] text-muted-foreground/50">链接指向维基百科搜索页，可能需要进一步筛选结果。</p>
               </div>
             )}
+
+            {recommendations.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-border/30">
+                <h3 className="text-sm font-semibold mb-3 text-foreground flex items-center gap-2">
+                  <Sparkles size={14} className="text-cyan-500" />
+                  推荐阅读
+                </h3>
+                <p className="text-[10px] text-muted-foreground mb-3">基于你的阅读历史和当前事件智能推荐</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {recommendations.map((rec) => {
+                    const recCategory = CATEGORY_CONFIG[rec.event.category]
+                    const recRegion = REGION_CONFIG[rec.event.region]
+                    return (
+                      <button
+                        key={rec.event.id}
+                        onClick={() => handleNavigate(rec.event)}
+                        className="text-left p-2.5 rounded-lg border border-border/50 hover:border-cyan-400/50 hover:bg-cyan-500/5 transition-all group"
+                      >
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <div
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{ backgroundColor: recCategory.color }}
+                          />
+                          <span className="text-[10px] text-muted-foreground font-mono">{formatYear(rec.event.year)}</span>
+                          <span className="text-[10px]">{recRegion.flag}</span>
+                          {rec.event.significance === 3 && (
+                            <Star size={8} className="text-amber-500" fill="currentColor" />
+                          )}
+                          <span className="ml-auto text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+                            {rec.reason}
+                          </span>
+                        </div>
+                        <p className="text-xs font-medium line-clamp-1 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">{rec.event.title}</p>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </DialogContent>
     </Dialog>
+  )
+}
+
+/** 迷你时间线位置指示器 — 展示事件在 6000 年文明进程中的位置 */
+function TimelinePositionIndicator({ year, eraColor }: { year: number; eraColor?: string }) {
+  const MIN_YEAR = -4000
+  const MAX_YEAR = 2030
+  const totalSpan = MAX_YEAR - MIN_YEAR
+  const clampedYear = Math.max(MIN_YEAR, Math.min(MAX_YEAR, year))
+  const progress = ((clampedYear - MIN_YEAR) / totalSpan) * 100
+  const percentText = Math.round(progress)
+  const dotColor = eraColor || '#f59e0b'
+
+  return (
+    <div className="mb-6 rounded-lg border border-border/40 bg-card/40 px-4 py-3">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-[10px] text-muted-foreground">文明进程定位</span>
+        <span className="text-[10px] font-mono text-muted-foreground">
+          已走过 {percentText}% 的人类文明史
+        </span>
+      </div>
+      <div className="relative h-2 rounded-full bg-muted/60 overflow-hidden">
+        {/* 已过进度 */}
+        <div
+          className="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
+          style={{
+            width: `${progress}%`,
+            background: `linear-gradient(90deg, #8B7355 0%, #DAA520 25%, #4A6741 50%, #9370DB 70%, #4169E1 100%)`,
+            opacity: 0.6,
+          }}
+        />
+        {/* 当前位置圆点 */}
+        <div
+          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full border-2 border-background shadow-md transition-all duration-500"
+          style={{ left: `${progress}%`, backgroundColor: dotColor }}
+        />
+      </div>
+      <div className="flex items-center justify-between mt-1.5 text-[9px] text-muted-foreground/60">
+        <span>公元前 4000 年</span>
+        <span>公元 2030 年</span>
+      </div>
+    </div>
   )
 }

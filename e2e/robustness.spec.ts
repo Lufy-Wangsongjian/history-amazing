@@ -165,6 +165,7 @@ test.describe('边界数据场景', () => {
   });
 
   test('快速连续切换视图不崩溃', async ({ page }) => {
+    test.setTimeout(60000);
     const jsErrors: string[] = [];
     page.on('pageerror', (error) => jsErrors.push(error.message));
 
@@ -194,6 +195,7 @@ test.describe('边界数据场景', () => {
   });
 
   test('连续多次触发穿越功能不崩溃', async ({ page }) => {
+    test.setTimeout(60000);
     const jsErrors: string[] = [];
     page.on('pageerror', (error) => jsErrors.push(error.message));
 

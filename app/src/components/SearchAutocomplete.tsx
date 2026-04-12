@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear } from '@/data/types'
 import { Input } from '@/components/ui/input'
-import { Search, X, Clock, Star } from 'lucide-react'
+import { Search, X, Clock, Star, Sparkles } from 'lucide-react'
 import { CategoryIcon } from './CategoryIcon'
 import { RegionFlag } from './RegionFlag'
 
@@ -15,6 +15,38 @@ interface SearchAutocompleteProps {
 
 const POPULAR_SEARCHES = ['丝绸之路', '文艺复兴', '工业革命', '秦始皇', '金字塔', '达芬奇']
 const MAX_SUGGESTIONS = 8
+const SEARCH_HISTORY_KEY = 'chrono-atlas-search-history'
+const MAX_HISTORY = 10
+
+/** 从 localStorage 读取搜索历史 */
+function loadSearchHistory(): string[] {
+  try {
+    const raw = localStorage.getItem(SEARCH_HISTORY_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    if (Array.isArray(parsed)) return parsed.filter((s): s is string => typeof s === 'string').slice(0, MAX_HISTORY)
+    return []
+  } catch {
+    return []
+  }
+}
+
+/** 保存搜索历史到 localStorage */
+function saveSearchHistory(history: string[]) {
+  try {
+    localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history.slice(0, MAX_HISTORY)))
+  } catch {
+    // 隐私模式下 localStorage 可能不可用
+  }
+}
+
+/** 添加一条搜索记录 */
+function addToHistory(keyword: string, history: string[]): string[] {
+  const trimmed = keyword.trim()
+  if (!trimmed) return history
+  const filtered = history.filter(h => h !== trimmed)
+  return [trimmed, ...filtered].slice(0, MAX_HISTORY)
+}
 
 /** 高亮匹配的关键词 */
 function HighlightText({ text, query }: { text: string; query: string }) {
@@ -45,6 +77,7 @@ export function SearchAutocomplete({
   const [isOpen, setIsOpen] = useState(false)
   const [localInput, setLocalInput] = useState(searchQuery)
   const [activeIndex, setActiveIndex] = useState(-1)
+  const [searchHistory, setSearchHistory] = useState<string[]>(loadSearchHistory)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
@@ -108,7 +141,17 @@ export function SearchAutocomplete({
   const handleSubmit = useCallback(() => {
     setSearchQuery(localInput)
     setIsOpen(false)
-  }, [localInput, setSearchQuery])
+    if (localInput.trim()) {
+      const updated = addToHistory(localInput, searchHistory)
+      setSearchHistory(updated)
+      saveSearchHistory(updated)
+    }
+  }, [localInput, setSearchQuery, searchHistory])
+
+  const handleClearHistory = useCallback(() => {
+    setSearchHistory([])
+    saveSearchHistory([])
+  }, [])
 
   const handleSelectEvent = useCallback((event: HistoricalEvent) => {
     onSelectEvent(event)
@@ -247,27 +290,66 @@ export function SearchAutocomplete({
             </div>
           )}
 
-          {/* 无输入时显示热门搜索 */}
+          {/* 无输入时显示最近搜索 + 热门搜索 */}
           {localInput.trim().length === 0 && (
-            <div className="p-3">
-              <div className="flex items-center gap-1.5 mb-2 text-[10px] text-muted-foreground">
-                <Clock size={10} />
-                热门搜索
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {POPULAR_SEARCHES.map(keyword => (
-                  <button
-                    key={keyword}
-                    onClick={() => {
-                      setLocalInput(keyword)
-                      setSearchQuery(keyword)
-                      setIsOpen(false)
-                    }}
-                    className="rounded-full border border-border/60 bg-background/60 px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground hover:bg-primary/5"
-                  >
-                    {keyword}
-                  </button>
-                ))}
+            <div className="p-3 space-y-3">
+              {/* 最近搜索 */}
+              {searchHistory.length > 0 && (
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                      <Clock size={10} />
+                      最近搜索
+                    </div>
+                    <button
+                      onClick={handleClearHistory}
+                      className="text-[10px] text-muted-foreground/60 hover:text-destructive transition-colors"
+                    >
+                      清除
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {searchHistory.map(keyword => (
+                      <button
+                        key={keyword}
+                        onClick={() => {
+                          setLocalInput(keyword)
+                          setSearchQuery(keyword)
+                          setIsOpen(false)
+                        }}
+                        className="rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 text-[11px] text-foreground/80 transition-colors hover:border-primary/40 hover:bg-primary/10"
+                      >
+                        {keyword}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 热门搜索 */}
+              <div>
+                <div className="flex items-center gap-1.5 mb-2 text-[10px] text-muted-foreground">
+                  <Sparkles size={10} className="text-amber-500" />
+                  热门搜索
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {POPULAR_SEARCHES.map(keyword => (
+                    <button
+                      key={keyword}
+                      onClick={() => {
+                        setLocalInput(keyword)
+                        setSearchQuery(keyword)
+                        setIsOpen(false)
+                        const updated = addToHistory(keyword, searchHistory)
+                        setSearchHistory(updated)
+                        saveSearchHistory(updated)
+                      }}
+                      className="rounded-full border border-border/60 bg-background/60 px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground hover:bg-primary/5"
+                    >
+                      {keyword}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           )}

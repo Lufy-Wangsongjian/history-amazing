@@ -34,6 +34,10 @@ import { currencyEvents, insuranceEvents, espionageEvents, gamingEvents, comicsE
 import { railwayEvents, aviationEvents, automobileEvents, archaeologyEvents, migrationEvents, festivalEvents, foodCultureEvents, spiceTradeEvents, cartographyEvents, measurementEvents } from './events-enrichment-12'
 // 非洲文明早期事件补充
 import { africaEarlyEvents } from './events-africa-early'
+// Round 12: 诗歌 + 音乐剧专题
+import { poetryEvents, musicalTheaterEvents } from './events-enrichment-13'
+// Round 13: 诗经·唐诗·宋词·元曲专题
+import { shijingEvents, tangshiEvents, songciEvents, yuanquEvents } from './events-enrichment-14'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -160,6 +164,14 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...measurementEvents,
   // 非洲文明早期补充
   ...africaEarlyEvents,
+  // Round 12: 诗歌 + 音乐剧专题
+  ...poetryEvents,
+  ...musicalTheaterEvents,
+  // Round 13: 诗经·唐诗·宋词·元曲
+  ...shijingEvents,
+  ...tangshiEvents,
+  ...songciEvents,
+  ...yuanquEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER

@@ -3,7 +3,7 @@ import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear, getEra } from '@/data/types'
 import { buildEventDetailPreview } from '@/lib/event-detail'
 import { cn } from '@/lib/utils'
-import { ChevronDown, Clock, MapPin, User, Star, Tag, PanelRightOpen, Zap, Heart } from 'lucide-react'
+import { ChevronDown, Clock, MapPin, User, Star, Tag, PanelRightOpen, Zap, Heart, Link2 } from 'lucide-react'
 import { CategoryIcon } from './CategoryIcon'
 import { RegionFlag } from './RegionFlag'
 
@@ -214,6 +214,13 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            {/* 因果关联数量 badge */}
+            {event.relatedIds && event.relatedIds.length > 0 && (
+              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-[9px] font-medium text-purple-400" title={`${event.relatedIds.length} 个因果关联事件`}>
+                <Link2 size={8} />
+                {event.relatedIds.length}
+              </span>
+            )}
             <span className="text-xs flex items-center gap-1 text-muted-foreground pt-0.5">
               <RegionFlag region={event.region} size={16} />
               <span className="hidden sm:inline text-[10px]">{regionCfg.label}</span>
@@ -225,6 +232,13 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
           </div>
           </div>
         </div>
+
+        {/* 描述摘要（未展开时也可见，hover 时更明显） */}
+        {!expanded && !isMilestone && (
+          <p className="text-[11px] text-muted-foreground/50 line-clamp-1 mt-1 group-hover:text-muted-foreground/80 transition-colors">
+            {event.description}
+          </p>
+        )}
 
         {thumbnailUrl && !isThumbError && (
           <div className="mb-2 rounded-lg overflow-hidden border border-border/40 bg-muted/20">
