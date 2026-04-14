@@ -542,3 +542,743 @@ export function generateExternalLinks(event: HistoricalEvent): ExternalLink[] {
 
   return links
 }
+
+/* ================================================================
+   "如果你在那里" 沉浸式第二人称叙事
+   ================================================================ */
+
+const IMMERSIVE_TEMPLATES: Record<string, Record<string, string[]>> = {
+  history: {
+    ancient: [
+      '你站在泥砖砌成的城墙上，远方是一望无际的灌溉农田。城中传来书吏刻写泥板的声响，空气中弥漫着祭祀的焚香味。这是人类最早的都市文明，而你正亲眼见证它的运转。',
+      '你走在尘土飞扬的集市中，牛车载着粮食缓缓驶过。陶工正在转盘前专注成型，铜匠的锤声清脆有力。文明的齿轮正在你脚下的这片土地上第一次转动。',
+    ],
+    classical: [
+      '你坐在露天剧场的石阶上，穹顶是地中海湛蓝的天空。台上演员的面具在阳光下闪光，周围数千观众屏息凝听。你能感受到这个城邦正处于它的黄金时代。',
+      '你站在宏伟的神庙廊柱下，大理石在正午的阳光中白得耀眼。广场上哲学家正在辩论，将军在策划远征。帝国的野心与思想的自由在这里奇妙地共存。',
+    ],
+    medieval: [
+      '你穿过一座哥特式大教堂的重重拱门，彩色玻璃窗把阳光碎成斑斓的光斑洒在石板地上。管风琴的低鸣在穹顶回荡，仿佛整座建筑都在呼吸。',
+      '你骑马行过一座石桥，桥下是护城河的幽暗水面。城堡的塔楼在薄雾中若隐若现，集市上商人操着不同语言讨价还价。中世纪并非你想象的那样沉寂。',
+    ],
+    early_modern: [
+      '你站在一间摆满透镜和黄铜仪器的工作室里，窗外是繁忙的港口。印刷机正在隔壁咔嚓作响，新发现的消息以前所未有的速度传播。旧世界正在你眼前裂开缝隙。',
+      '你走进一间灯火通明的沙龙，知识分子围坐桌前激烈争论。墙上挂着新大陆的地图，桌上摆着最新出版的百科全书。理性的光芒正在驱散几个世纪的迷雾。',
+    ],
+    modern: [
+      '你站在摩天大楼的玻璃幕墙前，城市的灯火向地平线蔓延。耳边是新闻广播的嗡嗡声，手中的设备连接着地球另一端的人。信息以光速重塑着这个世界。',
+      '你走在一条忙碌的大街上，电子屏幕播放着实时新闻，无人机掠过头顶。每个人的口袋里都装着一部连接全球知识的装置。你生活在人类历史上变化最快的时代。',
+    ],
+  },
+  warfare: {
+    ancient: [
+      '你能听到远处战鼓的闷响和青铜盾牌的碰撞声。尘土遮蔽了半边天空，战车在平原上列阵。这是人类最早的有组织战争之一，胜负将改写一个文明的命运。',
+    ],
+    classical: [
+      '你站在山丘上俯瞰战场，密集的方阵像铁墙般缓缓推进。号角声划破清晨的薄雾，骑兵在侧翼等待时机。几个小时后，一个帝国的疆界将因此改变。',
+    ],
+    medieval: [
+      '你透过城堡的箭孔向外张望，攻城器械正在逼近。城内妇孺在教堂祈祷，骑士们在城墙上来回巡视。围城战可能持续数月，而你身处其中。',
+    ],
+    modern: [
+      '你蹲在一条泥泞的壕沟里，头顶是炮弹划过的呼啸声。探照灯的光柱在夜空中交叉扫过，远方的爆炸让大地震颤。现代战争的规模和残酷超出了所有人的想象。',
+    ],
+  },
+  science: {
+    ancient: [
+      '你站在一座天文台的平台上，夜空中的星辰清晰得仿佛伸手可及。旁边的学者正在竹简上记录星象，试图从天空的规律中寻找世界的秩序。这是科学最古老的冲动。',
+    ],
+    classical: [
+      '你在一间铺满莎草纸卷的书房中，窗外是地中海的波光。学者正用几何图形推演天体的运动，他手中的圆规和直尺就是解锁宇宙奥秘的钥匙。',
+    ],
+    early_modern: [
+      '你凑近一台刚刚打磨好的望远镜，镜头中的月球表面凹凸不平，完全不是教科书上所说的完美球体。你正在见证的不只是一个发现，而是一场认知革命的起点。',
+    ],
+    modern: [
+      '你站在一间嗡嗡作响的实验室里，显示器上的数据正在实时刷新。同事们在白板前激烈讨论，咖啡杯堆满了角落。一个可能改变世界的突破就藏在这些数字里。',
+    ],
+  },
+  literature: {
+    ancient: [
+      '你坐在篝火旁，一位年迈的吟唱者正在用抑扬顿挫的声调讲述英雄的故事。火光映照着听众的面庞，每个人都沉浸其中。文字还未出现，但文学已经在人声中诞生。',
+    ],
+    classical: [
+      '你在一间竹帘半掩的书斋中，案上的竹简墨迹未干。窗外是修竹摇曳的庭院，远处隐约传来琴声。在这样的午后，一位诗人正在把此刻的感动凝炼成流传千年的句子。',
+    ],
+    modern: [
+      '你走进一家拥挤的咖啡馆，烟雾缭绕中，一位作家正在角落里奋笔疾书。他的手稿将在几十年后被视为文学的转折点，但此刻他只是一个在城市中挣扎的年轻人。',
+    ],
+  },
+  music: {
+    classical: [
+      '你坐在一间灯火辉煌的宫廷大厅里，乐师们正在调音。第一个音符响起的瞬间，空气似乎凝固了。你正在聆听一首将被后世反复演奏的杰作的首次演出。',
+    ],
+    modern: [
+      '你挤在一间烟雾弥漫的地下俱乐部里，舞台上的乐手正在即兴演奏。节奏打破了所有已知的规则，台下的人群从困惑变成狂热。一种全新的音乐风格正在这个夜晚诞生。',
+    ],
+  },
+  technology: {
+    ancient: [
+      '你站在一座窑炉前，炉火的温度灼烤着你的面庞。工匠正在小心翼翼地控制火候，一件前所未有的器物即将在烈焰中成形。技术的每一步跃进都始于这样的火与汗水。',
+    ],
+    modern: [
+      '你站在一间车库改造的工作室里，电路板和焊锡的气味弥漫在空气中。几个年轻人正在调试一台看起来平平无奇的机器——但它将改变数十亿人的生活方式。',
+    ],
+  },
+  philosophy: {
+    classical: [
+      '你走在一条林荫小径上，前方的智者正在与弟子们散步论道。他提出的问题看似简单，却让在场的每个人陷入沉思。两千年后，人们仍在寻找这些问题的答案。',
+    ],
+    modern: [
+      '你坐在一间塞满书籍的阁楼里，窗外是战后废墟般的城市。桌前的思想家正在写下对人类存在的追问——自由、荒诞、责任，这些词在他的笔下获得了全新的重量。',
+    ],
+  },
+  art: {
+    classical: [
+      '你走进一间光线昏暗的画室，颜料的气味扑面而来。画家正在巨大的画布前凝视，他的调色板上混合着从矿石中研磨出的色彩。当他落笔的那一刻，一件传世之作开始成形。',
+    ],
+    modern: [
+      '你站在一间白墙展厅里，面前的作品让你困惑不已——它打破了你对艺术的所有预期。周围的人有的愤怒，有的狂喜。你正在见证一个艺术流派的诞生时刻。',
+    ],
+  },
+  exploration: {
+    early_modern: [
+      '你站在一艘木帆船的甲板上，海风夹杂着盐雾打湿了你的衣襟。身后是渐渐消失的海岸线，前方是一片完全未知的海域。每一天的航行都可能是发现，也可能是终点。',
+    ],
+    modern: [
+      '你透过舷窗向外看去，地球是一颗蓝色的弹珠悬浮在无垠的黑暗中。失重感让一切都变得超现实。你正以第一视角见证人类走出摇篮的时刻。',
+    ],
+  },
+  medicine: {
+    classical: [
+      '你站在一间简陋的诊疗室里，药草的气味浓烈而复杂。一位医者正在仔细观察病人的面色，用经验和直觉对抗疾病。在没有显微镜的时代，这就是医学的前线。',
+    ],
+    modern: [
+      '你穿着白大褂站在一台精密仪器前，显微镜下的世界比任何想象都更复杂。一个微小的发现可能拯救数百万人的生命——而你正在见证这个发现的诞生。',
+    ],
+  },
+}
+
+function getTimeSlot(year: number): string {
+  if (year < -500) return 'ancient'
+  if (year < 500) return 'classical'
+  if (year < 1400) return 'medieval'
+  if (year < 1800) return 'early_modern'
+  return 'modern'
+}
+
+export function generateImmersiveNarrative(event: HistoricalEvent): string | null {
+  const timeSlot = getTimeSlot(event.year)
+  const yearStr = formatYear(event.year)
+  const regionLabel = REGION_CONFIG[event.region]?.label || event.region
+
+  // Try category-specific templates first
+  const catTemplates = IMMERSIVE_TEMPLATES[event.category]
+  let pool: string[] = []
+  if (catTemplates) {
+    pool = catTemplates[timeSlot] || []
+    // Fallback: try adjacent time slots
+    if (pool.length === 0) {
+      const slots = ['ancient', 'classical', 'medieval', 'early_modern', 'modern']
+      const idx = slots.indexOf(timeSlot)
+      if (idx > 0 && catTemplates[slots[idx - 1]]) pool = catTemplates[slots[idx - 1]]
+      if (pool.length === 0 && idx < slots.length - 1 && catTemplates[slots[idx + 1]]) pool = catTemplates[slots[idx + 1]]
+    }
+  }
+
+  // Fallback to history category templates
+  if (pool.length === 0) {
+    const histTemplates = IMMERSIVE_TEMPLATES.history
+    pool = histTemplates[timeSlot] || histTemplates.modern || []
+  }
+
+  if (pool.length === 0) return null
+
+  const idx = hashCode(event.id) % pool.length
+  const template = pool[idx]
+
+  return `如果你在${yearStr}的${regionLabel}——${template}`
+}
+
+/* ================================================================
+   时代环境音景 — 感官氛围描述
+   ================================================================ */
+
+const ERA_AMBIENCE: Record<string, string[]> = {
+  '远古文明': [
+    '篝火噼啪作响，星穹低垂，石器的叩击声在旷野中回荡',
+    '泥土与草木的气息弥漫在空气中，远处河流的低语诉说着大地的故事',
+    '原始丛林的虫鸣与兽吼交织，火种是唯一的光明与温暖',
+  ],
+  '古典时代': [
+    '大理石廊柱下的辩论声，混合着橄榄油灯微微的烟味',
+    '战车轮毂的碾压声与铜钟的鸣响，在城邦的广场上交汇',
+    '竹简展开时的沙沙声，砚台中研磨的墨香弥漫书斋',
+  ],
+  '轴心时代': [
+    '哲人的低语穿过菩提树的浓荫，沉思与觉悟在寂静中发酵',
+    '不同信仰的钟声、诵经声和号角声，在同一片天空下此起彼伏',
+  ],
+  '帝国时代': [
+    '驿道上马蹄声急促如鼓点，丝绸与香料的气息穿越万里',
+    '宫殿深处回荡着编钟的余韵，青铜器在烛光中泛着幽光',
+  ],
+  '中世纪': [
+    '哥特式大教堂的管风琴轰鸣，彩色玻璃窗把阳光碎成斑斓的光斑',
+    '城堡护城河上方飘来铁匠铺的锤声，集市的喧嚣与教堂的钟声交织',
+    '羊皮纸与鹅毛笔的窸窣声，修道院的抄写室里安静得只能听见呼吸',
+  ],
+  '文艺复兴前夜': [
+    '印刷机齿轮的咔嗒声，纸张与油墨的气息正在改变一个世界',
+    '港口的桅杆林立如森林，未知的海风带着冒险的咸味扑面而来',
+  ],
+  '文艺复兴': [
+    '颜料研磨的声响与画笔在画布上的沙沙声，工作室弥漫着松节油的味道',
+    '解剖台上的烛光摇曳，人体的奥秘在刀锋下一层层展开',
+  ],
+  '科学革命': [
+    '透镜与棱镜折射出彩虹，实验室里玻璃器皿碰撞的清脆声',
+    '望远镜镜筒对准星空的那一刻，宇宙的沉默突然变得震耳欲聋',
+  ],
+  '工业时代': [
+    '蒸汽机的嘶嘶声与齿轮的轰鸣，煤烟弥漫在工厂的天空',
+    '火车汽笛划破田野的宁静，钢铁与蒸汽正在重新丈量世界的距离',
+  ],
+  '现代': [
+    '键盘敲击声与屏幕的微光，信息以光速在看不见的网络中穿梭',
+    '机场广播的多语言播报，咖啡馆里来自世界各地的对话嗡嗡作响',
+    '手机提示音此起彼伏，每个人的口袋里都装着一个连接全球的入口',
+  ],
+}
+
+export function getEraAmbience(event: HistoricalEvent): string | null {
+  const era = getEra(event.year)
+  if (!era) return null
+  const pool = ERA_AMBIENCE[era.name]
+  if (!pool || pool.length === 0) return null
+  const idx = hashCode(event.id) % pool.length
+  return pool[idx]
+}
+
+/* ---------- 时间胶囊：世界指标历史估算 ---------- */
+
+export interface TimeCapsuleItem {
+  label: string
+  then: string
+  now: string
+  emoji: string
+}
+
+/** 世界人口估算（年份 → 亿人）来源：Our World in Data / UN */
+const POPULATION_ESTIMATES: Array<[number, string]> = [
+  [-4000, '约 700 万'],
+  [-3000, '约 1400 万'],
+  [-2000, '约 2700 万'],
+  [-1000, '约 5000 万'],
+  [-500, '约 1 亿'],
+  [0, '约 1.9 亿'],
+  [200, '约 1.9 亿'],
+  [500, '约 2 亿'],
+  [1000, '约 2.7 亿'],
+  [1200, '约 3.6 亿'],
+  [1400, '约 3.5 亿'],
+  [1500, '约 4.6 亿'],
+  [1600, '约 5.6 亿'],
+  [1700, '约 6 亿'],
+  [1800, '约 9.8 亿'],
+  [1900, '约 16.5 亿'],
+  [1950, '约 25 亿'],
+  [2000, '约 61 亿'],
+  [2025, '约 81 亿'],
+]
+
+/** 平均预期寿命估算（年份 → 岁）*/
+const LIFESPAN_ESTIMATES: Array<[number, string]> = [
+  [-4000, '约 25 岁'],
+  [-1000, '约 26 岁'],
+  [0, '约 28 岁'],
+  [500, '约 30 岁'],
+  [1000, '约 30 岁'],
+  [1400, '约 30 岁'],
+  [1600, '约 35 岁'],
+  [1800, '约 40 岁'],
+  [1900, '约 48 岁'],
+  [1950, '约 52 岁'],
+  [2000, '约 67 岁'],
+  [2025, '约 73 岁'],
+]
+
+/** 识字率估算（年份 → 百分比）*/
+const LITERACY_ESTIMATES: Array<[number, string]> = [
+  [-4000, '< 1%'],
+  [-1000, '< 1%'],
+  [0, '约 2%'],
+  [500, '约 3%'],
+  [1000, '约 5%'],
+  [1400, '约 8%'],
+  [1600, '约 12%'],
+  [1800, '约 23%'],
+  [1900, '约 36%'],
+  [1950, '约 56%'],
+  [2000, '约 83%'],
+  [2025, '约 87%'],
+]
+
+function lookupEstimate(data: Array<[number, string]>, year: number): string {
+  if (data.length === 0) return '未知'
+  let closest = data[0]
+  let minDist = Math.abs(year - data[0][0])
+  for (const entry of data) {
+    const dist = Math.abs(year - entry[0])
+    if (dist < minDist) { minDist = dist; closest = entry }
+  }
+  return closest[1]
+}
+
+export function generateTimeCapsule(event: HistoricalEvent): TimeCapsuleItem[] {
+  if (event.significance < 3) return [] // Only for milestones
+  const items: TimeCapsuleItem[] = []
+  items.push({
+    label: '世界人口',
+    then: lookupEstimate(POPULATION_ESTIMATES, event.year),
+    now: '约 81 亿',
+    emoji: '🌍',
+  })
+  items.push({
+    label: '平均寿命',
+    then: lookupEstimate(LIFESPAN_ESTIMATES, event.year),
+    now: '约 73 岁',
+    emoji: '💓',
+  })
+  items.push({
+    label: '识字率',
+    then: lookupEstimate(LITERACY_ESTIMATES, event.year),
+    now: '约 87%',
+    emoji: '📖',
+  })
+  return items
+}
+
+/* ================================================================
+   特性 2：历史巧合"你知道吗" v2
+   ================================================================ */
+
+export interface HistoricalCoincidence {
+  text: string
+  type: 'coincidence'
+}
+
+export function findHistoricalCoincidences(
+  event: HistoricalEvent,
+  allEvents: HistoricalEvent[]
+): HistoricalCoincidence[] {
+  if (!allEvents || allEvents.length === 0) return []
+  const results: HistoricalCoincidence[] = []
+  const candidates = allEvents.filter(e =>
+    e.id !== event.id &&
+    Math.abs(e.year - event.year) <= 1 &&
+    e.region !== event.region &&
+    e.category !== event.category &&
+    (e.significance >= 2 || event.significance >= 2)
+  )
+  if (candidates.length === 0) return []
+  // Sort by significance desc, pick top 2
+  candidates.sort((a, b) => (b.significance ?? 1) - (a.significance ?? 1))
+  const picked = candidates.slice(0, 2)
+  for (const c of picked) {
+    const yearNote = c.year === event.year
+      ? `同一年（${formatYear(event.year)}）`
+      : `几乎同时（${formatYear(event.year)} vs ${formatYear(c.year)}）`
+    const catA = CATEGORY_CONFIG[event.category]?.label ?? event.category
+    const catB = CATEGORY_CONFIG[c.category]?.label ?? c.category
+    results.push({
+      text: `${yearNote}，在${REGION_CONFIG[event.region]?.label ?? event.region}发生「${event.title}」（${catA}）的同时，${REGION_CONFIG[c.region]?.label ?? c.region}正在发生「${c.title}」（${catB}）。两件看似毫无关联的事件，却在历史的同一刻交汇。`,
+      type: 'coincidence',
+    })
+  }
+  return results
+}
+
+/* ================================================================
+   特性 3：因果链"蝴蝶效应"完整故事线
+   ================================================================ */
+
+export function buildButterflyEffectNarrative(
+  chainEvents: HistoricalEvent[]
+): string | null {
+  if (!chainEvents || chainEvents.length < 3) return null
+  const sorted = [...chainEvents].sort((a, b) => a.year - b.year)
+  const parts: string[] = []
+
+  // Opening
+  const first = sorted[0]
+  const last = sorted[sorted.length - 1]
+  const spanYears = Math.abs(last.year - first.year)
+  parts.push(`这条因果链横跨${spanYears > 0 ? spanYears + '年' : '数十年'}的历史——从${formatYear(first.year)}的「${first.title}」到${formatYear(last.year)}的「${last.title}」，每一步都是下一步不可或缺的前提。`)
+
+  // Middle transitions (limit to key nodes for long chains)
+  const nodes = sorted.length > 8
+    ? [sorted[0], ...sorted.filter((_, i) => i > 0 && i < sorted.length - 1 && (i % Math.ceil(sorted.length / 5) === 0 || sorted[i].significance >= 3)), sorted[sorted.length - 1]]
+    : sorted
+
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const curr = nodes[i]
+    const next = nodes[i + 1]
+    const gap = Math.abs(next.year - curr.year)
+    let transition = ''
+    if (gap <= 30) {
+      transition = `「${curr.title}」的影响迅速传导——仅${gap}年后，「${next.title}」随之出现。`
+    } else if (gap <= 200) {
+      transition = `「${curr.title}」埋下的种子在${gap}年后结出果实：「${next.title}」的发生，正是前者长期效应的体现。`
+    } else {
+      transition = `从「${curr.title}」到「${next.title}」，${gap}年的漫长岁月里，前者的遗产以意想不到的方式持续发酵，最终催生了后者。`
+    }
+    parts.push(transition)
+  }
+
+  // Closing
+  parts.push(`回望这条链条，没有任何一环是多余的——如果抽掉其中任何一个事件，后续的历史可能走向完全不同的方向。这就是历史的"蝴蝶效应"。`)
+
+  return parts.join('\n\n')
+}
+
+/* ================================================================
+   特性 6："如果历史重来"反事实推演卡片
+   ================================================================ */
+
+export function generateCounterfactual(
+  event: HistoricalEvent,
+  allEvents: HistoricalEvent[]
+): string | null {
+  if (event.significance < 3) return null // Only for milestones
+
+  const relatedCount = event.relatedIds?.length ?? 0
+  const cat = event.category
+  const era = getEra(event.year)
+
+  // Build a category-specific counterfactual frame
+  const frames: Record<string, string> = {
+    science: `如果「${event.title}」没有在${formatYear(event.year)}发生，人类的科学认知可能停滞数十甚至上百年。`,
+    technology: `如果「${event.title}」被推迟或从未实现，依赖这项技术的整条创新链都将断裂——`,
+    literature: `如果「${event.title}」未曾诞生，后世无数受其启发的文学作品也将不复存在——`,
+    warfare: `如果「${event.title}」的结局不同，此后的政治版图和民族命运可能被彻底改写。`,
+    history: `如果「${event.title}」未曾发生，此后${relatedCount > 2 ? `至少${relatedCount}个` : '多个'}重大历史事件可能不会出现，或以截然不同的面貌出现。`,
+    music: `如果「${event.title}」没有发生，此后的音乐发展轨迹可能完全不同——`,
+    philosophy: `如果「${event.title}」中的思想从未被提出，人类理解自身和世界的方式可能仍然停留在更早的阶段。`,
+    religion: `如果「${event.title}」没有发生，数亿甚至数十亿人的精神生活、道德观念和文化传统都将面目全非。`,
+    art: `如果「${event.title}」从未出现，艺术史的进程可能沿着一条完全不同的道路发展——`,
+    medicine: `如果「${event.title}」推迟一个世纪，可能有无数人因为缺少这项医学突破而失去生命。`,
+    exploration: `如果「${event.title}」没有发生，人类对地理和宇宙的认知边界可能至今仍停留在更小的范围内。`,
+    architecture: `如果「${event.title}」从未建成，人类建筑史将失去一座定义性的标杆。`,
+  }
+
+  const frame = frames[cat] ?? `如果「${event.title}」没有在${formatYear(event.year)}发生，此后的历史轨迹将发生难以预测的偏转。`
+
+  // Find downstream events via relatedIds
+  const downstream = (event.relatedIds ?? [])
+    .map(id => allEvents.find(e => e.id === id))
+    .filter((e): e is HistoricalEvent => !!e && e.year > event.year)
+    .slice(0, 3)
+
+  let consequence = ''
+  if (downstream.length > 0) {
+    const names = downstream.map(e => `「${e.title}」（${formatYear(e.year)}）`).join('、')
+    consequence = `直接受影响的后续事件包括${names}——它们中的每一个都以不同的方式延续了「${event.title}」的历史能量。`
+  } else {
+    consequence = `它在${era?.name ?? '那个时代'}激起的涟漪，以我们今天仍能感受到的方式持续扩散着。`
+  }
+
+  return `${frame}\n\n${consequence}\n\n这当然只是思想实验——历史没有"如果"。但正是这种反事实推演，帮助我们更深刻地理解每一个关键时刻的分量。`
+}
+
+/* ================================================================
+   特性 7：事件深度叙事多维度解锁
+   ================================================================ */
+
+export interface ContextDimension {
+  label: string
+  icon: string // Lucide icon name hint
+  content: string
+}
+
+const ERA_CONTEXT_TEMPLATES: Record<string, string> = {
+  '远古文明': '在文字尚未发明或刚刚出现的时代，人类社会正从游牧走向定居，从部落走向城邦。',
+  '古典时代': '地中海世界、中华帝国和印度次大陆几乎同时进入了制度化和城市化的快车道。',
+  '轴心时代': '全球多个文明几乎同时诞生了一批影响后世数千年的思想家和精神导师。',
+  '帝国时代': '大型帝国的扩张带来了前所未有的跨区域文化交流和冲突。',
+  '中世纪': '在宗教权威笼罩一切的表象下，商业、技术和思想正在悄然孕育变革。',
+  '文艺复兴前夜': '旧秩序正在松动，新思想和新发现正在从各个角落涌现。',
+  '文艺复兴': '人对自身力量的重新发现，推动了科学、艺术和探索的全面繁荣。',
+  '科学革命': '实验方法和数学语言取代了权威和教条，人类认识世界的方式发生根本性转变。',
+  '工业时代': '蒸汽和钢铁重塑了空间与时间的意义，城市化和全球化加速推进。',
+  '现代': '信息技术和全球化以前所未有的速度改变着人类生活的每一个方面。',
+}
+
+export function generateContextDimensions(
+  event: HistoricalEvent,
+  allEvents: HistoricalEvent[]
+): ContextDimension[] {
+  const dims: ContextDimension[] = []
+  const era = getEra(event.year)
+  const eraName = era?.name ?? '未知时代'
+
+  // Dimension 1: Historical Background
+  const eraContext = ERA_CONTEXT_TEMPLATES[eraName] ?? '这个时期的世界正在经历深刻变化。'
+  const regionName = REGION_CONFIG[event.region]?.label ?? event.region
+  dims.push({
+    label: '历史背景',
+    icon: 'Clock',
+    content: `${eraContext}在${regionName}，${event.title}正是这一时代大背景的产物。${event.description}`,
+  })
+
+  // Dimension 2: Key Figures
+  if (event.figure) {
+    const figures = event.figure.split(/[、,，]/).map(f => f.trim()).filter(Boolean)
+    if (figures.length === 1) {
+      dims.push({
+        label: '关键人物',
+        icon: 'User',
+        content: `${figures[0]}是这一事件的核心推动者。在${eraName}的${regionName}，个人的抉择常常能改变历史的走向——${figures[0]}在「${event.title}」中的角色正是如此。`,
+      })
+    } else if (figures.length > 1) {
+      dims.push({
+        label: '关键人物',
+        icon: 'Users',
+        content: `${figures.join('、')}等人在这一事件中扮演了关键角色。他们的互动——合作、对抗或互相启发——共同塑造了「${event.title}」的最终面貌。`,
+      })
+    }
+  } else {
+    dims.push({
+      label: '结构性力量',
+      icon: 'Layers',
+      content: `「${event.title}」不是某个人的决定，而是更深层的结构性力量——经济周期、技术变革、人口迁移、思想传播——共同作用的结果。`,
+    })
+  }
+
+  // Dimension 3: Legacy & Impact
+  const relatedCount = event.relatedIds?.length ?? 0
+  const downstream = (event.relatedIds ?? [])
+    .map(id => allEvents.find(e => e.id === id))
+    .filter((e): e is HistoricalEvent => !!e && e.year > event.year)
+  if (downstream.length > 0) {
+    const names = downstream.slice(0, 3).map(e => `「${e.title}」`).join('、')
+    dims.push({
+      label: '后世影响',
+      icon: 'TrendingUp',
+      content: `「${event.title}」的影响远超其发生的时代。它直接或间接催生了${names}等后续事件${relatedCount > 3 ? `（共关联${relatedCount}个事件）` : ''}。从长远来看，这一事件改变的不仅是一时的格局，更是此后数代人的生活方式和思维模式。`,
+    })
+  } else {
+    dims.push({
+      label: '后世影响',
+      icon: 'TrendingUp',
+      content: `「${event.title}」的影响在此后的历史中持续回响。即使在今天，我们仍然可以在制度、文化或思想中找到它留下的印记。`,
+    })
+  }
+
+  return dims
+}
+
+/* ================================================================
+   特性 8：叙事引擎 v3——"历史现场"报道体
+   ================================================================ */
+
+const NEWS_REPORT_TEMPLATES: Record<string, (event: HistoricalEvent) => string> = {
+  '远古文明': (e) => `【部落传令】长老们在篝火旁宣布了一个改变部落命运的消息："${e.title}"。从今天起，我们的世界将不再一样。河对岸的部落也已收到消息——这件事太大了，连最远的氏族都在谈论它。`,
+  '古典时代': (e) => `【城邦公报 · ${REGION_CONFIG[e.region]?.label ?? '未知'}】公民们，请在广场集合听取最新消息。"${e.title}"——这一事件的意义，将在未来数个世纪中被反复讨论。传令官已将消息送往各同盟城邦。`,
+  '轴心时代': (e) => `【竹简通讯 · ${formatYear(e.year)}】有远方旅人带来重要消息："${e.title}"。学宫中的智者们正在激烈讨论此事的意涵——有人说这是开天辟地之变，有人说不过尔尔。唯一可以确定的是：此事将改变人们对世界的理解。`,
+  '帝国时代': (e) => `【帝国驿报 · 紧急快马】八百里加急——"${e.title}"。此消息经驿站日夜传递，自${REGION_CONFIG[e.region]?.label ?? '前方'}送达。帝国中枢已知悉此事，御前会议正在商讨对策。所有边关守将即日起保持高度戒备。`,
+  '中世纪': (e) => `【修道院编年录 · 主历${e.year > 0 ? e.year : Math.abs(e.year) + ' BC'}年】本日记录一件足以载入史册之大事——"${e.title}"。修士们在经祷之余议论纷纷，有人认为这是上帝的旨意，有人认为这是撒旦的诡计。无论如何，历史的车轮已经转动。`,
+  '文艺复兴前夜': (e) => `【学者通信 · 手抄本】敬致各位同仁——今有一件大事值得关注："${e.title}"。这或许标志着旧秩序的裂缝正在扩大。请诸位在抄写经典之余，密切关注此事的后续发展。我们正处在一个转折的时代。`,
+  '文艺复兴': (e) => `【威尼斯商报 · 头版】号外！"${e.title}"——这一消息已在各大港口和宫廷引起轰动。据来自${REGION_CONFIG[e.region]?.label ?? '远方'}的可靠消息源，此事的影响将远超我们的想象。印刷工坊正在加紧排版详细报道。`,
+  '科学革命': (e) => `【皇家学会通报】尊敬的会员们——"${e.title}"。经多位学者实验验证和同行评议，此发现已获认可。这不仅挑战了长期以来的权威学说，更为我们理解自然打开了一扇全新的窗户。详细论文将在下期会刊中刊出。`,
+  '工业时代': (e) => `【电报快讯 · ${formatYear(e.year)}】——紧急——"${e.title}"——此消息经海底电缆从${REGION_CONFIG[e.region]?.label ?? '远方'}传来——各报社编辑部正在赶制号外——预计明日头版见报——股票市场已有反应——详情待续——`,
+  '现代': (e) => `【全球新闻快讯】Breaking News——"${e.title}"。来自${REGION_CONFIG[e.region]?.label ?? '全球'}的报道称，这一事件正在引发全球范围内的连锁反应。社交媒体上相关话题已冲上热搜，各国政府和机构正在紧急评估其影响。我们将持续跟进报道。`,
+}
+
+export interface NewsReportResult {
+  report: string
+  readerComments: { stance: 'positive' | 'negative' | 'neutral'; text: string }[]
+}
+
+export function generateNewsReport(event: HistoricalEvent): NewsReportResult | null {
+  const era = getEra(event.year)
+  if (!era) return null
+  const template = NEWS_REPORT_TEMPLATES[era.name]
+  if (!template) return null
+
+  const report = template(event)
+
+  // Generate reader comments based on category and significance
+  const comments: NewsReportResult['readerComments'] = []
+  if (event.significance >= 2) {
+    const cat = event.category
+    if (cat === 'warfare' || cat === 'history') {
+      comments.push({ stance: 'positive', text: `此事必将载入史册。后世评说，当从此刻算起。` })
+      comments.push({ stance: 'negative', text: `代价太大了。多少无辜者为此付出了生命？历史不该只记住胜利者。` })
+    } else if (cat === 'science' || cat === 'technology') {
+      comments.push({ stance: 'positive', text: `人类的智慧再一次证明：我们能理解并驾驭这个世界。这是属于理性的胜利。` })
+      comments.push({ stance: 'neutral', text: `令人振奋，但也令人不安——我们是否真的准备好迎接它带来的所有后果？` })
+    } else if (cat === 'philosophy' || cat === 'religion') {
+      comments.push({ stance: 'positive', text: `终于有人说出了我们心中模糊感受到却无法表达的东西。这是思想的觉醒。` })
+      comments.push({ stance: 'negative', text: `动摇了我们长期以来的信念。这究竟是解放还是迷失？时间会给出答案。` })
+    } else if (cat === 'literature' || cat === 'music' || cat === 'art') {
+      comments.push({ stance: 'positive', text: `艺术的力量在于它不需要说服——它直接触动你的内心。这件作品做到了。` })
+      comments.push({ stance: 'neutral', text: `有人说它是杰作，有人说它是疯狂。也许两者之间的距离，比我们想象的更近。` })
+    } else {
+      comments.push({ stance: 'positive', text: `这件事值得被记住。它改变了我们理解世界的方式。` })
+      comments.push({ stance: 'neutral', text: `历史自有其节奏。此刻看似平常，也许百年后方知其意义。` })
+    }
+  }
+
+  return { report, readerComments: comments }
+}
+
+/* ================================================================
+   特性："一句话读懂"核心洞察引擎
+   为每个事件生成一句反直觉或高密度的认知翻转
+   ================================================================ */
+
+const INSIGHT_TEMPLATES: Record<string, (e: HistoricalEvent) => string | null> = {
+  history: (e) => {
+    if (e.title.includes('统一')) return `${e.title}不仅仅是版图的合并——更是度量衡、文字和思想被强行拉到同一个标准的暴力与效率的极端结合。`
+    if (e.title.includes('革命')) return `${e.title}的真正遗产不是推翻了什么，而是它证明了一个真理：旧秩序一旦失去合法性，其崩塌速度远超所有人的预期。`
+    if (e.title.includes('条约') || e.title.includes('和约')) return `这份条约看似终结了冲突，实际上它制造的不满和裂痕，为下一场冲突埋下了种子。`
+    return e.significance >= 3 ? `${e.title}改变的不只是一个时代——它重新定义了此后所有人理解权力、秩序和正义的方式。` : null
+  },
+  warfare: (e) => {
+    if (e.title.includes('战役') || e.title.includes('战争')) return `这场战争最深远的影响不在战场——而在战后幸存者重建世界时，不得不面对一个核心问题：如何确保这一切不再重演。`
+    return e.significance >= 3 ? `${e.title}留给后世的最大教训：决定战争结果的从来不只是武力，而是支撑武力的经济、技术和社会组织能力。` : null
+  },
+  science: (e) => {
+    if (e.title.includes('发现') || e.title.includes('理论')) return `${e.title}之所以重要，不在于它解答了一个问题——而在于它暴露了我们此前对世界的理解有多么根本性的错误。`
+    return `科学史上的每一个突破都遵循同一个模式：先是少数人的疯狂想法，然后是主流的嘲笑，最后是教科书的理所当然。`
+  },
+  technology: (e) => {
+    if (e.title.includes('发明')) return `${e.title}的发明者可能从未想到：这项技术真正的影响不在它被设计做的事情上，而在它意外使能的事情上。`
+    return `每一项革命性技术都有一个共同特征：它被发明时的用途，与它最终改变世界的方式，几乎总是完全不同。`
+  },
+  literature: (e) => {
+    if (e.title.includes('诗') || e.title.includes('词')) return `这些诗句跨越千年仍然动人——因为它们表达的不是某个时代的情感，而是人之为人最本质的悲欢。`
+    return e.significance >= 3 ? `${e.title}之所以成为经典，不是因为它属于那个时代——而是因为每一代读者都在其中找到了自己时代的影子。` : null
+  },
+  music: (e) => {
+    return `${e.title}证明了一件事：音乐是唯一能同时穿越时间、地理和语言障碍的人类发明——它不需要翻译就能让陌生人流泪。`
+  },
+  philosophy: (e) => {
+    return `${e.title}提出的问题至今没有最终答案——但这恰恰是它最大的价值：真正深刻的问题不是用来被解决的，而是用来让每一代人重新思考的。`
+  },
+  art: (e) => {
+    return `${e.title}在当时可能引发争议——但伟大艺术的标志就是：它在被创造时让人不安，在被理解后让人震撼。`
+  },
+  religion: (e) => {
+    return `${e.title}的影响力不在于它宣称的超自然真理——而在于它为数十亿人提供了一个回答"我为什么活着"的框架，而这个需求永远不会消失。`
+  },
+  exploration: (e) => {
+    if (e.title.includes('航') || e.title.includes('发现')) return `${e.title}的真正代价和收获，要在几个世纪后才能看清——探索者启程时，没有人能预见旅途终点的真正意义。`
+    return `每一次伟大的探索都始于同一个冲动：已知世界的边界，恰恰是人类好奇心最无法忍受的地方。`
+  },
+  medicine: (e) => {
+    return `${e.title}救活的人数可能超过历史上所有战争杀死的人数之和——但医学进步几乎从不出现在史诗或纪念碑上。这是人类叙事的一个盲点。`
+  },
+  architecture: (e) => {
+    return `${e.title}不只是一座建筑——它是一个时代把自己对永恒的理解，凝固成石头和空间的尝试。千年后，文字可能失传，制度可能瓦解，但建筑还在那里。`
+  },
+}
+
+export function generateCoreInsight(event: HistoricalEvent): string | null {
+  const template = INSIGHT_TEMPLATES[event.category]
+  if (!template) return null
+  return template(event)
+}
+
+/* ================================================================
+   历史遗产模块 — generateLegacy()
+   ────────────────────────────────────────────────────────────────
+   为里程碑事件生成"这件事的遗产至今还在影响我们"的当代关联。
+   只为 significance=3 的事件生成。
+   ================================================================ */
+
+interface LegacyTemplate {
+  match: string[]
+  legacy: string
+}
+
+const LEGACY_DATABASE: LegacyTemplate[] = [
+  // 文字与印刷
+  { match: ['造纸', '纸'], legacy: '今天你手机屏幕上的每一个像素，都承载着造纸术开创的知识民主化精神——信息不再是少数人的特权。' },
+  { match: ['印刷', '古腾堡', '活字'], legacy: '现代出版业、维基百科、社交媒体——一切大规模信息传播的根基，都可以追溯到这项发明。' },
+  { match: ['楔形文字', '甲骨文', '文字'], legacy: '你现在正在阅读的每一个字符，都是这项发明的后代——书写是人类跨越时间传递信息的第一种技术。' },
+  // 科学
+  { match: ['万有引力', '牛顿', '经典力学'], legacy: '你的 GPS 导航、卫星通信、甚至手机扔出去的抛物线轨迹——都在遵守三百多年前发现的这些定律。' },
+  { match: ['相对论', '爱因斯坦'], legacy: 'GPS 卫星每天都要用相对论修正时钟——没有爱因斯坦，你的导航会偏差 10 公里以上。' },
+  { match: ['进化论', '达尔文', '物种起源'], legacy: '从抗生素耐药性到人工智能的遗传算法，进化论的原理今天在医学和计算机科学中无处不在。' },
+  { match: ['DNA', '双螺旋', '基因'], legacy: 'mRNA 疫苗、基因编辑婴儿、个性化医疗——21 世纪生物技术革命的每一步都建立在这个发现之上。' },
+  { match: ['青霉素', '抗生素'], legacy: '全球每年有数百万人的生命被抗生素挽救——但抗生素耐药性正在成为 21 世纪最大的公共卫生威胁之一。' },
+  // 技术
+  { match: ['蒸汽机', '瓦特'], legacy: '蒸汽机开创的"用热力驱动机械"原理，至今仍是火力发电和核电站的核心——你用的电有很大概率来自"烧水转涡轮"。' },
+  { match: ['电报', '莫尔斯'], legacy: '即时通讯的概念始于电报——从"嘀嗒"声到微信消息，人类追求实时沟通的执念从未停止。' },
+  { match: ['电话', '贝尔'], legacy: '从固定电话到智能手机，电话的后代已经从"打电话"进化成了人类的第二大脑和随身钱包。' },
+  { match: ['互联网', '万维网', 'ARPANET', 'TCP'], legacy: '你正在使用的设备就是这项发明的直系后代——互联网重新定义了人类社交、工作、学习和娱乐的方式。' },
+  { match: ['晶体管', '集成电路', '微处理器'], legacy: '你的手机里有数十亿个晶体管——这个指甲盖大小的芯片上的运算能力超过了阿波罗登月时整个 NASA 的计算机。' },
+  // 政治与制度
+  { match: ['法国大革命', '人权宣言'], legacy: '"自由、平等、博爱"至今是法国的国家格言，联合国人权宣言的精神也直接继承自这场革命。' },
+  { match: ['大宪章', 'Magna Carta'], legacy: '英美法系的核心原则——"王在法下"——直接来源于这张羊皮纸。今天每一次司法独立的实践，都在回应 800 年前贵族的那次抗争。' },
+  { match: ['联合国', '人权'], legacy: '联合国安理会、世界卫生组织、联合国教科文组织——当今国际秩序的基本框架，都是这个时刻的直接遗产。' },
+  { match: ['民主', '雅典', '公民大会'], legacy: '今天全球约有 120 个民主国家——雅典的一项政治实验，在 2500 年后成为了地球上最普遍的治理模式。' },
+  // 宗教
+  { match: ['佛', '释迦'], legacy: '全球约有 5 亿佛教徒，正念冥想已经进入西方心理治疗和硅谷企业文化——佛陀的遗产远超宗教本身。' },
+  { match: ['耶稣', '基督'], legacy: '世界上最通用的纪年方式（公元/AD）以这个人的出生为起点——即使你不是基督徒，你的日历也是他的遗产。' },
+  // 探索
+  { match: ['登月', '阿波罗', 'Armstrong'], legacy: '月球上的美国国旗至今还在那里——人类脚印是月球表面唯一不会被风化的痕迹。' },
+  { match: ['哥伦布', '新大陆'], legacy: '全球化、拉丁美洲的西班牙语、感恩节——这次航行的后果至今仍在塑造世界地图和文化版图。' },
+  // 文学与艺术
+  { match: ['莎士比亚'], legacy: '英语中约有 1700 个常用单词是莎士比亚发明或首次书面使用的——包括"eyeball""lonely""assassination"。' },
+  { match: ['红楼梦', '曹雪芹'], legacy: '\"红学\"至今是中国人文学科中参与人数最多的研究领域之一——一部未完成的小说，养活了几百年的学术讨论。' },
+  { match: ['诗经'], legacy: '\"关关雎鸠\"至今是中国语文教育的必修内容——三千年前的情歌，仍然是华语文明的情感底色。' },
+  // 音乐
+  { match: ['摇滚', 'Rock'], legacy: '从 Spotify 到抖音短视频，当代流行音乐的节奏结构、吉他音色和叛逆精神，大部分可以追溯到摇滚乐的诞生。' },
+  { match: ['嘻哈', 'Hip-Hop', 'rap'], legacy: '嘻哈是 21 世纪全球最大的音乐流派——从纽约街头发展而来的即兴文化，现在塑造着全球时尚、语言和社交媒体美学。' },
+  // 军事与战争
+  { match: ['原子弹', '广岛', '核'], legacy: '核威慑至今是国际关系的基石——人类拥有了自我毁灭的能力后，大国之间再也没有发生过全面战争。这叫"恐怖的和平"。' },
+  { match: ['火药'], legacy: '从烟花到导弹，火药的后代至今是新年庆典和战争恐怖的双重象征——同一项发明的两面性没有任何东西比得上它。' },
+  // 经济
+  { match: ['比特币', '加密货币', '区块链'], legacy: '区块链技术已经超越了加密货币本身——智能合约、去中心化金融和 NFT 正在挑战传统金融体系的每一个角落。' },
+  { match: ['工业革命'], legacy: '你呼吸的空气中 CO₂ 浓度比工业革命前高了 50%——气候变化是工业革命最大的、至今仍在展开的遗产。' },
+]
+
+export interface LegacyResult {
+  text: string
+}
+
+export function generateLegacy(event: HistoricalEvent): LegacyResult | null {
+  if (event.significance !== 3) return null
+
+  const searchText = `${event.title} ${event.description} ${event.details || ''}`
+
+  for (const tmpl of LEGACY_DATABASE) {
+    if (tmpl.match.some(kw => searchText.includes(kw))) {
+      return { text: tmpl.legacy }
+    }
+  }
+
+  // 通用 fallback（按 category）
+  const CATEGORY_LEGACY: Partial<Record<string, string>> = {
+    history: '这个历史转折点的回响仍然塑造着今天的国界线、民族认同和政治叙事。',
+    science: '这项科学发现打开的大门至今没有关上——它的应用仍在以我们无法预见的方式改变世界。',
+    technology: '这项技术发明的原理至今仍在日常生活中运转——只是速度更快、体积更小、价格更低。',
+    warfare: '这场冲突重新划定的力量格局和留下的集体记忆，至今仍影响着相关国家的外交政策和民族情感。',
+    literature: '这部作品至今仍在世界各地的课堂上被阅读和讨论——好的文学不会过时。',
+    music: '这种音乐风格至今仍是全球流行文化的基因之一——你每天听到的音乐中可能就有它的影子。',
+    philosophy: '这个思想体系至今仍在影响人们如何思考道德、正义和美好生活——哲学从来不是纸上谈兵。',
+    art: '这种艺术风格的影响远超画廊——它改变了广告、建筑、时尚和日常生活的视觉语言。',
+    religion: '这个信仰体系至今塑造着数亿人的道德观、节日传统和人生选择。',
+    exploration: '这次探索改变了人类对"世界有多大"的认知——我们如今的全球意识，正是一次又一次远征的累积。',
+    medicine: '这项医学突破至今每天都在挽救生命——现代医疗体系的很大一部分都建立在这个发现之上。',
+    architecture: '这种建筑理念至今仍影响着城市天际线和居住空间的设计——好的建筑思想跨越世纪。',
+  }
+
+  const fallback = CATEGORY_LEGACY[event.category]
+  if (fallback) return { text: fallback }
+
+  return null
+}

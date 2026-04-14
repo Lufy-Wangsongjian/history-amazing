@@ -30,3 +30,14 @@ npm-debug.log*
 # Playwright
 playwright-report/
 test-results/
+
+# Chrono Atlas 自动进化
+.chrono-evolve/
+.product-evolve/
+
+# WorkBuddy
+.workbuddy/
+
+# SQLite WAL/SHM files
+*.db-shm
+*.db-wal

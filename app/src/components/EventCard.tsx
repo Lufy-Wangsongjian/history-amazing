@@ -240,6 +240,29 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
           </p>
         )}
 
+        {/* 时间跨度条（有 endYear 的持续性事件） */}
+        {event.endYear != null && !expanded && (() => {
+          const duration = event.endYear - event.year
+          if (duration <= 0) return null
+          const widthPct = Math.min(Math.max(Math.log2(duration + 1) * 12, 10), 100)
+          return (
+            <div className="flex items-center gap-2 mt-1" title={`持续 ${duration} 年 (${formatYear(event.year)} — ${formatYear(event.endYear)})`}>
+              <div className="flex-1 h-1 rounded-full bg-muted/30 overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${widthPct}%`,
+                    backgroundColor: catCfg.color + '60',
+                  }}
+                />
+              </div>
+              <span className="text-[8px] text-muted-foreground/50 flex-shrink-0 tabular-nums">
+                {duration}年
+              </span>
+            </div>
+          )
+        })()}
+
         {thumbnailUrl && !isThumbError && (
           <div className="mb-2 rounded-lg overflow-hidden border border-border/40 bg-muted/20">
             <img

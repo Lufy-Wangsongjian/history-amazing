@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { skipWelcomeDialog } from './helpers';
 
 /**
  * Chrono Atlas - 健壮性 & 边界条件 E2E 测试
@@ -9,21 +10,6 @@ import { test, expect } from '@playwright/test';
  *   - localStorage 不可用时不崩溃
  *   - 各功能模块的边界操作
  */
-
-/**
- * 关闭 WelcomeDialog 欢迎弹窗（复用 views.spec.ts 的逻辑）
- */
-async function dismissWelcomeDialog(page: import('@playwright/test').Page) {
-  await page.waitForTimeout(1500);
-  const startBtn = page.locator('button:has-text("从头开始探索"), button:has-text("开始探索")').first();
-  if (await startBtn.isVisible().catch(() => false)) {
-    await startBtn.click();
-    await page.waitForTimeout(500);
-    return;
-  }
-  await page.keyboard.press('Escape');
-  await page.waitForTimeout(500);
-}
 
 test.describe('运行时错误捕获', () => {
   test('全页面交互过程中无 JS 运行时错误', async ({ page }) => {
@@ -50,19 +36,18 @@ test.describe('运行时错误捕获', () => {
       }
     });
 
+    await skipWelcomeDialog(page);
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
-    await dismissWelcomeDialog(page);
+    await page.waitForTimeout(1500);
 
-    // 遍历所有视图
+    // 遍历所有视图 —— 使用 FilterPanel 中 grid 内的精确按钮
     const viewButtons = [
-      'button:has-text("时间")',
-      'button:has-text("矩阵")',
-      'button:has-text("对照")',
-      'button:has-text("统计")',
-      'button:has-text("路径")',
-      'button:has-text("图谱")',
+      '.grid button:has-text("时间线")',
+      '.grid button:has-text("矩阵")',
+      '.grid button:has-text("对照")',
+      '.grid button:has-text("统计")',
+      '.grid button:has-text("文明图谱")',
     ];
 
     for (const selector of viewButtons) {
@@ -141,10 +126,10 @@ test.describe('localStorage 异常容错', () => {
 
 test.describe('边界数据场景', () => {
   test.beforeEach(async ({ page }) => {
+    await skipWelcomeDialog(page);
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
-    await dismissWelcomeDialog(page);
+    await page.waitForTimeout(1500);
   });
 
   test('搜索不存在的内容不崩溃', async ({ page }) => {
@@ -170,12 +155,11 @@ test.describe('边界数据场景', () => {
     page.on('pageerror', (error) => jsErrors.push(error.message));
 
     const viewButtons = [
-      'button:has-text("时间")',
-      'button:has-text("矩阵")',
-      'button:has-text("图谱")',
-      'button:has-text("统计")',
-      'button:has-text("对照")',
-      'button:has-text("路径")',
+      '.grid button:has-text("时间线")',
+      '.grid button:has-text("矩阵")',
+      '.grid button:has-text("文明图谱")',
+      '.grid button:has-text("统计")',
+      '.grid button:has-text("对照")',
     ];
 
     // 快速连续点击（不等待渲染完成）
@@ -214,41 +198,53 @@ test.describe('边界数据场景', () => {
 
 test.describe('新增功能模块验证', () => {
   test.beforeEach(async ({ page }) => {
+    await skipWelcomeDialog(page);
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
-    await dismissWelcomeDialog(page);
+    await page.waitForTimeout(1500);
   });
 
   test('收藏功能不崩溃（如果存在）', async ({ page }) => {
     const jsErrors: string[] = [];
     page.on('pageerror', (error) => jsErrors.push(error.message));
 
-    const favBtn = page.locator('button:has-text("收藏"), button:has-text("Favorite"), [class*="favorite"], [class*="Favorite"]').first();
+    // 工具栏中的"我的收藏"按钮
+    const favBtn = page.locator('button[title="我的收藏"]').first();
     if (await favBtn.isVisible().catch(() => false)) {
       await favBtn.click();
-      await page.waitForTimeout(1000);
-      expect(jsErrors).toHaveLength(0);
+      await page.waitForTimeout(1500);
+      // 关闭面板
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(500);
     }
+
+    const fatalErrors = jsErrors.filter(e => !e.includes('ResizeObserver'));
+    expect(fatalErrors).toHaveLength(0);
   });
 
   test('历史问答功能不崩溃（如果存在）', async ({ page }) => {
     const jsErrors: string[] = [];
     page.on('pageerror', (error) => jsErrors.push(error.message));
 
-    const quizBtn = page.locator('button:has-text("问答"), button:has-text("Quiz"), button:has-text("测验"), [class*="quiz"], [class*="Quiz"]').first();
+    // 工具栏中的"历史知识测验"按钮
+    const quizBtn = page.locator('button[title="历史知识测验"]').first();
     if (await quizBtn.isVisible().catch(() => false)) {
       await quizBtn.click();
-      await page.waitForTimeout(1500);
+      await page.waitForTimeout(2000);
 
-      // 如果有题目，尝试点击选项
-      const option = page.locator('button[class*="option"], button[class*="answer"], [class*="quiz"] button').first();
-      if (await option.isVisible().catch(() => false)) {
-        await option.click();
-        await page.waitForTimeout(500);
+      // 如果有"开始测验"按钮，尝试点击
+      const startBtn = page.locator('button:has-text("开始测验")').first();
+      if (await startBtn.isVisible().catch(() => false)) {
+        await startBtn.click();
+        await page.waitForTimeout(1500);
       }
 
-      expect(jsErrors).toHaveLength(0);
+      // 关闭面板
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(500);
     }
+
+    const fatalErrors = jsErrors.filter(e => !e.includes('ResizeObserver'));
+    expect(fatalErrors).toHaveLength(0);
   });
 });

@@ -1,6 +1,6 @@
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear, getEra } from '@/data/types'
-import { buildEventDetailParagraphs, generateDidYouKnow, buildCausalNarrative, generateExternalLinks } from '@/lib/event-detail'
+import { buildEventDetailParagraphs, generateDidYouKnow, buildCausalNarrative, generateExternalLinks, generateImmersiveNarrative, getEraAmbience, generateTimeCapsule, findHistoricalCoincidences, generateCounterfactual, generateContextDimensions, generateNewsReport, generateCoreInsight, generateLegacy } from '@/lib/event-detail'
 import { findQuotesForEvent } from '@/lib/literary-quotes'
 import { generateRecommendations } from '@/lib/recommendations'
 import { fetchEventContext } from '@/lib/api'
@@ -22,6 +22,15 @@ import {
   Heart,
   Share2,
   Sparkles,
+  Eye,
+  CalendarDays,
+  Rewind,
+  Newspaper,
+  ChevronDown,
+  TrendingUp,
+  Layers,
+  Zap,
+  Landmark,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { RegionFlag } from './RegionFlag'
@@ -60,12 +69,30 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
   const era = event ? getEra(event.year) : null
   const detailParagraphs = useMemo(() => (event ? buildEventDetailParagraphs(event) : []), [event])
   const didYouKnowFacts = useMemo(() => (event ? generateDidYouKnow(event) : []), [event])
+  const immersiveNarrative = useMemo(() => (event ? generateImmersiveNarrative(event) : null), [event])
+  const eraAmbience = useMemo(() => (event ? getEraAmbience(event) : null), [event])
+  const timeCapsule = useMemo(() => (event ? generateTimeCapsule(event) : []), [event])
   const externalLinks = useMemo(() => (event ? generateExternalLinks(event) : []), [event])
+  const legacyResult = useMemo(() => (event ? generateLegacy(event) : null), [event])
   const literaryQuotes = useMemo(() => (event ? findQuotesForEvent(event) : []), [event])
+  const coincidences = useMemo(() => (event ? findHistoricalCoincidences(event, events) : []), [event, events])
+  const counterfactual = useMemo(() => (event ? generateCounterfactual(event, events) : null), [event, events])
+  const contextDimensions = useMemo(() => (event ? generateContextDimensions(event, events) : []), [event, events])
+  const newsReportResult = useMemo(() => (event ? generateNewsReport(event) : null), [event])
+  const coreInsight = useMemo(() => (event ? generateCoreInsight(event) : null), [event])
   const recommendations = useMemo(() => (event && readIds ? generateRecommendations(event, events, readIds, 4) : []), [event, events, readIds])
+  const sameYearEvents = useMemo(() => {
+    if (!event) return []
+    const exact = events.filter(e => e.id !== event.id && e.year === event.year)
+    if (exact.length >= 3) return exact.slice(0, 10)
+    const nearby = events.filter(e => e.id !== event.id && Math.abs(e.year - event.year) <= 5)
+      .sort((a, b) => Math.abs(a.year - event.year) - Math.abs(b.year - event.year))
+    return nearby.slice(0, 10)
+  }, [event, events])
   const [context, setContext] = useState(EMPTY_CONTEXT)
   const [loadedContextEventId, setLoadedContextEventId] = useState<string | null>(null)
   const [isImageError, setIsImageError] = useState(false)
+  const [showSameYear, setShowSameYear] = useState(false)
   const eventId = event?.id ?? null
   const eventImage = event?.image
 
@@ -309,6 +336,45 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
             {/* 时间线位置指示器 */}
             <TimelinePositionIndicator year={event.year} eraColor={era?.color} />
 
+            {/* 同年大事对照 */}
+            {sameYearEvents.length > 0 && (
+              <div className="mb-6">
+                <button
+                  onClick={() => setShowSameYear(prev => !prev)}
+                  className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors"
+                >
+                  <CalendarDays size={14} className="text-emerald-500" />
+                  同年大事
+                  <span className="text-[10px] font-normal text-muted-foreground">
+                    ({sameYearEvents.some(e => e.year === event.year) ? `${formatYear(event.year)}年` : `±5年内`}共 {sameYearEvents.length} 件)
+                  </span>
+                  <span className={`text-xs text-muted-foreground transition-transform ${showSameYear ? 'rotate-90' : ''}`}>▶</span>
+                </button>
+                {showSameYear && (
+                  <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    {sameYearEvents.map(sameEvent => {
+                      const sameCategory = CATEGORY_CONFIG[sameEvent.category]
+                      const sameRegion = REGION_CONFIG[sameEvent.region]
+                      return (
+                        <button
+                          key={sameEvent.id}
+                          onClick={() => handleNavigate(sameEvent)}
+                          className="text-left p-2 rounded-lg border border-border/50 hover:border-emerald-400/50 hover:bg-emerald-500/5 transition-all"
+                        >
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: sameCategory.color }} />
+                            <span className="text-[10px] text-muted-foreground font-mono">{formatYear(sameEvent.year)}</span>
+                            <span className="text-[10px]">{sameRegion.flag}</span>
+                          </div>
+                          <p className="text-xs font-medium line-clamp-1">{sameEvent.title}</p>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="mb-6 rounded-xl border border-border/50 bg-card/60 p-4">
               <h3 className="text-sm font-semibold mb-3 text-foreground flex items-center gap-2">
                 <ScrollText size={14} className="text-primary" />
@@ -349,6 +415,18 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
               </div>
             )}
 
+            {immersiveNarrative && (
+              <div className="mb-6 rounded-xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-blue-500/5 p-4">
+                <h3 className="text-sm font-semibold mb-2 text-foreground flex items-center gap-2">
+                  <Eye size={14} className="text-indigo-400" />
+                  如果你在那里
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed italic">
+                  {immersiveNarrative}
+                </p>
+              </div>
+            )}
+
             {didYouKnowFacts.length > 0 && (
               <div className="mb-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
                 <h3 className="text-sm font-semibold mb-3 text-foreground flex items-center gap-2">
@@ -360,6 +438,107 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                     <div key={`${event.id}-dyk-${index}`} className="flex items-start gap-2.5">
                       <span className="text-base flex-shrink-0 mt-0.5">{fact.emoji}</span>
                       <p className="text-sm text-muted-foreground leading-relaxed">{fact.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {coincidences.length > 0 && (
+              <div className="mb-6 rounded-xl border border-pink-500/20 bg-gradient-to-br from-pink-500/5 to-rose-500/5 p-4">
+                <h3 className="text-sm font-semibold mb-3 text-foreground flex items-center gap-2">
+                  <Sparkles size={14} className="text-pink-500" />
+                  历史巧合
+                </h3>
+                <div className="space-y-2.5">
+                  {coincidences.map((c, idx) => (
+                    <p key={`${event.id}-coin-${idx}`} className="text-sm text-muted-foreground leading-relaxed">{c.text}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {newsReportResult && (
+              <div className="mb-6 rounded-xl border border-stone-500/20 bg-gradient-to-br from-stone-500/5 to-neutral-500/5 p-4">
+                <h3 className="text-sm font-semibold mb-2 text-foreground flex items-center gap-2">
+                  <Newspaper size={14} className="text-stone-500" />
+                  历史现场
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed italic whitespace-pre-line font-serif">
+                  {newsReportResult.report}
+                </p>
+                {newsReportResult.readerComments.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-stone-500/10 space-y-2">
+                    <p className="text-[10px] text-stone-400 font-medium">假想读者来信</p>
+                    {newsReportResult.readerComments.map((c, i) => (
+                      <div key={i} className={`text-xs leading-relaxed pl-3 border-l-2 ${c.stance === 'positive' ? 'border-green-400/40 text-green-600 dark:text-green-400' : c.stance === 'negative' ? 'border-red-400/40 text-red-600 dark:text-red-400' : 'border-yellow-400/40 text-yellow-600 dark:text-yellow-400'}`}>
+                        {c.text}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {coreInsight && (
+              <div className="mb-6 rounded-xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 to-teal-500/5 p-4">
+                <h3 className="text-sm font-semibold mb-2 text-foreground flex items-center gap-2">
+                  <Zap size={14} className="text-cyan-500" />
+                  一句话读懂
+                </h3>
+                <p className="text-sm text-foreground leading-relaxed font-medium">
+                  {coreInsight}
+                </p>
+              </div>
+            )}
+
+            {counterfactual && (
+              <div className="mb-6 rounded-xl border border-dashed border-orange-500/30 bg-gradient-to-br from-orange-500/5 to-amber-500/5 p-4">
+                <h3 className="text-sm font-semibold mb-2 text-foreground flex items-center gap-2">
+                  <Rewind size={14} className="text-orange-500" />
+                  如果历史重来
+                  <span className="text-[10px] font-normal text-orange-400/70 ml-1">思想实验</span>
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {counterfactual}
+                </p>
+              </div>
+            )}
+
+            {contextDimensions.length > 0 && (
+              <div className="mb-6 space-y-2">
+                {contextDimensions.map((dim, idx) => (
+                  <details key={`${event.id}-dim-${idx}`} className="group rounded-lg border border-border/50 bg-muted/30">
+                    <summary className="flex items-center gap-2 px-3 py-2 cursor-pointer text-sm font-medium text-foreground hover:bg-muted/50 rounded-lg">
+                      {dim.icon === 'Clock' && <Clock size={13} className="text-blue-500" />}
+                      {dim.icon === 'User' && <User size={13} className="text-green-500" />}
+                      {dim.icon === 'Users' && <User size={13} className="text-green-500" />}
+                      {dim.icon === 'Layers' && <Layers size={13} className="text-slate-500" />}
+                      {dim.icon === 'TrendingUp' && <TrendingUp size={13} className="text-purple-500" />}
+                      {dim.label}
+                      <ChevronDown size={12} className="ml-auto text-muted-foreground transition-transform group-open:rotate-180" />
+                    </summary>
+                    <p className="px-3 pb-3 text-sm text-muted-foreground leading-relaxed">{dim.content}</p>
+                  </details>
+                ))}
+              </div>
+            )}
+
+            {timeCapsule.length > 0 && (
+              <div className="mb-6 rounded-xl border border-teal-500/20 bg-gradient-to-br from-teal-500/5 to-emerald-500/5 p-4">
+                <h3 className="text-sm font-semibold mb-3 text-foreground flex items-center gap-2">
+                  <Clock size={14} className="text-teal-500" />
+                  时间胶囊
+                </h3>
+                <p className="text-[10px] text-muted-foreground mb-3">当这件事发生时的世界 vs 今天</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {timeCapsule.map((item, idx) => (
+                    <div key={idx} className="text-center">
+                      <span className="text-lg">{item.emoji}</span>
+                      <p className="text-[10px] text-muted-foreground mt-1">{item.label}</p>
+                      <p className="text-xs font-semibold text-foreground/80 mt-0.5">{item.then}</p>
+                      <div className="text-[9px] text-muted-foreground/60 my-0.5">▼</div>
+                      <p className="text-xs font-bold text-teal-600 dark:text-teal-400">{item.now}</p>
                     </div>
                   ))}
                 </div>
@@ -392,9 +571,21 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                     const relatedRegion = REGION_CONFIG[relatedEvent.region]
                     const isCurrent = relatedEvent.year <= event.year
                     const causalText = buildCausalNarrative(event, relatedEvent)
+                    const prevEvent = index > 0 ? relatedEvents[index - 1] : null
+                    const yearDiff = prevEvent ? Math.abs(relatedEvent.year - prevEvent.year) : 0
 
                     return (
                       <div key={relatedEvent.id}>
+                        {prevEvent && yearDiff > 0 && (
+                          <div
+                            className="flex items-center justify-center text-[9px] text-muted-foreground/50 font-mono"
+                            style={{ height: `${Math.max(16, Math.min(96, 16 + Math.log2(Math.max(yearDiff, 1)) * 8))}px` }}
+                          >
+                            <span className="px-2 py-0.5 rounded-full bg-purple-500/5 border border-purple-500/10">
+                              {yearDiff} 年
+                            </span>
+                          </div>
+                        )}
                         <button
                           onClick={() => handleNavigate(relatedEvent)}
                           className={`
@@ -496,6 +687,16 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
               </div>
             )}
 
+            {legacyResult && (
+              <div className="mb-6 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+                <h3 className="text-sm font-semibold mb-2 text-foreground flex items-center gap-2">
+                  <Landmark size={14} className="text-emerald-500" />
+                  历史遗产
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{legacyResult.text}</p>
+              </div>
+            )}
+
             {externalLinks.length > 0 && (
               <div className="mt-6 pt-4 border-t border-border/30">
                 <h3 className="text-sm font-semibold mb-3 text-foreground flex items-center gap-2">
@@ -517,6 +718,14 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                   ))}
                 </div>
                 <p className="mt-2 text-[10px] text-muted-foreground/50">链接指向维基百科搜索页，可能需要进一步筛选结果。</p>
+              </div>
+            )}
+
+            {eraAmbience && (
+              <div className="mt-4 px-3 py-2.5 rounded-lg bg-muted/30 border border-border/20">
+                <p className="text-[11px] text-muted-foreground/70 italic leading-relaxed">
+                  {eraAmbience}
+                </p>
               </div>
             )}
 

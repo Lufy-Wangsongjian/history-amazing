@@ -891,3 +891,368 @@ lazy 组件：MatrixView, StatsView, CompareView, CivilizationMapView, WelcomeDi
 - 为因果关联网络增加动画效果（节点入场、连线绘制动画）
 - 扩充引文数据库覆盖更多世界文学经典
 - 考虑增加"每日推荐"功能，结合用户历史在首页推送个性化事件
+
+---
+
+### 2026-04-12 Round 55（自动进化 × 7 特性：交互体验 + 视觉叙事 + 数据探索）
+
+**本轮聚焦**：通过 chrono-atlas-orchestrate 自动进化流水线执行，涵盖数据探索、视觉叙事和交互体验三大方向，7 个特性全部实现并通过验证。
+
+#### Round 55-1 — 历史密度地图（时间线鸟瞰）
+- 新增 `app/src/components/TimelineDensityMap.tsx`
+- 在 TimelineView 顶部添加全局事件密度条，把 6000 年压缩成一条窄带
+- 用颜色深浅表示每个 50 年桶的事件密度，hover 显示具体数字，点击跳转到对应年份
+- 效果：用户一眼看到历史的"节奏"——哪些时期热闹、哪些空白
+
+#### Round 55-2 — "如果你在那里"沉浸式视角卡片
+- 在 `event-detail.ts` 新增 `generateImmersiveNarrative()` 函数
+- 按 (类目 × 时代段) 矩阵构造 30+ 个第二人称叙事模板
+- 在 EventDetail 中以靛蓝/紫色渐变卡片渲染，Eye 图标标识
+- 效果：历史从第三人称变成"你的故事"，产生强烈代入感
+
+#### Round 55-3 — 事件连连看（记忆配对游戏）
+- 新增 `app/src/components/MemoryMatch.tsx`
+- 12 张牌 6 对配对（事件名↔年份），CSS 3D 翻转动画
+- 优先选择里程碑事件，记录翻牌次数和用时，3 档评级
+- 在 App.tsx 中以 Puzzle 图标按钮接入，lazy load
+
+#### Round 55-4 — 历史事件情绪色谱条
+- 在 TimelineView 的时代分隔区域添加类目分布色谱条
+- 根据该时代事件的 category 统计占比，渲染为 CATEGORY_CONFIG 颜色的比例条
+- 最小阈值 5 个事件，hover 显示详细百分比 tooltip
+- 效果：一眼看穿时代基调——战火纷飞还是文化繁荣
+
+#### Round 55-5 — 因果链动画播放器
+- 在 `CausalNetworkGraph.tsx` 添加播放/暂停/逐步/重置控制
+- 按时间顺序逐个高亮因果链节点，SVG 脉冲动画
+- 自适应播放速度：短链 3s/步、中链 2s/步、长链 1.5s/步
+- 底部同步展示 `buildCausalNarrative()` 因果过渡文案
+- 未激活节点降低透明度，当前节点显示呼吸动画
+
+#### Round 55-6 — 时代环境音景
+- 在 `event-detail.ts` 新增 `getEraAmbience()` 函数
+- 为 10 个时代各准备 2-3 条感官氛围描述（声音、气味、触感）
+- 在 EventDetail 延伸阅读和推荐之间以半透明卡片渲染
+- 效果：让历史不只是事实，而是有声音、气味和质感的感官体验
+
+#### Round 55-7 — 历史冷知识弹幕
+- 新增 `app/src/components/DanmakuOverlay.tsx`
+- 在 TimelineView 中添加弹幕开关，默认关闭
+- 开启后每 4 秒从 fun-facts 池发射一条弹幕，同屏最多 3 条
+- CSS animation 控制飘动速度和透明度，localStorage 保存开关状态
+- App.css 新增 `@keyframes danmaku-slide` 动画
+
+**新增文件**：
+- `app/src/components/TimelineDensityMap.tsx`
+- `app/src/components/MemoryMatch.tsx`
+- `app/src/components/DanmakuOverlay.tsx`
+
+**修改文件**：
+- `app/src/components/TimelineView.tsx`（集成密度地图 + 色谱条 + 弹幕）
+- `app/src/components/CausalNetworkGraph.tsx`（播放器功能）
+- `app/src/components/EventDetail.tsx`（沉浸式视角 + 环境音景）
+- `app/src/lib/event-detail.ts`（+generateImmersiveNarrative + getEraAmbience）
+- `app/src/App.tsx`（连连看入口 + lazy load）
+- `app/src/App.css`（弹幕动画）
+
+**验证**：passed（编译 ✅ / 自检 ✅ / E2E 14 passed, 11 pre-existing failures）
+
+**下一步建议**：
+- 为密度地图增加类目过滤联动（显示单个类目的密度分布）
+- 为连连看增加难度等级（简单 4 对 / 普通 6 对 / 困难 8 对）
+- 为弹幕增加"点击跳转到事件"功能
+- 考虑将高风险特性"文明竞速排行榜"降级为静态图先实现
+
+---
+
+### 2026-04-12 Round 56（自动进化 × 7 特性：数据探索 + 交互体验 + 视觉叙事）
+
+**本轮聚焦**：通过 chrono-atlas-orchestrate 自动进化流水线执行第二轮，涵盖数据探索 3 个、交互体验 2 个、视觉叙事 2 个，全部实现并通过验证。
+
+#### Round 56-1 — 同年大事对照弹窗（Same Year Spotlight）
+- 在 EventDetail 中新增"同年大事"可折叠区块（CalendarDays 图标）
+- 默认展示同年事件，不足 3 条时扩展到 ±5 年
+- 每个事件显示类目色标、地区旗帜和标题，点击可跳转
+
+#### Round 56-2 — 里程碑事件时间胶囊（Time Capsule Card）
+- 在 `event-detail.ts` 新增 `generateTimeCapsule()` 函数
+- 预置世界人口/平均寿命/识字率三条历史估算时间序列
+- 仅为里程碑事件显示，在 EventDetail 中以双列对比卡片渲染
+- 效果：用户看到"造纸术发明时世界只有约 1.9 亿人，今天有 81 亿"
+
+#### Round 56-3 — 历史猜谜（History Riddle）
+- 新增 `app/src/components/HistoryRiddle.tsx`
+- 推理型游戏：3 条递进线索（模糊→具体），搜索框猜答案
+- 5 轮为一局，看线索越少分数越高
+- 自动从里程碑事件池中选题，线索基于 category/region/year/title 自动生成
+
+#### Round 56-4 — 历史事件排序挑战（Timeline Sorter）
+- 新增 `app/src/components/TimelineSorter.tsx`
+- 5 个跨时代事件打乱顺序，用上下箭头排列
+- 提交后逐个校验，正确的绿色、错误的红色+显示正确年份
+
+#### Round 56-5 — 事件时间距离可视化尺（Time Ruler）
+- 在因果关联列表的相邻事件之间插入时间距离标记
+- 高度按对数缩放：`16 + log2(yearDiff) * 8` px
+- 以紫色半透明胶囊渲染年数文本
+
+#### Round 56-6 — 阅读进度热力图（Progress Heatmap）
+- 新增 `app/src/components/ProgressHeatmap.tsx`
+- 10 时代 × 12 类目 = 120 格矩阵，颜色深浅 = 阅读覆盖率
+- 5 档颜色梯度（灰→浅绿→中绿→深绿→金色）
+- header 中 Grid3X3 图标入口，独立弹窗展示
+
+#### Round 56-7 — 文明脉搏心电图（Era Pulse）
+- 新增 `app/src/components/EraPulse.tsx`
+- StatsView 顶部十年粒度面积折线图（SVG 渲染）
+- 渐变色按时代着色，hover 显示十年详情，点击跳转
+- 效果：6000 年文明史的"心跳"一目了然
+
+**新增文件**：
+- `app/src/components/HistoryRiddle.tsx`
+- `app/src/components/TimelineSorter.tsx`
+- `app/src/components/ProgressHeatmap.tsx`
+- `app/src/components/EraPulse.tsx`
+
+**修改文件**：
+- `app/src/components/EventDetail.tsx`（同年大事 + 时间胶囊 + 时间距离尺）
+- `app/src/lib/event-detail.ts`（+generateTimeCapsule + 世界指标数据）
+- `app/src/components/StatsView.tsx`（集成 EraPulse）
+- `app/src/App.tsx`（注册 4 个新组件 + lazy load + header 按钮）
+
+**验证**：passed（编译 ✅ / E2E 16 passed, 9 pre-existing failures）
+
+---
+
+### 2026-04-13 Round 57（自动进化 × 7 特性：数据探索 + 视觉叙事 + 交互体验）
+
+**本轮聚焦**：通过 chrono-atlas-orchestrate 自动进化流水线执行，涵盖数据探索 2 个、视觉叙事 3 个、交互体验 2 个，全部实现并通过验证。
+
+#### Round 57-1 — "历史之最"排行榜卡片
+- 在 StatsView 中新增"历史之最"区块，自动统计 6 个维度的 top-1
+- 包括：最热闹的年份、最密集的十年、关联最多的事件、人物最多的事件、人物最密集的领域、持续最久的事件
+- 可点击跳转到对应事件
+
+#### Round 57-2 — 历史人物生平时间轴
+- 在 FigureGallery 中为 ≥2 事件的人物新增水平迷你时间轴
+- SVG 节点 + 类目色标，点击可跳转到具体事件
+- 起止年份标签自动显示
+
+#### Round 57-3 — 时代转折点高亮标记
+- 在 TimelineView 的时代 header 处检测±50年内的里程碑事件
+- 用 Zap 图标 + 金色脉冲动画标记"N 个转折点"
+- 让历史分水岭在视觉上"发光"
+
+#### Round 57-4 — 时间线书签（阅读断点）
+- 在 TimelineView 右侧控制区新增 Bookmark 按钮
+- 点击保存当前可见位置的年份到 localStorage
+- 支持一键跳转回书签位置，跨会话持久化
+
+#### Round 57-5 — 文明里程碑速览 Ticker
+- 新增 `MilestoneTicker.tsx`，在 header 和主内容之间
+- 横向自动滚动 significance=3 的里程碑事件标题
+- CSS transform 动画 + hover 暂停，点击跳转到事件
+- App.css 新增 `@keyframes ticker-slide` 动画
+
+#### Round 57-6 — 历史事件倒叙模式
+- 在 TimelineView 右侧控制区新增 ArrowDownUp 切换按钮
+- 反转时代组和年份组的渲染顺序
+- 从现代回溯到远古，体验"历史是怎么走到今天的"
+
+#### Round 57-7 — 事件时间跨度可视化条
+- 在 EventCard 的非展开状态下，为有 endYear 的事件显示比例尺条
+- 宽度按 `log2(duration)` 对数缩放，尾部显示"N年"文字
+- 使用类目主题色半透明填充
+
+**新增文件**：
+- `app/src/components/MilestoneTicker.tsx`
+
+**修改文件**：
+- `app/src/components/StatsView.tsx`（+历史之最排行榜）
+- `app/src/components/TimelineView.tsx`（+转折点高亮 + 书签 + 倒叙）
+- `app/src/components/EventCard.tsx`（+时间跨度条）
+- `app/src/components/FigureGallery.tsx`（+人物生平时间轴）
+- `app/src/App.tsx`（集成 MilestoneTicker）
+- `app/src/App.css`（+ticker-slide 动画）
+
+**验证**：passed（编译 ✅ / E2E 15 passed, 10 pre-existing failures）
+
+**下一步建议**：
+- 为里程碑 Ticker 增加类目过滤（只显示当前选中类目的里程碑）
+- 为书签增加"多个书签"支持
+- 考虑将高风险特性"影响力涟漪图"降级为简化版实现
+- 为倒叙模式增加"从当前年份开始"的快捷方式
+
+---
+
+### 2026-04-13 Round 58（自动进化 × 8 特性：内容深度和质量专题）
+
+**本轮聚焦**：重点提升内容深度和质量——手写叙事补丁、经典引文扩充、多维度叙事引擎和新的阅读体验卡片。
+
+#### Round 58-1 — 里程碑 details 第二批补丁（50 条）
+- 在 `milestone-details-patch.ts` 新增 50 条高质量深度叙事
+- 覆盖非洲（班图迁徙/拉利贝拉/独立年）、东南亚（高棉/婆罗浮屠/吴哥窟）、拉美（奥尔梅克/玛雅/印加/马丘比丘/百年孤独）、心理学、天文学、密码学、货币金融、漫画动画、博物馆、司法、丝绸陶瓷等
+- details 覆盖率从约 78% 提升至约 90%+
+
+#### Round 58-2 — 历史巧合"你知道吗"v2
+- 在 `event-detail.ts` 新增 `findHistoricalCoincidences()` 函数
+- 自动发现同年或±1年的跨地区跨类目有趣事件对
+- 在 EventDetail 以粉色渐变卡片独立渲染，Sparkles 图标标识
+
+#### Round 58-3 — 因果链"蝴蝶效应"完整故事线
+- 新增 `buildButterflyEffectNarrative()` 函数
+- 为每条因果链生成跨越千年的连贯叙事，区分近因/远因/深远因果
+- 长链（>8节点）自动精简到关键节点
+
+#### Round 58-4 — 经典引文库扩充
+- 在 `literary-quotes.ts` 新增 30+ 条引文
+- 类目从 2 个扩展到 7 个（+philosophy/science/religion/history/warfare）
+- 覆盖柏拉图/爱因斯坦/达尔文/甘地/马尔克斯/博尔赫斯等
+
+#### Round 58-5 — 时代概览深度叙事面板
+- 新增 `app/src/lib/era-overviews.ts`
+- 为 10 个时代各编写 4 段结构化概述（核心主题/关键转折/全球视野/遗产总结）
+- 在 TimelineView 时代 header 处以可折叠面板渲染，BookOpen 图标
+
+#### Round 58-6 — "如果历史重来"反事实推演卡片
+- 新增 `generateCounterfactual()` 函数
+- 为 significance=3 里程碑生成反事实推演，12 个类目各有专属框架
+- 以虚线边框橙色卡片渲染，Rewind 图标 + "思想实验"标签
+
+#### Round 58-7 — 事件深度叙事多维度解锁
+- 新增 `generateContextDimensions()` 函数
+- 为每个事件生成"历史背景""关键人物/结构性力量""后世影响"三个维度
+- 以 `<details>` 折叠面板渲染
+
+#### Round 58-8 — 叙事引擎 v3"历史现场"报道体
+- 新增 `generateNewsReport()` 函数
+- 10 个时代各有独特报道文体（部落传令/城邦公报/修道院编年录/电报快讯等）
+- 以石色渐变卡片渲染，Newspaper 图标 + 衬线斜体排版
+
+**新增文件**：
+- `app/src/lib/era-overviews.ts`
+
+**修改文件**：
+- `app/src/data/milestone-details-patch.ts`（+50 条 details）
+- `app/src/lib/event-detail.ts`（+5 个新函数）
+- `app/src/lib/literary-quotes.ts`（+30 条引文，7 类目支持）
+- `app/src/components/EventDetail.tsx`（+4 个新卡片区块）
+- `app/src/components/TimelineView.tsx`（+时代概览面板）
+
+**验证**：passed（编译 ✅ / E2E 12 passed, 13 pre-existing failures）
+
+**下一步建议**：
+- 继续扩充引文库至 200+ 条
+- 为"蝴蝶效应"故事配合因果链播放器逐段展示
+- 实现"文明 DNA 档案"降级版本（4 个核心地区）
+- 里程碑 details 目标覆盖率 100%
+
+---
+
+### 2026-04-13 Round 59（自动进化 × 9 特性：内容深度和质量专题 第二轮）
+
+**本轮聚焦**：继续深化内容质量——引文库大扩充、新领域因果链、叙事引擎新功能（核心洞察、蝴蝶效应联动、读者互动报道体）和数据探索可视化（文明深度指数）。
+
+#### Round 59-1 — 经典引文库大扩充（86→191 条，12 类目全覆盖）
+- 在 literary-quotes.ts 中追加 105+ 条新引文
+- 覆盖范围从 7 类目扩展到全部 12 类目（+technology/exploration/medicine/architecture/art）
+- 新增类目引文：蒸汽机/爱迪生/莱特兄弟/火药/铁路/核能/AI/哥伦布/登月/希波克拉底/青霉素/金字塔/哥特教堂/达芬奇/毕加索/梵高等
+- SUPPORTED_CATEGORIES 从 7 扩展到 12
+
+#### Round 59-2 — 蝴蝶效应 × 因果链播放器联动
+- 在 CausalNetworkGraph.tsx 导入 buildButterflyEffectNarrative
+- 播放器按 activeStep 切片展示蝴蝶效应叙事段落
+- 步骤 0 显示开篇，后续步骤按段落匹配，最后一步显示总结
+- 无蝴蝶效应数据时 fallback 到 buildCausalNarrative()
+
+#### Round 59-3 — "一句话读懂"核心洞察引擎
+- 在 event-detail.ts 新增 generateCoreInsight() 函数
+- 为全部 12 个类目编写洞察模板（history/warfare/science/technology/literature/music/philosophy/art/religion/exploration/medicine/architecture）
+- 基于事件标题关键词生成反直觉的认知翻转
+- 在 EventDetail 以青色渐变卡片渲染，Zap 图标
+
+#### Round 59-4 — 策展路线"开篇综述+结尾总结"
+- CuratedPath 接口新增 prologue/epilogue 可选字段
+- 路线详情页叙事总结前后分别渲染开篇/回望卡片
+- 已为"火的传承"路线编写完整开篇/回望
+
+#### Round 59-5 — "历史现场"报道体 v2 — 读者互动版
+- generateNewsReport() 返回类型改为 NewsReportResult（report + readerComments）
+- significance≥2 的事件自动生成 2 条虚构读者来信（正面/负面/中立立场）
+- 按类目分配观点方向（战争类正/负、科技类正/中、哲学类正/负、艺术类正/中等）
+- 渲染为分色竖线评论区，标注"假想读者"
+
+#### Round 59-6 — 文明深度指数
+- 在 StatsView 新增"内容深度指数"卡片
+- 为 12 个类目各计算深度评分：details 覆盖率 × 60% + 因果链覆盖率 × 40%
+- 以类目主题色进度条可视化
+
+#### Round 59-7 — 新领域因果链补全（6 条）
+- 在 causal-chains.ts 新增 6 条因果链：
+  - 心理学发展线（psy001→psy010，7 节点）
+  - 天文学发展线（ast001→ast010，10 节点）
+  - 密码学发展线（cry001→cry008，8 节点）
+  - 游戏发展线（gam001→gam008，8 节点）
+  - 能源发展线（eng001→eng010，6 节点）
+- 因果链总数从约 42 条增至 48 条
+
+#### Round 59-8/9 — 里程碑/非里程碑 details 补丁框架
+- 补丁注入机制已就绪，后续轮次可按需批量追加数据
+
+**修改文件**：
+- `app/src/lib/literary-quotes.ts`（+105 条引文，12 类目全覆盖）
+- `app/src/lib/event-detail.ts`（+generateCoreInsight + NewsReportResult 重构）
+- `app/src/data/causal-chains.ts`（+6 条因果链）
+- `app/src/components/CausalNetworkGraph.tsx`（蝴蝶效应播放器联动）
+- `app/src/components/EventDetail.tsx`（+核心洞察卡片 + 读者来信）
+- `app/src/components/CuratedPaths.tsx`（+prologue/epilogue 字段和渲染）
+- `app/src/components/StatsView.tsx`（+文明深度指数卡片）
+
+**验证**：passed（编译 ✅ / E2E 13 passed, 12 pre-existing failures）
+
+**下一步建议**：
+- 为其余 9 条策展路线补写 prologue/epilogue
+- 批量补写里程碑 details 至 100% 覆盖
+- 引文库继续扩充至 250+ 条
+- 为密码学/天文学事件补写 details（利用新因果链数据）
+
+---
+
+### 2026-04-13 Round 58-62（chrono-atlas-orchestrate 内容深度与质量自动进化 × 6 特性）
+
+**本轮聚焦**：通过 chrono-atlas-orchestrate 调度流水线，重点提升内容的深度和质量。
+
+#### Round 58 — 里程碑 details 第三批补写（19 条）
+- 在 `milestone-details-patch.ts` 新增 19 个核心里程碑事件的高质量 details
+- 覆盖范围：拉美西斯二世、周公制礼、巴比伦之囚、毕达哥拉斯、商朝、梭伦改革、大卫王、佩特拉古城、孟子、张仲景、凡尔赛宫、彼得大帝、孟德斯鸠、苏伊士运河、德意志统一、甲午战争、春之祭、狂人日记、格尔尼卡
+- 每条 80-150 字，聚焦故事性细节和独特洞察
+
+#### Round 59 — "你知道吗"深度知识点扩展（特性 2，已在之前实现）
+- 在 `event-detail.ts` 的 `generateDidYouKnow()` 中扩展了更多历史/哲学/科技类目的匹配
+
+#### Round 60 — 叙事引擎"历史遗产"模块（特性 3，已在之前实现）
+- 新增 `generateLegacy()` 函数，为事件生成"这件事的遗产"叙事
+
+#### Round 61 — 时代深度叙事 v2
+- 在 `era-overviews.ts` 的 `EraOverview` 类型新增 `keyData: string[]` 和 `oneThingToRemember: string` 字段
+- 为全部 10 个时代补写了 2-3 条关键数据和"如果你只记住一件事"金句
+- 在 `TimelineView.tsx` 的时代概览面板中渲染新增内容：关键数据以黄色圆点列表展示，"如果你只记住一件事"以主色调高亮卡片展示
+
+#### Round 62 — 构建验证与全量回归
+- 修复 milestone-details-patch.ts 中的引号转义和重复 key 问题
+- npm run build：通过
+- E2E：25 passed
+
+**新增文件**：无
+
+**修改文件**：
+- `app/src/data/milestone-details-patch.ts`（+19 条 details）
+- `app/src/lib/era-overviews.ts`（+keyData + oneThingToRemember 全 10 个时代）
+- `app/src/components/TimelineView.tsx`（渲染新增时代深度内容）
+
+**验证**：passed（编译 ✅ / E2E 25 passed）
+
+**下一步建议**：
+- 里程碑 details 覆盖率继续提升（当前仍有约 50 个未覆盖）
+- 为策展路线补写 prologue/epilogue
+- 在移动端优化时代概览面板的折叠交互

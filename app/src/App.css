@@ -724,3 +724,25 @@
     animation: none !important;
   }
 }
+
+/* ===== 弹幕动画 ===== */
+@keyframes danmaku-slide {
+  from { right: -400px; opacity: 0.8; }
+  5% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  to { right: 110%; opacity: 0; }
+}
+
+/* ===== 里程碑 Ticker 无限滚动 ===== */
+@keyframes ticker-slide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-scroll {
+  animation: ticker-slide linear infinite;
+}
+
+.ticker-scroll:hover {
+  animation-play-state: paused;
+}

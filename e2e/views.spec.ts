@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { skipWelcomeDialog } from './helpers';
 
 /**
  * Chrono Atlas - 核心视图 E2E 测试
@@ -37,51 +38,12 @@ test.describe('应用基础', () => {
   });
 });
 
-/**
- * 关闭 WelcomeDialog 欢迎弹窗
- * 应用首次加载时会弹出欢迎引导，遮住整个界面。
- * 必须先关掉它才能进行任何操作。
- */
-async function dismissWelcomeDialog(page: import('@playwright/test').Page) {
-  // 等弹窗出现
-  await page.waitForTimeout(1500);
-
-  // 方式 1：点击「从头开始探索」按钮
-  const startBtn = page.locator('button:has-text("从头开始探索"), button:has-text("开始探索"), button:has-text("Start")').first();
-  if (await startBtn.isVisible().catch(() => false)) {
-    await startBtn.click();
-    await page.waitForTimeout(500);
-    return;
-  }
-
-  // 方式 2：点击关闭按钮（× 按钮）
-  const closeBtn = page.locator('[data-slot="dialog-close"], button:near(:text("6000")):has-text("×"), button[aria-label="Close"], .dialog-close, [class*="close"]').first();
-  if (await closeBtn.isVisible().catch(() => false)) {
-    await closeBtn.click();
-    await page.waitForTimeout(500);
-    return;
-  }
-
-  // 方式 3：按 Escape 键
-  await page.keyboard.press('Escape');
-  await page.waitForTimeout(500);
-
-  // 方式 4：点击遮罩层外部区域（最后手段）
-  const overlay = page.locator('[data-slot="dialog-overlay"], [class*="dialog-overlay"]').first();
-  if (await overlay.isVisible().catch(() => false)) {
-    // 点击页面左上角（弹窗外）
-    await page.mouse.click(10, 10);
-    await page.waitForTimeout(500);
-  }
-}
-
 test.describe('视图切换', () => {
   test.beforeEach(async ({ page }) => {
+    await skipWelcomeDialog(page);
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
-    // 关闭欢迎弹窗
-    await dismissWelcomeDialog(page);
+    await page.waitForTimeout(1500);
   });
 
   test('时间线视图（Timeline）正常渲染', async ({ page }) => {
@@ -117,10 +79,18 @@ test.describe('视图切换', () => {
   });
 
   test('东西方对照视图（Compare）正常渲染', async ({ page }) => {
-    const compareBtn = page.locator('button:has-text("对照"), button:has-text("Compare"), button:has-text("东西"), [data-view-mode="compare"]').first();
-    if (await compareBtn.isVisible()) {
+    // 使用精确选择器：FilterPanel 中的视图模式按钮包含图标+文字，且在 grid 容器内
+    const compareBtn = page.locator('.grid button:has-text("对照"), [class*="MobileTabBar"] button:has-text("对照")').first();
+    if (await compareBtn.isVisible().catch(() => false)) {
       await compareBtn.click();
       await page.waitForTimeout(1500);
+    } else {
+      // fallback: 通过 FilterPanel 中精确的按钮（排除 MilestoneTicker 中的滚动按钮）
+      const fallback = page.locator('button:has(svg) :text-is("对照")').first();
+      if (await fallback.isVisible().catch(() => false)) {
+        await fallback.click();
+        await page.waitForTimeout(1500);
+      }
     }
 
     const bodyText = await page.locator('body').innerText();
@@ -150,10 +120,17 @@ test.describe('视图切换', () => {
   });
 
   test('文明图谱视图（Civilizations）正常渲染', async ({ page }) => {
-    const civBtn = page.locator('button:has-text("图谱"), button:has-text("文明"), button:has-text("Civilization"), [data-view-mode="civilizations"]').first();
-    if (await civBtn.isVisible()) {
+    // FilterPanel 按钮文字是"文明图谱"，MobileTabBar 是"图谱"
+    const civBtn = page.locator('.grid button:has-text("文明图谱"), .grid button:has-text("图谱"), [class*="MobileTabBar"] button:has-text("图谱")').first();
+    if (await civBtn.isVisible().catch(() => false)) {
       await civBtn.click();
       await page.waitForTimeout(2000);
+    } else {
+      const fallback = page.locator('button:has(svg) :text-is("图谱")').first();
+      if (await fallback.isVisible().catch(() => false)) {
+        await fallback.click();
+        await page.waitForTimeout(2000);
+      }
     }
 
     const bodyText = await page.locator('body').innerText();
@@ -163,10 +140,10 @@ test.describe('视图切换', () => {
 
 test.describe('核心交互', () => {
   test.beforeEach(async ({ page }) => {
+    await skipWelcomeDialog(page);
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
-    await dismissWelcomeDialog(page);
+    await page.waitForTimeout(1500);
   });
 
   test('搜索功能可用', async ({ page }) => {
@@ -214,19 +191,18 @@ test.describe('无报错检查', () => {
       if (msg.type() === 'error') consoleErrors.push(msg.text());
     });
 
+    await skipWelcomeDialog(page);
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000);
-    await dismissWelcomeDialog(page);
+    await page.waitForTimeout(1500);
 
-    // 收集所有视图按钮可能的选择器
+    // 收集所有视图按钮可能的选择器（FilterPanel grid 内的按钮，避免匹配工具栏弹窗按钮）
     const viewSelectors = [
-      'button:has-text("时间")',
-      'button:has-text("矩阵")',
-      'button:has-text("对照")',
-      'button:has-text("统计")',
-      'button:has-text("路径")',
-      'button:has-text("图谱")',
+      '.grid button:has-text("时间线")',
+      '.grid button:has-text("矩阵")',
+      '.grid button:has-text("对照")',
+      '.grid button:has-text("统计")',
+      '.grid button:has-text("文明图谱")',
     ];
 
     for (const selector of viewSelectors) {

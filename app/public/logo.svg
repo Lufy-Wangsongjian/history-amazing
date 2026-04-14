@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <!-- 主渐变：amber-500 → orange-600 -->
+    <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <!-- 浅金渐变 -->
+    <linearGradient id="lightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <!-- 深橙渐变 -->
+    <linearGradient id="darkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <!-- 背景渐变 -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 外圆环 — 代表地球/时间的循环 -->
+  <circle cx="256" cy="256" r="220" stroke="url(#mainGrad)" stroke-width="18" fill="none" opacity="0.9"/>
+  
+  <!-- 内圆环 — 表盘 -->
+  <circle cx="256" cy="256" r="180" stroke="url(#lightGrad)" stroke-width="4" fill="none" opacity="0.4"/>
+
+  <!-- 经纬线 — 地球元素 -->
+  <!-- 水平线（纬线） -->
+  <ellipse cx="256" cy="256" rx="180" ry="60" stroke="url(#mainGrad)" stroke-width="2.5" fill="none" opacity="0.25"/>
+  <ellipse cx="256" cy="256" rx="180" ry="120" stroke="url(#mainGrad)" stroke-width="2.5" fill="none" opacity="0.2"/>
+  <!-- 垂直线（经线） -->
+  <ellipse cx="256" cy="256" rx="60" ry="180" stroke="url(#mainGrad)" stroke-width="2.5" fill="none" opacity="0.25"/>
+  <ellipse cx="256" cy="256" rx="120" ry="180" stroke="url(#mainGrad)" stroke-width="2.5" fill="none" opacity="0.2"/>
+  
+  <!-- 十字准星（赤道和本初子午线） -->
+  <line x1="76" y1="256" x2="436" y2="256" stroke="url(#mainGrad)" stroke-width="2" opacity="0.15"/>
+  <line x1="256" y1="76" x2="256" y2="436" stroke="url(#mainGrad)" stroke-width="2" opacity="0.15"/>
+
+  <!-- 时钟刻度 — 12 个主刻度 -->
+  <g stroke="url(#lightGrad)" stroke-width="4" stroke-linecap="round" opacity="0.6">
+    <!-- 12点 --> <line x1="256" y1="50" x2="256" y2="76"/>
+    <!-- 1点 -->  <line x1="359" y1="77.5" x2="346" y2="100"/>
+    <!-- 2点 -->  <line x1="434.5" y1="153" x2="412" y2="166"/>
+    <!-- 3点 -->  <line x1="462" y1="256" x2="436" y2="256"/>
+    <!-- 4点 -->  <line x1="434.5" y1="359" x2="412" y2="346"/>
+    <!-- 5点 -->  <line x1="359" y1="434.5" x2="346" y2="412"/>
+    <!-- 6点 -->  <line x1="256" y1="462" x2="256" y2="436"/>
+    <!-- 7点 -->  <line x1="153" y1="434.5" x2="166" y2="412"/>
+    <!-- 8点 -->  <line x1="77.5" y1="359" x2="100" y2="346"/>
+    <!-- 9点 -->  <line x1="50" y1="256" x2="76" y2="256"/>
+    <!-- 10点 --> <line x1="77.5" y1="153" x2="100" y2="166"/>
+    <!-- 11点 --> <line x1="153" y1="77.5" x2="166" y2="100"/>
+  </g>
+
+  <!-- 时针 — 粗短，指向约 10 点方向 -->
+  <line x1="256" y1="256" x2="168" y2="148" 
+        stroke="url(#mainGrad)" stroke-width="12" stroke-linecap="round"/>
+  
+  <!-- 分针 — 细长，指向约 2 点方向 -->
+  <line x1="256" y1="256" x2="348" y2="108" 
+        stroke="url(#lightGrad)" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- 中心圆点 -->
+  <circle cx="256" cy="256" r="14" fill="url(#mainGrad)"/>
+  <circle cx="256" cy="256" r="7" fill="#fef3c7"/>
+
+  <!-- 四角罗盘装饰 — 上 -->
+  <polygon points="256,42 248,62 264,62" fill="url(#darkGrad)" opacity="0.8"/>
+  <!-- 下 -->
+  <polygon points="256,470 248,450 264,450" fill="url(#mainGrad)" opacity="0.5"/>
+  <!-- 左 -->
+  <polygon points="42,256 62,248 62,264" fill="url(#mainGrad)" opacity="0.5"/>
+  <!-- 右 -->
+  <polygon points="470,256 450,248 450,264" fill="url(#mainGrad)" opacity="0.5"/>
+</svg>

@@ -1,10 +1,13 @@
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react'
 import type { HistoricalEvent } from '@/data/types'
-import { formatYear, getEra } from '@/data/types'
+import { formatYear, getEra, CATEGORY_CONFIG } from '@/data/types'
 import { EventCard } from './EventCard'
 import { CausalArcs } from './CausalArcs'
 import { EraSidebar } from './EraSidebar'
-import { ChevronUp, ChevronDown, Sparkles, ArrowUpToLine } from 'lucide-react'
+import { TimelineDensityMap } from './TimelineDensityMap'
+import { DanmakuOverlay } from './DanmakuOverlay'
+import { ERA_OVERVIEWS } from '@/lib/era-overviews'
+import { ChevronUp, ChevronDown, Sparkles, ArrowUpToLine, Zap, Bookmark, ArrowDownUp, BookOpen } from 'lucide-react'
 
 interface TimelineViewProps {
   events: HistoricalEvent[]
@@ -44,6 +47,16 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
   const [eraMood, setEraMood] = useState<string>('modern')
   const [scrollProgress, setScrollProgress] = useState(0)
   const [showBackToTop, setShowBackToTop] = useState(false)
+  const [danmakuEnabled, setDanmakuEnabled] = useState(() => {
+    try { return localStorage.getItem('chrono-atlas-danmaku') === '1' } catch { return false }
+  })
+  const [reversed, setReversed] = useState(false)
+  const [bookmarkYear, setBookmarkYear] = useState<number | null>(() => {
+    try {
+      const val = localStorage.getItem('chrono-atlas-bookmark-year')
+      return val ? Number(val) : null
+    } catch { return null }
+  })
   const yearRefs = useRef<Map<number, HTMLDivElement>>(new Map())
   const eraHeaderRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
@@ -97,6 +110,65 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
     })
     return stats
   }, [eraGroups])
+
+  // 转折点检测：每个时代末尾±50年内的里程碑
+  const turningPoints = useMemo(() => {
+    const result = new Map<string, HistoricalEvent[]>()
+    eraGroups.forEach((g, i) => {
+      if (i >= eraGroups.length - 1) return
+      const nextGroup = eraGroups[i + 1]
+      const boundaryYear = nextGroup.yearGroups[0]?.year ?? Infinity
+      const tps = g.yearGroups
+        .flatMap(yg => yg.events)
+        .filter(e => e.significance === 3 && Math.abs(e.year - boundaryYear) <= 50)
+      if (tps.length > 0) result.set(g.era, tps)
+    })
+    return result
+  }, [eraGroups])
+
+  // 可用于渲染的时代组（支持倒叙）
+  const displayEraGroups = useMemo(() => {
+    if (!reversed) return eraGroups
+    return [...eraGroups].reverse().map(g => ({
+      ...g,
+      yearGroups: [...g.yearGroups].reverse(),
+    }))
+  }, [eraGroups, reversed])
+
+  // 书签保存
+  const saveBookmark = useCallback(() => {
+    if (!scrollRef.current) return
+    const container = scrollRef.current
+    const containerRect = container.getBoundingClientRect()
+    let closestYear: number | null = null
+    let closestDist = Infinity
+    yearRefs.current.forEach((el, year) => {
+      const rect = el.getBoundingClientRect()
+      const dist = Math.abs(rect.top - containerRect.top - 60)
+      if (dist < closestDist) { closestDist = dist; closestYear = year }
+    })
+    if (closestYear !== null) {
+      setBookmarkYear(closestYear)
+      try { localStorage.setItem('chrono-atlas-bookmark-year', String(closestYear)) } catch {}
+    }
+  }, [])
+
+  // 跳到书签
+  const jumpToBookmark = useCallback(() => {
+    if (bookmarkYear === null) return
+    const el = yearRefs.current.get(bookmarkYear)
+    if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
+    else {
+      // 找最近年份
+      const target = yearGroups.reduce((closest, yg) =>
+        Math.abs(yg.year - bookmarkYear) < Math.abs(closest.year - bookmarkYear) ? yg : closest
+      , yearGroups[0])
+      if (target) {
+        const el2 = yearRefs.current.get(target.year)
+        if (el2) el2.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+  }, [bookmarkYear, yearGroups])
 
   useEffect(() => {
     if (focusYear === null) return
@@ -172,6 +244,25 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
     return set
   }, [selectedEvent])
 
+  const handleDensitySelectYear = useCallback((year: number) => {
+    if (yearGroups.length === 0) return
+    const target = yearGroups.reduce((closest, yg) =>
+      Math.abs(yg.year - year) < Math.abs(closest.year - year) ? yg : closest
+    , yearGroups[0])
+    if (target) {
+      const el = yearRefs.current.get(target.year)
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [yearGroups])
+
+  const toggleDanmaku = useCallback(() => {
+    setDanmakuEnabled(prev => {
+      const next = !prev
+      try { localStorage.setItem('chrono-atlas-danmaku', next ? '1' : '0') } catch {}
+      return next
+    })
+  }, [])
+
   if (events.length === 0) {
     return (
       <div className="flex-1 flex items-center justify-center">
@@ -188,7 +279,16 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
   let staggerIndex = 0
 
   return (
+    <div className="flex-1 min-h-0 flex flex-col">
+      <TimelineDensityMap events={events} onSelectYear={handleDensitySelectYear} />
     <div className={`flex-1 min-h-0 relative era-atmosphere ${relatedIdSet ? 'timeline-has-selection' : ''}`} data-era-mood={eraMood}>
+      {/* 弹幕层 */}
+      <DanmakuOverlay
+        events={events}
+        enabled={danmakuEnabled}
+        onToggle={toggleDanmaku}
+      />
+
       {/* 时代侧边快速跳转条 */}
       <EraSidebar
         events={events}
@@ -248,6 +348,31 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
             <span className="hidden md:inline">回到顶部</span>
           </button>
         )}
+        <button
+          onClick={saveBookmark}
+          className={`p-2 rounded-full backdrop-blur-sm border border-border/50 shadow-md hover:bg-accent transition-colors ${bookmarkYear !== null ? 'bg-amber-500/20 text-amber-500' : 'bg-card/85'}`}
+          aria-label="保存书签"
+          title={bookmarkYear !== null ? `书签：${formatYear(bookmarkYear)}（点击更新）` : '在此处添加书签'}
+        >
+          <Bookmark size={16} />
+        </button>
+        {bookmarkYear !== null && (
+          <button
+            onClick={jumpToBookmark}
+            className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 border border-amber-500/30 px-2.5 py-1.5 text-[10px] font-medium text-amber-500 shadow-sm hover:bg-amber-500/30 transition-colors"
+            title={`跳转到书签 ${formatYear(bookmarkYear)}`}
+          >
+            {formatYear(bookmarkYear)}
+          </button>
+        )}
+        <button
+          onClick={() => setReversed(prev => !prev)}
+          className={`p-2 rounded-full backdrop-blur-sm border border-border/50 shadow-md hover:bg-accent transition-colors ${reversed ? 'bg-violet-500/20 text-violet-500' : 'bg-card/85'}`}
+          aria-label={reversed ? '切换为正序' : '切换为倒叙'}
+          title={reversed ? '当前倒叙 · 点击正序' : '切换为倒叙模式'}
+        >
+          <ArrowDownUp size={16} />
+        </button>
       </div>
 
       <div
@@ -267,8 +392,9 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
           {/* 时间轴线 */}
           <div className="absolute left-[100px] md:left-[140px] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
 
-          {eraGroups.map((eraGroup, eraIndex) => {
+          {displayEraGroups.map((eraGroup, eraIndex) => {
             const stats = eraMilestoneStats.get(eraGroup.era)
+            const tps = turningPoints.get(eraGroup.era)
             return (
               <div key={`${eraGroup.era}-${eraIndex}`} className="relative">
                 {/* 时代分界标题 */}
@@ -308,7 +434,99 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
                       }}
                     />
                   </div>
+                  {/* 转折点高亮标记 */}
+                  {tps && tps.length > 0 && (
+                    <div className="flex items-center gap-1 ml-1 flex-shrink-0">
+                      <Zap size={12} className="text-amber-400 animate-pulse" />
+                      <span className="text-[9px] text-amber-400 font-medium hidden md:inline">
+                        {tps.length} 个转折点
+                      </span>
+                    </div>
+                  )}
                 </div>
+
+                {/* 时代情绪色谱条 */}
+                {(() => {
+                  const allEvents = eraGroup.yearGroups.flatMap(yg => yg.events)
+                  if (allEvents.length < 5) return null
+                  const catCounts: Record<string, number> = {}
+                  allEvents.forEach(e => { catCounts[e.category] = (catCounts[e.category] || 0) + 1 })
+                  const sorted = Object.entries(catCounts).sort(([,a], [,b]) => b - a)
+                  const total = allEvents.length
+                  return (
+                    <div className="ml-[116px] md:ml-[156px] mr-4 mb-4 flex items-center gap-2">
+                      <div className="flex-1 h-1 rounded-full overflow-hidden flex" title="类目分布色谱">
+                        {sorted.map(([cat, count]) => {
+                          const cfg = CATEGORY_CONFIG[cat as keyof typeof CATEGORY_CONFIG]
+                          return (
+                            <div
+                              key={cat}
+                              className="h-full transition-all duration-300"
+                              style={{
+                                width: `${(count / total) * 100}%`,
+                                backgroundColor: cfg?.color || '#888',
+                              }}
+                              title={`${cfg?.label || cat}: ${count} 条 (${Math.round((count / total) * 100)}%)`}
+                            />
+                          )
+                        })}
+                      </div>
+                      <span className="text-[8px] text-muted-foreground/40 flex-shrink-0 hidden md:inline">色谱</span>
+                    </div>
+                  )
+                })()}
+
+                {/* 时代概览深度面板 */}
+                {(() => {
+                  const ov = ERA_OVERVIEWS[eraGroup.era]
+                  if (!ov) return null
+                  return (
+                    <details className="ml-[116px] md:ml-[156px] mr-4 mb-4 group rounded-lg border border-border/40 bg-muted/20">
+                      <summary className="flex items-center gap-2 px-3 py-2 cursor-pointer text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-lg transition-colors">
+                        <BookOpen size={12} />
+                        时代概览：{eraGroup.era}
+                        <ChevronDown size={11} className="ml-auto transition-transform group-open:rotate-180" />
+                      </summary>
+                      <div className="px-3 pb-3 space-y-2.5 text-xs text-muted-foreground leading-relaxed">
+                        <div>
+                          <span className="font-semibold text-foreground/80">核心主题</span>
+                          <p className="mt-0.5">{ov.theme}</p>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-foreground/80">关键转折</span>
+                          <p className="mt-0.5">{ov.turning}</p>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-foreground/80">全球视野</span>
+                          <p className="mt-0.5">{ov.global}</p>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-foreground/80">遗产总结</span>
+                          <p className="mt-0.5">{ov.legacy}</p>
+                        </div>
+                        {ov.keyData && ov.keyData.length > 0 && (
+                          <div className="pt-1.5 border-t border-border/30">
+                            <span className="font-semibold text-foreground/80">关键数据</span>
+                            <ul className="mt-1 space-y-0.5 list-none">
+                              {ov.keyData.map((d, i) => (
+                                <li key={i} className="flex items-start gap-1.5">
+                                  <span className="text-amber-500 flex-shrink-0 mt-0.5">•</span>
+                                  <span>{d}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        {ov.oneThingToRemember && (
+                          <div className="pt-1.5 border-t border-border/30 bg-primary/5 -mx-3 px-3 pb-2 rounded-b-lg">
+                            <span className="font-semibold text-primary/80">如果你只记住一件事</span>
+                            <p className="mt-0.5 text-foreground/90 font-medium">{ov.oneThingToRemember}</p>
+                          </div>
+                        )}
+                      </div>
+                    </details>
+                  )
+                })()}
 
                 {eraGroup.yearGroups.map((yearGroup) => {
                   const hasMilestone = yearGroup.events.some(event => event.significance === 3)
@@ -406,6 +624,7 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

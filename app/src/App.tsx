@@ -17,7 +17,8 @@ import { downloadShareCard } from '@/lib/share-card'
 import { ALL_REGIONS, getVisibleSelectedRegions } from '@/data/regions'
 import { CATEGORY_CONFIG, REGION_CONFIG, ERAS, formatYear } from '@/data/types'
 import type { HistoricalEvent, Category } from '@/data/types'
-import { Globe, Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard, Target, Swords } from 'lucide-react'
+import { MilestoneTicker } from '@/components/MilestoneTicker'
+import { Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard, Target, Swords, Puzzle, HelpCircle, ArrowUpDown, Grid3X3 } from 'lucide-react'
 import { useState, useCallback, useRef, useEffect, useMemo, lazy, Suspense } from 'react'
 import './App.css'
 
@@ -37,6 +38,10 @@ const FigureGallery = lazy(() => import('@/components/FigureGallery').then(m => 
 const ExplorerMissions = lazy(() => import('@/components/ExplorerMissions').then(m => ({ default: m.ExplorerMissions })))
 const TimelineChallenge = lazy(() => import('@/components/TimelineChallenge').then(m => ({ default: m.TimelineChallenge })))
 const AchievementsPanel = lazy(() => import('@/components/AchievementsPanel').then(m => ({ default: m.AchievementsPanel })))
+const MemoryMatch = lazy(() => import('@/components/MemoryMatch').then(m => ({ default: m.MemoryMatch })))
+const HistoryRiddle = lazy(() => import('@/components/HistoryRiddle').then(m => ({ default: m.HistoryRiddle })))
+const TimelineSorter = lazy(() => import('@/components/TimelineSorter').then(m => ({ default: m.TimelineSorter })))
+const ProgressHeatmap = lazy(() => import('@/components/ProgressHeatmap').then(m => ({ default: m.ProgressHeatmap })))
 
 const WELCOME_STORAGE_KEY = 'chrono-atlas-welcome-dismissed'
 
@@ -86,6 +91,10 @@ function App() {
   const [showAutoExplore, setShowAutoExplore] = useState(false)
   const [showFigureGallery, setShowFigureGallery] = useState(false)
   const [showAchievements, setShowAchievements] = useState(false)
+  const [showMemoryMatch, setShowMemoryMatch] = useState(false)
+  const [showHistoryRiddle, setShowHistoryRiddle] = useState(false)
+  const [showTimelineSorter, setShowTimelineSorter] = useState(false)
+  const [showProgressHeatmap, setShowProgressHeatmap] = useState(false)
   const [showWelcome, setShowWelcome] = useState(() => {
     try {
       if (typeof window === 'undefined') return false
@@ -236,9 +245,7 @@ function App() {
               <PanelLeftOpen size={18} />
             </button>
           )}
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20 flex-shrink-0">
-            <Globe size={18} className="text-white" />
-          </div>
+          <img src="/logo.svg" alt="Chrono Atlas" className="w-8 h-8 flex-shrink-0 drop-shadow-lg" />
           <div className="min-w-0">
             <h1 className="text-sm font-bold text-foreground tracking-tight truncate">Chrono Atlas</h1>
             <p className="text-[10px] text-muted-foreground -mt-0.5 hidden sm:block">人类文明时间线</p>
@@ -289,6 +296,51 @@ function App() {
           >
             <Brain size={14} />
             <span className="hidden sm:inline">测验</span>
+          </button>
+
+          <button
+            onClick={() => {
+              dismissWelcome()
+              setShowMemoryMatch(true)
+            }}
+            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20
+              text-teal-600 dark:text-teal-400 hover:from-teal-500/20 hover:to-cyan-500/20
+              transition-all duration-200 hover:shadow-sm hidden md:flex"
+            title="历史连连看"
+          >
+            <Puzzle size={14} />
+            <span className="hidden lg:inline">连连看</span>
+          </button>
+
+          <button
+            onClick={() => {
+              dismissWelcome()
+              setShowHistoryRiddle(true)
+            }}
+            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 border border-violet-500/20
+              text-violet-600 dark:text-violet-400 hover:from-violet-500/20 hover:to-fuchsia-500/20
+              transition-all duration-200 hover:shadow-sm hidden md:flex"
+            title="历史猜谜"
+          >
+            <HelpCircle size={14} />
+            <span className="hidden lg:inline">猜谜</span>
+          </button>
+
+          <button
+            onClick={() => {
+              dismissWelcome()
+              setShowTimelineSorter(true)
+            }}
+            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-500/20
+              text-orange-600 dark:text-orange-400 hover:from-orange-500/20 hover:to-amber-500/20
+              transition-all duration-200 hover:shadow-sm hidden md:flex"
+            title="历史排序挑战"
+          >
+            <ArrowUpDown size={14} />
+            <span className="hidden lg:inline">排序</span>
           </button>
 
           <button
@@ -385,6 +437,17 @@ function App() {
           </button>
 
           <button
+            onClick={() => { dismissWelcome(); setShowProgressHeatmap(true) }}
+            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
+              bg-gradient-to-r from-emerald-500/10 to-green-500/10 border border-emerald-500/20
+              text-emerald-600 dark:text-emerald-400 hover:from-emerald-500/20 hover:to-green-500/20
+              transition-all duration-200 hover:shadow-sm hidden lg:flex"
+            title="探索热力图"
+          >
+            <Grid3X3 size={14} />
+          </button>
+
+          <button
             onClick={handleRandomExplore}
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
               bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20
@@ -427,6 +490,8 @@ function App() {
           </button>
         </div>
       </header>
+
+      <MilestoneTicker events={state.filteredEvents} onSelectEvent={(event) => { dismissWelcome(); state.setSelectedEvent(event) }} />
 
       <div className="flex-1 min-h-0 flex overflow-hidden relative">
         {isMobile && mobileMenuOpen && (
@@ -656,6 +721,43 @@ function App() {
         passportEras={passportEras}
         passportCategories={passportCategories}
         nextUnlocks={achievements.locked.slice(0, 3)}
+      />
+
+      <MemoryMatch
+        open={showMemoryMatch}
+        onClose={() => setShowMemoryMatch(false)}
+        events={state.filteredEvents}
+        onSelectEvent={(event) => {
+          state.setSelectedEvent(event)
+          setShowMemoryMatch(false)
+        }}
+      />
+
+      <HistoryRiddle
+        open={showHistoryRiddle}
+        onClose={() => setShowHistoryRiddle(false)}
+        events={state.filteredEvents}
+        onSelectEvent={(event) => {
+          state.setSelectedEvent(event)
+          setShowHistoryRiddle(false)
+        }}
+      />
+
+      <TimelineSorter
+        open={showTimelineSorter}
+        onClose={() => setShowTimelineSorter(false)}
+        events={state.filteredEvents}
+        onSelectEvent={(event) => {
+          state.setSelectedEvent(event)
+          setShowTimelineSorter(false)
+        }}
+      />
+
+      <ProgressHeatmap
+        open={showProgressHeatmap}
+        onClose={() => setShowProgressHeatmap(false)}
+        events={state.filteredEvents}
+        readIds={progress.readIds}
       />
       </Suspense>
     </div>

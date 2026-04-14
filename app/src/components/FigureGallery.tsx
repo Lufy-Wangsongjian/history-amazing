@@ -140,6 +140,45 @@ export function FigureGallery({ open, onClose, events, onSelectEvent }: FigureGa
                       </div>
                     </div>
                     {/* 关联事件 */}
+                    {/* 人物生平迷你时间轴 (≥2 事件) */}
+                    {figure.events.length >= 2 && (() => {
+                      const sorted = figure.events
+                      const minY = sorted[0].year
+                      const maxY = sorted[sorted.length - 1].year
+                      const span = maxY - minY
+                      if (span <= 0) return null
+                      return (
+                        <div className="mt-2.5 mb-1 px-1">
+                          <div className="relative h-6">
+                            {/* 底线 */}
+                            <div className="absolute top-3 left-4 right-4 h-px bg-border/50" />
+                            {/* 起止年份标签 */}
+                            <span className="absolute top-4 left-0 text-[8px] text-muted-foreground/50 tabular-nums">{formatYear(minY)}</span>
+                            <span className="absolute top-4 right-0 text-[8px] text-muted-foreground/50 tabular-nums">{formatYear(maxY)}</span>
+                            {/* 事件节点 */}
+                            {sorted.map((evt) => {
+                              const pct = ((evt.year - minY) / span) * 100
+                              const left = 4 + (pct / 100) * (100 - 8) // 留 4% padding
+                              const evtCat = CATEGORY_CONFIG[evt.category as keyof typeof CATEGORY_CONFIG]
+                              return (
+                                <button
+                                  key={evt.id}
+                                  onClick={(e) => { e.stopPropagation(); onSelectEvent(evt) }}
+                                  className="absolute top-1.5 -translate-x-1/2 group/dot"
+                                  style={{ left: `${left}%` }}
+                                  title={`${formatYear(evt.year)} ${evt.title}`}
+                                >
+                                  <div
+                                    className="w-3 h-3 rounded-full border-2 border-card hover:scale-150 transition-transform"
+                                    style={{ backgroundColor: evtCat?.color || '#888' }}
+                                  />
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )
+                    })()}
                     <div className="mt-2 flex flex-wrap gap-1">
                       {figure.events.slice(0, 4).map(evt => (
                         <button
