@@ -327,8 +327,30 @@ export function generateFunFacts(events: HistoricalEvent[]): FunFact[] {
   if (indiaEvents.length >= 5) facts.push({ emoji: '🪷', text: `印度文明事件有 ${indiaEvents.length} 条——印度发明了"零"的概念，没有零就没有现代数学和计算机。` })
 
   // 50. 非洲文明
-  const africaEvents = events.filter(e => ['ethiopia','nigeria','south_africa','mali','ghana','kenya','tanzania','sudan','egypt'].includes(e.region))
+  const africaEvents = events.filter(e => ['ethiopia','nigeria','south-africa','mali','ghana','kenya','tanzania','sudan','egypt'].includes(e.region))
   if (africaEvents.length >= 5) facts.push({ emoji: '🌍', text: `非洲文明事件有 ${africaEvents.length} 条——廷巴克图在 15 世纪拥有的图书馆比欧洲大多数城市都多，这里曾是全球最重要的学术中心之一。` })
+
+  // ═══ 故事性历史冷知识（反直觉/叙事型） ═══
+  facts.push({ emoji: '🔺', text: '克利奥帕特拉距离 iPhone 发布（2007年）比距离大金字塔建造（约前2560年）更近。她活在前 69 年——离金字塔已过了 2500 年，离 iPhone 只有 2076 年。' })
+  facts.push({ emoji: '🦣', text: '大金字塔建造时，猛犸象还没完全灭绝——弗兰格尔岛上的矮化猛犸象一直活到约前 1700 年，比胡夫金字塔晚了近 900 年。' })
+  facts.push({ emoji: '🎓', text: '牛津大学（1096年有教学记录）比阿兹特克帝国（1325年建立特诺奇蒂特兰）更古老。' })
+  facts.push({ emoji: '🦈', text: '鲨鱼比树更古老——鲨鱼出现在约 4.5 亿年前，而树直到约 3.5 亿年前才演化出来。' })
+  facts.push({ emoji: '⏰', text: '如果把地球 46 亿年历史压缩成 24 小时，人类在最后 1.5 秒才出现，文明在最后 0.1 秒。' })
+  facts.push({ emoji: '🏛️', text: '古罗马的混凝土配方至今令工程师惊叹——万神殿的穹顶 2000 年来从未坍塌，而现代混凝土通常在 50-100 年后就开始劣化。' })
+  facts.push({ emoji: '📮', text: '英国的皇家邮政成立于 1516 年——比美国独立早了 260 年。如果你在 1516 年寄信，理论上可以送到亨利八世手中。' })
+  facts.push({ emoji: '🎵', text: '莫扎特和贝多芬曾在维也纳同城生活——1787 年 17 岁的贝多芬可能见过 31 岁的莫扎特，虽然具体细节至今有争议。' })
+  facts.push({ emoji: '🗡️', text: '最后一次使用弓箭的战役发生在 1940 年——英国军官杰克·丘吉尔在二战中用长弓和苏格兰大剑作战，并真的用弓箭射杀了一名德国士兵。' })
+  facts.push({ emoji: '📚', text: '世界上现存最古老的企业是日本的金刚组（578 年建立），它比查理曼帝国和唐朝都早了两百多年。' })
+  facts.push({ emoji: '🏠', text: '任天堂成立于 1889 年——比纸牌游戏到电子游戏的跨越整整 100 年。它最初是做手工花札纸牌的。' })
+  facts.push({ emoji: '🌊', text: '太平洋的面积比所有陆地面积加起来还大。当麦哲伦船队 1521 年穿越它时，花了 3 个多月没看到任何陆地。' })
+  facts.push({ emoji: '💀', text: '黑死病杀死了欧洲约三分之一到二分之一的人口（约 2500 万人），但它间接催生了文艺复兴——劳动力短缺让幸存者的工资暴涨，社会流动性大增。' })
+  facts.push({ emoji: '🏗️', text: '科隆大教堂从 1248 年开始建造，直到 1880 年才完工——建了 632 年。在这期间，蒙古帝国崛起又衰落，美洲被"发现"又独立，蒸汽机被发明。' })
+  facts.push({ emoji: '🐎', text: '成吉思汗的蒙古帝国在不到 80 年里征服了人类历史上最大的连续陆地面积——约 2400 万平方公里。骑马的游牧民创造的帝国比任何定居文明都大。' })
+  facts.push({ emoji: '✉️', text: '英国在 1840 年发行了世界上第一枚邮票——黑便士。一枚黑便士的面值是一便士，今天一枚保存完好的黑便士价值数千英镑。' })
+  facts.push({ emoji: '🧮', text: '古巴比伦人在 4000 年前就能解二次方程——他们用的是 60 进制数学系统，这也是我们今天一小时 60 分钟、一分钟 60 秒的来源。' })
+  facts.push({ emoji: '🗽', text: '自由女神像是法国送给美国的礼物，但她的铜皮最初是闪亮的铜色——绿色铜锈是几十年氧化的结果。设计师是建造了埃菲尔铁塔内部结构的古斯塔夫·埃菲尔。' })
+  facts.push({ emoji: '🌿', text: '阿司匹林来源于柳树皮——古埃及人在 3500 年前就用柳树皮止痛，但直到 1899 年拜耳才将其制成药片。' })
+  facts.push({ emoji: '🐛', text: '丝绸之路上最值钱的"货物"之一不是丝绸，而是偷运出中国的蚕卵——据传是两个拜占庭僧侣把蚕卵藏在竹杖里带到了君士坦丁堡。' })
 
   return facts
 }

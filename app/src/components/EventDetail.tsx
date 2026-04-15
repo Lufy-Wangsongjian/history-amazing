@@ -114,7 +114,7 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
         setLoadedContextEventId(eventId)
       })
       .catch((fetchError: unknown) => {
-        if ((fetchError as DOMException).name === 'AbortError') {
+        if (fetchError instanceof DOMException && fetchError.name === 'AbortError') {
           return
         }
 

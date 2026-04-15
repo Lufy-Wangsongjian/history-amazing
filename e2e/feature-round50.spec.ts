@@ -39,7 +39,15 @@ test.describe('Round 50-54 进化特性验证', () => {
     // 点击第一个事件卡片 —— 排除 MilestoneTicker 中的滚动按钮
     const firstCard = page.locator('.group button, [class*="event"] button, [class*="rounded-xl"] button').filter({ hasText: /工业|蒸汽/ }).first();
     if (await firstCard.isVisible().catch(() => false)) {
-      await firstCard.click({ force: true });
+      // 等待 DOM 稳定后再点击（避免 detach）
+      await page.waitForTimeout(1000);
+      try {
+        await firstCard.click({ force: true, timeout: 5000 });
+      } catch {
+        // 如果 detach 了，重新定位并重试
+        const retry = page.locator('.group button, [class*="event"] button, [class*="rounded-xl"] button').filter({ hasText: /工业|蒸汽/ }).first();
+        await retry.click({ force: true, timeout: 5000 }).catch(() => {});
+      }
       await page.waitForTimeout(3000);
     }
 

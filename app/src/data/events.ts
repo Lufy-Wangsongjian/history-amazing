@@ -2,6 +2,14 @@ import type { HistoricalEvent } from './types'
 import { expandHistoricalEvents, HISTORICAL_EVENTS_MULTIPLIER } from './event-expansion'
 import { injectCausalChains } from './causal-chains'
 import { injectMilestoneDetails } from './milestone-details-patch'
+import { injectMilestoneDetails2 } from './milestone-details-patch-2'
+import { injectMilestoneDetails3 } from './milestone-details-patch-3'
+import { injectMilestoneDetails4 } from './milestone-details-patch-4'
+import { injectMilestoneDetails5 } from './milestone-details-patch-5'
+import { injectMilestoneDetails6 } from './milestone-details-patch-6'
+import { injectMilestoneDetails7 } from './milestone-details-patch-7'
+import { injectImportantDetails } from './important-details-patch'
+import { injectImportantDetails2 } from './important-details-patch-2'
 import { ancientEvents, classicalEvents } from './events-ancient'
 import { axialEvents, empireEvents } from './events-axial'
 import { medievalEvents, preRenaissanceEvents } from './events-medieval'
@@ -177,6 +185,14 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER
 
 const baseWithCausalChains = injectCausalChains(baseHistoricalEvents)
-const baseWithDetails = injectMilestoneDetails(baseWithCausalChains)
+const baseWithMilestoneDetails = injectMilestoneDetails(baseWithCausalChains)
+const baseWithMilestoneDetails2 = injectMilestoneDetails2(baseWithMilestoneDetails)
+const baseWithMilestoneDetails3 = injectMilestoneDetails3(baseWithMilestoneDetails2)
+const baseWithMilestoneDetails4 = injectMilestoneDetails4(baseWithMilestoneDetails3)
+const baseWithMilestoneDetails5 = injectMilestoneDetails5(baseWithMilestoneDetails4)
+const baseWithMilestoneDetails6 = injectMilestoneDetails6(baseWithMilestoneDetails5)
+const baseWithMilestoneDetails7 = injectMilestoneDetails7(baseWithMilestoneDetails6)
+const baseWithDetails = injectImportantDetails(baseWithMilestoneDetails7)
+const baseWithDetails2 = injectImportantDetails2(baseWithDetails)
 
-export const historicalEvents: HistoricalEvent[] = expandHistoricalEvents(baseWithDetails)
+export const historicalEvents: HistoricalEvent[] = expandHistoricalEvents(baseWithDetails2)

@@ -89,8 +89,8 @@ export function StatsView({ events, onSelectEvent, onSearch, onDrillDown }: Stat
     const mostFigures = events
       .filter(e => e.figure && e.figure.trim().length > 0)
       .sort((a, b) => {
-        const aCount = (b.figure || '').split(/[、,，/]/).filter(Boolean).length
-        const bCount = (a.figure || '').split(/[、,，/]/).filter(Boolean).length
+        const aCount = (a.figure || '').split(/[、,，/]/).filter(Boolean).length
+        const bCount = (b.figure || '').split(/[、,，/]/).filter(Boolean).length
         return bCount - aCount
       })[0] || null
     const mostFiguresCount = mostFigures ? (mostFigures.figure || '').split(/[、,，/]/).filter(Boolean).length : 0

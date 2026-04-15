@@ -33,7 +33,6 @@ export const ancientEvents: HistoricalEvent[] = [
   { id: 'a051', year: -3000, title: '苏美尔神庙医学', description: '苏美尔人在泥板上记录了最早的药方和医疗实践，包含植物药和矿物药的使用方法。', category: 'medicine', region: 'iraq', significance: 2 },
   { id: 'a052', year: -2600, title: '扁鹊针灸传说', description: '中国传统医学的雏形在此时期形成，经络理论和针灸术开始萌芽。', category: 'medicine', region: 'china', significance: 2 },
   { id: 'a053', year: -2000, title: '腓尼基人地中海贸易网络', description: '腓尼基人建立起覆盖整个地中海的贸易网络，探索了从黎巴嫩到西班牙的广阔海域。', category: 'exploration', region: 'lebanon', significance: 2 },
-  { id: 'a054', year: -3500, title: '古埃及灌溉系统', description: '埃及人建造复杂的灌溉系统来控制尼罗河水，发展出高产农业。', category: 'technology', region: 'egypt', significance: 2 },
   { id: 'a055', year: -2000, title: '印度河谷城市卫生系统', description: '哈拉帕文明建立了世界最早的城市排水和公共卫生系统。', category: 'medicine', region: 'pakistan', significance: 2 },
   { id: 'a056', year: -3100, title: '苏美尔宗教体系', description: '苏美尔人建立了系统的多神教体系，以恩利尔、安努等主神为核心，兴建了最早的神庙塔。', category: 'religion', region: 'iraq', significance: 2 },
   // 新增远古文明事件

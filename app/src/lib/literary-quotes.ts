@@ -947,6 +947,415 @@ const QUOTES_BY_KEYWORD: Array<{ keywords: string[]; quotes: LiteraryQuote[] }> 
     keywords: ['印刷', '谷登堡'],
     quotes: [{ text: 'God suffers in the multitude of souls whom His word cannot reach. Religious truth is imprisoned in a small number of manuscript books.', source: 'Johannes Gutenberg', translation: '上帝因大量灵魂无法接触到他的话语而痛苦。宗教真理被囚禁在少量手抄本中。' }],
   },
+  // ═══ 第五批引文：扩充至 300+ ═══
+  {
+    keywords: ['铁路', '火车', '蒸汽机车'],
+    quotes: [{ text: 'What can be more palpably absurd than the prospect held out of locomotives travelling twice as fast as stagecoaches?', source: 'The Quarterly Review, 1825', translation: '还有什么比火车头跑到两倍马车速度的前景更荒谬的呢？' }],
+  },
+  {
+    keywords: ['航空', '飞机', '莱特兄弟'],
+    quotes: [{ text: 'The desire to fly is an idea handed down to us by our ancestors who looked enviously on the birds soaring freely through space.', source: 'Wilbur Wright', translation: '飞行的渴望是祖先传递给我们的理想——他们曾嫉妒地仰望在天空中自由翱翔的鸟儿。' }],
+  },
+  {
+    keywords: ['音障', '超音速', '协和号'],
+    quotes: [{ text: 'I was scared five years before I finally did it.', source: 'Chuck Yeager, on breaking the sound barrier', translation: '在我真正做到之前，我害怕了整整五年。' }],
+  },
+  {
+    keywords: ['海战', '纳尔逊', '特拉法尔加'],
+    quotes: [{ text: 'England expects that every man will do his duty.', source: 'Horatio Nelson, 1805', translation: '英格兰期望每个人都恪尽职守。' }],
+  },
+  {
+    keywords: ['蒸汽船', '轮船'],
+    quotes: [{ text: 'The man who can make hard things easy is the educator.', source: 'Robert Fulton', translation: '能将困难之事变得容易的人才是教育家。' }],
+  },
+  {
+    keywords: ['密码', '图灵', 'Enigma'],
+    quotes: [{ text: 'Sometimes it is the people no one imagines anything of who do the things that no one can imagine.', source: 'Alan Turing (attributed)', translation: '有时候正是那些没人看好的人，做出了没人能想象的事。' }],
+  },
+  {
+    keywords: ['心理学', '弗洛伊德', '精神分析'],
+    quotes: [{ text: 'The mind is like an iceberg; it floats with one-seventh of its bulk above water.', source: 'Sigmund Freud', translation: '心灵就像冰山，七分之一浮在水面之上。' }],
+  },
+  {
+    keywords: ['行为主义', '巴甫洛夫'],
+    quotes: [{ text: 'Don\'t become a mere recorder of facts, but try to penetrate the mystery of their origin.', source: 'Ivan Pavlov', translation: '不要只做事实的记录者，而要试图穿透其起源的奥秘。' }],
+  },
+  {
+    keywords: ['马斯洛', '需求层次'],
+    quotes: [{ text: 'What a man can be, he must be. This need we call self-actualization.', source: 'Abraham Maslow', translation: '人能成为什么，就必须成为什么。我们把这种需求称为自我实现。' }],
+  },
+  {
+    keywords: ['社会学', '涂尔干'],
+    quotes: [{ text: 'Man is a moral being only because he lives in society.', source: 'Émile Durkheim', translation: '人之所以是道德的存在，仅仅因为他生活在社会之中。' }],
+  },
+  {
+    keywords: ['五月风暴', '1968'],
+    quotes: [{ text: 'Be realistic, demand the impossible.', source: 'Slogan of May 1968, Paris', translation: '做现实主义者，要求不可能之事。' }],
+  },
+  {
+    keywords: ['考古', '特洛伊', '谢里曼'],
+    quotes: [{ text: 'I have gazed on the face of Agamemnon.', source: 'Heinrich Schliemann (attributed)', translation: '我已凝视了阿伽门农的面容。' }],
+  },
+  {
+    keywords: ['图坦卡蒙', '法老'],
+    quotes: [{ text: 'Can you see anything? Yes, wonderful things.', source: 'Howard Carter, 1922', translation: '"你能看到什么吗？""是的，奇妙的东西。"' }],
+  },
+  {
+    keywords: ['兵马俑', '秦始皇'],
+    quotes: [{ text: 'The terracotta warriors stand as silent witnesses to the first emperor\'s ambition to rule even in death.', source: 'Museum of Terracotta Warriors', translation: '兵马俑作为沉默的见证者，诉说着始皇帝即使在死后也要统治的雄心。' }],
+  },
+  {
+    keywords: ['啤酒', '酿酒'],
+    quotes: [{ text: 'Beer is proof that God loves us and wants us to be happy.', source: 'Attributed to Benjamin Franklin (likely apocryphal)', translation: '啤酒证明了上帝爱我们，希望我们幸福。' }],
+  },
+  {
+    keywords: ['咖啡'],
+    quotes: [{ text: 'Coffee is a lot more than just a drink; it\'s something happening.', source: 'Gertrude Stein', translation: '咖啡远不止是一种饮品——它是一个正在发生的事件。' }],
+  },
+  {
+    keywords: ['方便面', '拉面'],
+    quotes: [{ text: 'Peace follows from aستomach that is full.', source: 'Momofuku Ando', translation: '和平源于一个吃饱的胃。' }],
+  },
+  {
+    keywords: ['香料', '胡椒', '达伽马'],
+    quotes: [{ text: 'We came in search of Christians and spices.', source: 'Vasco da Gama, upon reaching India, 1498', translation: '我们来寻找基督徒和香料。' }],
+  },
+  {
+    keywords: ['地图', '墨卡托'],
+    quotes: [{ text: 'The world is a book, and those who do not travel read only a page.', source: 'Attributed to Saint Augustine', translation: '世界是一本书，不旅行的人只读了一页。' }],
+  },
+  {
+    keywords: ['国际单位', '度量衡', '米制'],
+    quotes: [{ text: 'Nothing is more necessary to science than a system of units that allows the comparison of measurements.', source: 'James Clerk Maxwell', translation: '没有什么比一套允许比较测量结果的单位制更为科学所必需的了。' }],
+  },
+  {
+    keywords: ['奥运', '奥林匹克'],
+    quotes: [{ text: 'The most important thing in the Olympic Games is not winning but taking part.', source: 'Pierre de Coubertin', translation: '奥林匹克运动会最重要的不是赢得胜利而是参与其中。' }],
+  },
+  {
+    keywords: ['海底隧道', '英吉利'],
+    quotes: [{ text: 'A tunnel under the sea! The idea is as old as Napoleon, but the reality belongs to the engineers of the 20th century.', source: 'Eurotunnel history archives', translation: '海底隧道！这个想法和拿破仑一样古老，但它的实现属于20世纪的工程师。' }],
+  },
+  {
+    keywords: ['转基因', 'GMO'],
+    quotes: [{ text: 'We have the power to edit the very code of life. The question is not whether we can, but whether we should.', source: 'Modern genetics discussion', translation: '我们有能力编辑生命的底层代码。问题不在于我们能不能，而在于我们应不应该。' }],
+  },
+  {
+    keywords: ['国家公园', '黄石'],
+    quotes: [{ text: 'In wildness is the preservation of the world.', source: 'Henry David Thoreau', translation: '荒野中蕴藏着对世界的保全。' }],
+  },
+  {
+    keywords: ['保险', '风险'],
+    quotes: [{ text: 'The essence of insurance is the sharing of risk.', source: 'Insurance industry maxim', translation: '保险的本质是风险的共担。' }],
+  },
+  {
+    keywords: ['漫画', '超人', 'Superman'],
+    quotes: [{ text: 'What makes Superman a hero is not that he has power, but that he has the wisdom and the maturity to use the power wisely.', source: 'Christopher Reeve', translation: '让超人成为英雄的不是他拥有力量，而是他拥有智慧和成熟来明智地使用力量。' }],
+  },
+  {
+    keywords: ['米老鼠', '迪士尼'],
+    quotes: [{ text: 'I only hope that we never lose sight of one thing — that it was all started by a mouse.', source: 'Walt Disney', translation: '我只希望我们永远不要忘记一件事——这一切都是从一只老鼠开始的。' }],
+  },
+  {
+    keywords: ['宫崎骏', '龙猫', '吉卜力'],
+    quotes: [{ text: 'I believe in the power of story. I believe that stories have an important role to play in the formation of human beings.', source: 'Hayao Miyazaki', translation: '我相信故事的力量。我相信故事在人的成长中扮演着重要角色。' }],
+  },
+  {
+    keywords: ['博物馆', '卢浮宫'],
+    quotes: [{ text: 'A museum is a place where one should lose one\'s head.', source: 'Renzo Piano', translation: '博物馆是一个应该让人忘乎所以的地方。' }],
+  },
+  {
+    keywords: ['故宫', '紫禁城'],
+    quotes: [{ text: '旧时王谢堂前燕，飞入寻常百姓家。', source: '刘禹锡《乌衣巷》', translation: '' }],
+  },
+  {
+    keywords: ['汉谟拉比', '法典', '巴比伦'],
+    quotes: [{ text: '以正义之光照耀大地，消灭一切邪恶与罪人，使强者不能压迫弱者。', source: '汉谟拉比法典序言', translation: '' }],
+  },
+  {
+    keywords: ['丝绸', '蚕', '缫丝'],
+    quotes: [{ text: '春蚕到死丝方尽，蜡炬成灰泪始干。', source: '李商隐《无题》', translation: '' }],
+  },
+  {
+    keywords: ['瓷器', '青花', '景德镇'],
+    quotes: [{ text: '大邑烧瓷轻且坚，扣如哀玉锦城传。', source: '杜甫《又于韦处乞大邑瓷碗》', translation: '' }],
+  },
+  {
+    keywords: ['凡尔赛', '宫殿'],
+    quotes: [{ text: 'L\'État, c\'est moi.', source: 'Louis XIV (attributed)', translation: '朕即国家。' }],
+  },
+  {
+    keywords: ['核反应', '费米', '原子能'],
+    quotes: [{ text: 'The Italian navigator has just landed in the new world.', source: 'Arthur Compton, coded message about first nuclear reaction, 1942', translation: '"意大利航海家刚刚抵达新大陆。"（关于首次核反应的暗语）' }],
+  },
+  {
+    keywords: ['公钥', 'RSA', '加密'],
+    quotes: [{ text: 'Privacy is not something that I\'m merely entitled to, it\'s an absolute prerequisite.', source: 'Marlon Brando', translation: '隐私不仅仅是我的权利——它是绝对的前提条件。' }],
+  },
+  {
+    keywords: ['斯诺登', '监控', '棱镜'],
+    quotes: [{ text: 'Arguing that you don\'t care about the right to privacy because you have nothing to hide is no different than saying you don\'t care about free speech because you have nothing to say.', source: 'Edward Snowden', translation: '说你不在乎隐私权因为你无事可藏，和说你不在乎言论自由因为你无话可说没有区别。' }],
+  },
+  {
+    keywords: ['墨西哥', '壁画', '里维拉'],
+    quotes: [{ text: 'I paint what I see, not what you want to see.', source: 'Diego Rivera (attributed)', translation: '我画我所见的，不是你想让我见的。' }],
+  },
+  {
+    keywords: ['拿破仑', '法典', '民法'],
+    quotes: [{ text: 'My true glory is not to have won forty battles; Waterloo will efface the memory of so many victories. But what nothing will efface, what will live forever, is my Civil Code.', source: 'Napoleon Bonaparte', translation: '我真正的光荣不在于打了四十场胜仗；滑铁卢会抹去那么多胜利的记忆。但不会被抹去的、将永远存在的，是我的民法典。' }],
+  },
+  {
+    keywords: ['水稻', '稻作'],
+    quotes: [{ text: '锄禾日当午，汗滴禾下土。谁知盘中餐，粒粒皆辛苦。', source: '李绅《悯农》', translation: '' }],
+  },
+  {
+    keywords: ['奠边府', '越南'],
+    quotes: [{ text: 'You can kill ten of our men for every one we kill of yours. But even at those odds, you will lose and we will win.', source: 'Ho Chi Minh', translation: '你可以用十倍于我们的人换命。但即使如此，你仍会输，而我们会赢。' }],
+  },
+  {
+    keywords: ['阿尔及利亚', '独立'],
+    quotes: [{ text: 'Every generation must, out of relative obscurity, discover its mission, fulfill it, or betray it.', source: 'Frantz Fanon, The Wretched of the Earth', translation: '每一代人都必须在相对的默默无闻中发现自己的使命——完成它，或者背叛它。' }],
+  },
+  {
+    keywords: ['万有引力', '牛顿'],
+    quotes: [{ text: 'If I have seen further it is by standing on the shoulders of Giants.', source: 'Isaac Newton', translation: '如果我看得更远，那是因为我站在巨人的肩膀上。' }],
+  },
+  {
+    keywords: ['脉冲星', '中子星'],
+    quotes: [{ text: 'I had to make many observations... and analyze miles of chart recordings before I was convinced that I had observed something real.', source: 'Jocelyn Bell Burnell', translation: '我不得不进行大量观测、分析数英里长的图表记录，才确信我观测到了真实的东西。' }],
+  },
+
+  // ─── 第六批：60 条新引文 ─────────────────────────────────
+
+  // 古代与远古
+  {
+    keywords: ['金字塔', '胡夫', '吉萨'],
+    quotes: [{ text: 'Man fears Time, yet Time fears the Pyramids.', source: 'Arab proverb', translation: '人惧怕时间，而时间惧怕金字塔。' }],
+  },
+  {
+    keywords: ['吉尔伽美什', '乌鲁克'],
+    quotes: [{ text: '他是看过深渊的人，是国土的基石。他知晓一切，他明悟万事。', source: '《吉尔伽美什史诗》（开篇）', translation: '' }],
+  },
+  {
+    keywords: ['轮子', '美索不达米亚'],
+    quotes: [{ text: 'The wheel is the greatest invention, but the brake is a close second.', source: 'attributed to various', translation: '轮子是最伟大的发明，但刹车紧随其后。' }],
+  },
+  {
+    keywords: ['青铜', '冶金', '冶炼'],
+    quotes: [{ text: 'The discovery of metals was the discovery of power itself.', source: 'V. Gordon Childe', translation: '金属的发现就是权力本身的发现。' }],
+  },
+  {
+    keywords: ['班图', '迁徙', '非洲'],
+    quotes: [{ text: 'Africa is not a country, but a continent of extraordinary diversity, and the Bantu expansion is one reason why.', source: 'John Reader, Africa: A Biography of the Continent', translation: '非洲不是一个国家，而是一个拥有非凡多样性的大陆——班图人的扩张正是原因之一。' }],
+  },
+
+  // 哲学与宗教
+  {
+    keywords: ['庄子', '蝴蝶'],
+    quotes: [{ text: '昔者庄周梦为蝴蝶，栩栩然蝴蝶也。不知周之梦为蝴蝶与？蝴蝶之梦为周与？', source: '庄子·齐物论', translation: '' }],
+  },
+  {
+    keywords: ['亚伯拉罕', '一神教'],
+    quotes: [{ text: 'Now the Lord had said unto Abram, Get thee out of thy country, and from thy kindred, and from thy father\'s house, unto a land that I will shew thee.', source: 'Genesis 12:1', translation: '耶和华对亚伯兰说：你要离开本地、本族、父家，往我所要指示你的地去。' }],
+  },
+  {
+    keywords: ['阿育王', '佛教传播'],
+    quotes: [{ text: 'All men are my children. And just as I desire for my children that they may enjoy every kind of prosperity and happiness, so also do I desire the same for all men.', source: 'Asoka, Rock Edict VI', translation: '所有人都是我的孩子。正如我希望我的孩子享有一切繁荣和幸福，我对所有人也怀有同样的期望。' }],
+  },
+  {
+    keywords: ['耶稣', '受难', '十字架'],
+    quotes: [{ text: 'Father, forgive them, for they do not know what they are doing.', source: 'Luke 23:34', translation: '父啊，赦免他们，因为他们所做的，他们不晓得。' }],
+  },
+  {
+    keywords: ['伊斯兰', '穆罕默德', '古兰经'],
+    quotes: [{ text: 'Read! In the name of your Lord who created.', source: 'Quran 96:1 (first revelation)', translation: '你应当奉你的创造主的名义而宣读。' }],
+  },
+
+  // 帝国与战争
+  {
+    keywords: ['亚历山大', '东征'],
+    quotes: [{ text: 'There is nothing impossible to him who will try.', source: 'Alexander the Great (attributed)', translation: '对于愿意尝试的人，没有什么是不可能的。' }],
+  },
+  {
+    keywords: ['赤壁', '三国'],
+    quotes: [{ text: '大江东去，浪淘尽，千古风流人物。', source: '苏轼《念奴娇·赤壁怀古》', translation: '' }],
+  },
+  {
+    keywords: ['蒙古', '成吉思汗'],
+    quotes: [{ text: 'I am the punishment of God. If you had not committed great sins, God would not have sent a punishment like me upon you.', source: 'Genghis Khan (attributed)', translation: '我是上天的惩罚。如果你们没有犯下大罪，上天不会派我这样的惩罚降临于你们。' }],
+  },
+  {
+    keywords: ['阿杜瓦', '埃塞俄比亚'],
+    quotes: [{ text: 'Ethiopia has need of no one. She stretches her hands unto God.', source: 'Emperor Menelik II', translation: '埃塞俄比亚不需要任何人。她向上帝伸出双手。' }],
+  },
+  {
+    keywords: ['奥斯曼', '苏莱曼'],
+    quotes: [{ text: 'The people think of wealth and power as the greatest fate, but in this world a spell of health is the best state.', source: 'Suleiman the Magnificent', translation: '人们认为财富和权力是最大的命运，但在这个世界上，健康的时光才是最好的状态。' }],
+  },
+
+  // 科学与技术
+  {
+    keywords: ['DNA', '双螺旋', '沃森', '克里克'],
+    quotes: [{ text: 'We have discovered the secret of life.', source: 'Francis Crick (to patrons at the Eagle pub, Cambridge, 1953)', translation: '我们发现了生命的秘密。' }],
+  },
+  {
+    keywords: ['集成电路', '芯片'],
+    quotes: [{ text: 'The number of transistors in a dense integrated circuit doubles about every two years.', source: 'Gordon Moore (Moore\'s Law, 1965)', translation: '密集集成电路中的晶体管数量大约每两年翻一番。' }],
+  },
+  {
+    keywords: ['ARPANET', '互联网前身'],
+    quotes: [{ text: 'The Internet is the first thing that humanity has built that humanity doesn\'t understand.', source: 'Eric Schmidt', translation: '互联网是人类建造的第一个人类自己不理解的东西。' }],
+  },
+  {
+    keywords: ['谷歌', '搜索'],
+    quotes: [{ text: 'Google\'s mission is to organize the world\'s information and make it universally accessible and useful.', source: 'Google corporate mission statement', translation: '谷歌的使命是整合全球信息，使人人皆可访问并从中受益。' }],
+  },
+  {
+    keywords: ['CRISPR', '基因编辑'],
+    quotes: [{ text: 'We now have the power to change the very essence of who we are. The question is: should we?', source: 'Jennifer Doudna', translation: '我们现在有能力改变我们存在的本质。问题是：我们应该吗？' }],
+  },
+  {
+    keywords: ['韦伯望远镜', 'Webb'],
+    quotes: [{ text: 'Where the Hubble showed us the universe was bigger than we thought, Webb will show us it is older than we knew.', source: 'NASA', translation: '如果说哈勃告诉我们宇宙比我们以为的更大，韦伯将告诉我们宇宙比我们知道的更古老。' }],
+  },
+  {
+    keywords: ['青霉素', '弗莱明'],
+    quotes: [{ text: 'One sometimes finds what one is not looking for.', source: 'Alexander Fleming (Nobel Lecture, 1945)', translation: '人有时会找到自己并未在寻找的东西。' }],
+  },
+  {
+    keywords: ['基因组', 'DNA测序'],
+    quotes: [{ text: 'We used to think our fate was in our stars. Now we know, in large measure, our fate is in our genes.', source: 'James Watson', translation: '我们曾以为命运写在星辰里。现在我们知道，在很大程度上，命运写在基因里。' }],
+  },
+
+  // 现代政治与社会
+  {
+    keywords: ['独立宣言', '美国独立'],
+    quotes: [{ text: 'We hold these truths to be self-evident, that all men are created equal.', source: 'United States Declaration of Independence, 1776', translation: '我们认为这些真理是不言而喻的：人人生而平等。' }],
+  },
+  {
+    keywords: ['法国大革命', '巴士底'],
+    quotes: [{ text: 'Liberty, Equality, Fraternity.', source: 'Motto of the French Republic', translation: '自由、平等、博爱。' }],
+  },
+  {
+    keywords: ['辛亥', '孙中山'],
+    quotes: [{ text: '革命尚未成功，同志仍须努力。', source: '孙中山《总理遗嘱》（1925）', translation: '' }],
+  },
+  {
+    keywords: ['五四运动', '新文化'],
+    quotes: [{ text: '德先生和赛先生——只有这两位先生可以救治中国政治上、道德上、学术上、思想上一切的黑暗。', source: '陈独秀《新青年》', translation: '' }],
+  },
+  {
+    keywords: ['大萧条', '股市崩盘'],
+    quotes: [{ text: 'The only thing we have to fear is fear itself.', source: 'Franklin D. Roosevelt, Inaugural Address, 1933', translation: '我们唯一需要恐惧的，就是恐惧本身。' }],
+  },
+  {
+    keywords: ['二战', '世界大战', '诺曼底'],
+    quotes: [{ text: 'We shall fight on the beaches, we shall fight on the landing grounds, we shall fight in the fields and in the streets, we shall never surrender.', source: 'Winston Churchill, 1940', translation: '我们将在海滩上作战，我们将在登陆场上作战，我们将在田野和街头作战，我们永不投降。' }],
+  },
+  {
+    keywords: ['原子弹', '广岛', '核武器'],
+    quotes: [{ text: 'Now I am become Death, the destroyer of worlds.', source: 'J. Robert Oppenheimer (quoting the Bhagavad Gita)', translation: '现在我成了死神，世界的毁灭者。' }],
+  },
+  {
+    keywords: ['世界人权宣言', '人权'],
+    quotes: [{ text: 'All human beings are born free and equal in dignity and rights.', source: 'Universal Declaration of Human Rights, Article 1', translation: '人人生而自由，在尊严和权利上一律平等。' }],
+  },
+  {
+    keywords: ['联合国', '成立'],
+    quotes: [{ text: 'We the peoples of the United Nations determined to save succeeding generations from the scourge of war.', source: 'UN Charter, Preamble', translation: '我联合国人民同兹决心，欲免后世再遭今代人类两度身历惨不堪言之战祸。' }],
+  },
+  {
+    keywords: ['柏林墙', '倒塌'],
+    quotes: [{ text: 'Mr. Gorbachev, tear down this wall!', source: 'Ronald Reagan, Brandenburg Gate, 1987', translation: '戈尔巴乔夫先生，拆掉这堵墙！' }],
+  },
+  {
+    keywords: ['苏联解体', '冷战结束'],
+    quotes: [{ text: 'The end of the Cold War is the end of a most extraordinary chapter in human history.', source: 'Mikhail Gorbachev', translation: '冷战的结束是人类历史上最非凡篇章的终结。' }],
+  },
+  {
+    keywords: ['改革开放', '邓小平'],
+    quotes: [{ text: '不管白猫黑猫，捉到老鼠就是好猫。', source: '邓小平', translation: '' }],
+  },
+  {
+    keywords: ['古巴导弹', '肯尼迪'],
+    quotes: [{ text: 'Mankind must put an end to war, or war will put an end to mankind.', source: 'John F. Kennedy, UN Address, 1961', translation: '人类必须终结战争，否则战争将终结人类。' }],
+  },
+  {
+    keywords: ['石油危机', 'OPEC'],
+    quotes: [{ text: 'The Stone Age did not end for lack of stone, and the Oil Age will end long before the world runs out of oil.', source: 'Sheikh Ahmed Zaki Yamani (Saudi Oil Minister)', translation: '石器时代不是因为没有石头而结束的，石油时代也会在石油用完之前很久就结束。' }],
+  },
+
+  // 文学与艺术
+  {
+    keywords: ['红楼梦', '曹雪芹'],
+    quotes: [{ text: '满纸荒唐言，一把辛酸泪。都云作者痴，谁解其中味？', source: '曹雪芹《红楼梦》开篇', translation: '' }],
+  },
+  {
+    keywords: ['尤利西斯', '乔伊斯'],
+    quotes: [{ text: 'Yes I said yes I will Yes.', source: 'James Joyce, Ulysses (final words)', translation: '是的我说了是的我愿意是的。' }],
+  },
+  {
+    keywords: ['百年孤独', '马尔克斯'],
+    quotes: [{ text: 'Many years later, as he faced the firing squad, Colonel Aureliano Buendía was to remember that distant afternoon when his father took him to discover ice.', source: 'Gabriel García Márquez, One Hundred Years of Solitude', translation: '多年以后，面对行刑队，奥雷里亚诺·布恩迪亚上校将会回想起父亲带他去见识冰块的那个遥远的下午。' }],
+  },
+  {
+    keywords: ['立体主义', '毕加索', '格尔尼卡'],
+    quotes: [{ text: 'Art is a lie that makes us realize truth.', source: 'Pablo Picasso', translation: '艺术是让我们认识真理的谎言。' }],
+  },
+  {
+    keywords: ['包豪斯', '设计'],
+    quotes: [{ text: 'Less is more.', source: 'Ludwig Mies van der Rohe (Bauhaus director)', translation: '少即是多。' }],
+  },
+  {
+    keywords: ['吴哥窟', '高棉'],
+    quotes: [{ text: 'It is grander than anything left to us by Greece or Rome.', source: 'Henri Mouhot (French explorer, 1860)', translation: '它比希腊或罗马留给我们的任何东西都更宏伟。' }],
+  },
+  {
+    keywords: ['泰姬陵', '莫卧儿'],
+    quotes: [{ text: 'A teardrop on the cheek of time.', source: 'Rabindranath Tagore (on the Taj Mahal)', translation: '时光面颊上的一滴泪珠。' }],
+  },
+  {
+    keywords: ['奥尔梅克', '中美洲'],
+    quotes: [{ text: 'The Olmec were the mother culture of Mesoamerica.', source: 'Michael D. Coe, archaeologist', translation: '奥尔梅克是中美洲的母文化。' }],
+  },
+
+  // 现代科技与全球事件
+  {
+    keywords: ['9·11', '世贸中心'],
+    quotes: [{ text: 'Even the smallest act of service, the simplest act of kindness, is a way to honor those we lost.', source: 'Barack Obama (9/11 memorial, 2011)', translation: '即使是最微小的服务行为、最简单的善举，也是纪念我们失去之人的一种方式。' }],
+  },
+  {
+    keywords: ['金融危机', '次贷', '雷曼'],
+    quotes: [{ text: 'When the music stops, in terms of liquidity, things will be complicated.', source: 'Chuck Prince, Citigroup CEO (July 2007)', translation: '当音乐停下来的时候，就流动性而言，事情会变得复杂。' }],
+  },
+  {
+    keywords: ['新冠', 'COVID', '疫情'],
+    quotes: [{ text: 'The pandemic represents a rare but narrow window of opportunity to reflect, reimagine, and reset our world.', source: 'Klaus Schwab, World Economic Forum', translation: '这场大流行代表了一个罕见但短暂的机会窗口，让我们反思、重新想象和重置我们的世界。' }],
+  },
+  {
+    keywords: ['mRNA', '疫苗'],
+    quotes: [{ text: 'This is the first time in history that we have a vaccine within a year of the emergence of a new pathogen.', source: 'Ugur Sahin, BioNTech CEO', translation: '这是历史上第一次在新病原体出现一年内就有了疫苗。' }],
+  },
+  {
+    keywords: ['威斯特伐利亚', '主权'],
+    quotes: [{ text: 'The Westphalian system is the foundation upon which the entire edifice of international relations rests.', source: 'Henry Kissinger, World Order', translation: '威斯特伐利亚体系是整个国际关系大厦所依托的基础。' }],
+  },
+  {
+    keywords: ['德川', '江户', '锁国'],
+    quotes: [{ text: '花は桜木、人は武士。', source: '一休宗纯（江户时代谚语）', translation: '花中樱花，人中武士。' }],
+  },
+  {
+    keywords: ['西班牙流感', '大流感'],
+    quotes: [{ text: 'The influenza pandemic of 1918-1919 killed more people than the Great War, known today as World War I, at somewhere between 50 and 100 million people.', source: 'John M. Barry, The Great Influenza', translation: '1918-1919年的流感大流行杀死的人比大战（即第一次世界大战）还多，约在5000万到1亿之间。' }],
+  },
+  {
+    keywords: ['玛雅', '历法'],
+    quotes: [{ text: 'The Maya invented mathematics and astronomy of a complexity not equaled in Europe for a thousand years.', source: 'Jared Diamond', translation: '玛雅人发明的数学和天文学的复杂程度，在一千年内欧洲都未能企及。' }],
+  },
+  {
+    keywords: ['斯普特尼克', '卫星'],
+    quotes: [{ text: 'The Earth is the cradle of humanity, but mankind cannot stay in the cradle forever.', source: 'Konstantin Tsiolkovsky', translation: '地球是人类的摇篮，但人类不能永远待在摇篮里。' }],
+  },
 ]
 
 /**
