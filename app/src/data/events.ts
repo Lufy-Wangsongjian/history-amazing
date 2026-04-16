@@ -46,6 +46,15 @@ import { africaEarlyEvents } from './events-africa-early'
 import { poetryEvents, musicalTheaterEvents } from './events-enrichment-13'
 // Round 13: 诗经·唐诗·宋词·元曲专题
 import { shijingEvents, tangshiEvents, songciEvents, yuanquEvents } from './events-enrichment-14'
+// 中国历史名人群像扩充
+import { chinaFigureEvents, injectChinaFigures } from './china-figures-patch'
+// 中国历史基础事件扩充 + 宋明清深度扩充
+import { chinaSeedExpansionEvents } from './events-china-seed-expansion'
+import { songMingQingDeepEvents } from './events-song-mingqing-deep'
+// 维京与北欧文明
+import { vikingNordicEvents } from './events-viking-nordic'
+// Round 14: 荷兰/西班牙/东欧专题
+import { netherlandsEvents, spainEvents, easternEuropeEvents } from './events-enrichment-15'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -180,12 +189,75 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...tangshiEvents,
   ...songciEvents,
   ...yuanquEvents,
+  // 中国历史名人群像
+  ...chinaFigureEvents,
+  // 中国历史基础事件扩充（48条）
+  ...chinaSeedExpansionEvents,
+  // 宋代·明清深度扩充（20条）
+  ...songMingQingDeepEvents,
+  // 维京与北欧文明（15条）
+  ...vikingNordicEvents,
+  // Round 14: 荷兰/西班牙/东欧（50条）
+  ...netherlandsEvents,
+  ...spainEvents,
+  ...easternEuropeEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER
 
-const baseWithCausalChains = injectCausalChains(baseHistoricalEvents)
-const baseWithMilestoneDetails = injectMilestoneDetails(baseWithCausalChains)
+// ── P0 去重：按 title+year 去重，保留 details 最丰富的版本 ──
+function deduplicateEvents(events: HistoricalEvent[]): HistoricalEvent[] {
+  // 第一遍：决定每个 title+year 保留哪个 ID
+  const bestByKey = new Map<string, { event: HistoricalEvent; score: number }>()
+  const idRemapTo = new Map<string, string>() // 被删 ID → 保留 ID
+
+  for (const event of events) {
+    const key = `${event.title}|${event.year}`
+    const score = (event.details?.length ?? 0) + (event.significance ?? 0) * 100
+    const existing = bestByKey.get(key)
+    if (!existing) {
+      bestByKey.set(key, { event, score })
+    } else if (score > existing.score) {
+      // 新的更好，旧的 ID 映射到新的
+      idRemapTo.set(existing.event.id, event.id)
+      bestByKey.set(key, {
+        event: { ...event, relatedIds: mergeRelatedIdArrays(existing.event.relatedIds, event.relatedIds) },
+        score,
+      })
+    } else {
+      // 旧的更好，新的 ID 映射到旧的
+      idRemapTo.set(event.id, existing.event.id)
+      bestByKey.set(key, {
+        event: { ...existing.event, relatedIds: mergeRelatedIdArrays(existing.event.relatedIds, event.relatedIds) },
+        score: existing.score,
+      })
+    }
+  }
+
+  const validIds = new Set(Array.from(bestByKey.values()).map(v => v.event.id))
+
+  // 第二遍：清理 relatedIds，替换被删除的 ID 为保留的 ID
+  return Array.from(bestByKey.values()).map(({ event }) => {
+    if (!event.relatedIds) return event
+    const cleaned = event.relatedIds
+      .map(id => idRemapTo.get(id) ?? id) // 替换被删 ID
+      .filter(id => id !== event.id && validIds.has(id)) // 移除自引用和无效 ID
+    const unique = [...new Set(cleaned)]
+    return { ...event, relatedIds: unique.length > 0 ? unique : undefined }
+  })
+}
+
+function mergeRelatedIdArrays(a?: string[], b?: string[]): string[] | undefined {
+  if (!a && !b) return undefined
+  const merged = new Set([...(a ?? []), ...(b ?? [])])
+  return merged.size > 0 ? Array.from(merged) : undefined
+}
+
+const deduplicatedEvents = deduplicateEvents(baseHistoricalEvents)
+
+const baseWithCausalChains = injectCausalChains(deduplicatedEvents)
+const baseWithFigures = injectChinaFigures(baseWithCausalChains)
+const baseWithMilestoneDetails = injectMilestoneDetails(baseWithFigures)
 const baseWithMilestoneDetails2 = injectMilestoneDetails2(baseWithMilestoneDetails)
 const baseWithMilestoneDetails3 = injectMilestoneDetails3(baseWithMilestoneDetails2)
 const baseWithMilestoneDetails4 = injectMilestoneDetails4(baseWithMilestoneDetails3)

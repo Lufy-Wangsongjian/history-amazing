@@ -233,7 +233,7 @@ export function SearchAutocomplete({
 
       {/* 联想下拉 */}
       {showDropdown && (
-        <div className="absolute left-0 right-0 top-full mt-1 z-50 rounded-lg border border-border/60 bg-popover shadow-xl overflow-hidden search-autocomplete-dropdown">
+        <div className="absolute left-0 right-0 top-full mt-1 z-30 rounded-lg border border-border/60 bg-popover shadow-xl overflow-hidden search-autocomplete-dropdown">
           {/* 有输入时显示匹配结果 */}
           {localInput.trim().length > 0 && suggestions.length > 0 && (
             <div ref={listRef} className="max-h-[320px] overflow-y-auto py-1">

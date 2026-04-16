@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { ERAS, formatYear } from '@/data/types'
 
@@ -38,6 +38,7 @@ function buildDensityBuckets(events: HistoricalEvent[], bucketSize: number = 100
 export function EventDensityChart({ events, onSelectRange }: EventDensityChartProps) {
   const buckets = useMemo(() => buildDensityBuckets(events, 100), [events])
   const maxCount = Math.max(...buckets.map(b => b.count), 1)
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   // SVG 尺寸
   const W = 600
@@ -99,7 +100,7 @@ export function EventDensityChart({ events, onSelectRange }: EventDensityChartPr
   const peakPoint = points.find(p => p.bucket === peakBucket)
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="w-full h-auto"
@@ -174,32 +175,30 @@ export function EventDensityChart({ events, onSelectRange }: EventDensityChartPr
           strokeLinejoin="round"
         />
 
-        {/* 数据点 */}
+        {/* 数据点 + 交互热区 */}
         {points.map((p, i) => (
           <g key={i}>
             <circle
               cx={p.x}
               cy={p.y}
-              r={p.bucket.count > 0 ? 2.5 : 0}
+              r={p.bucket.count > 0 ? (hoveredIdx === i ? 4 : 2.5) : 0}
               fill="var(--background, #0a0a14)"
-              stroke={p.bucket === peakBucket ? '#f59e0b' : 'currentColor'}
-              strokeWidth={p.bucket === peakBucket ? 2 : 1}
-              strokeOpacity={p.bucket === peakBucket ? 1 : 0.3}
-              className="cursor-pointer transition-all hover:r-4"
+              stroke={p.bucket === peakBucket ? '#f59e0b' : hoveredIdx === i ? '#f59e0b' : 'currentColor'}
+              strokeWidth={p.bucket === peakBucket || hoveredIdx === i ? 2 : 1}
+              strokeOpacity={p.bucket === peakBucket || hoveredIdx === i ? 1 : 0.3}
+              className="transition-all duration-150"
             />
-            {/* Hover 热区（不可见的大圆用于点击） */}
-            {onSelectRange && (
-              <circle
-                cx={p.x}
-                cy={p.y}
-                r={8}
-                fill="transparent"
-                className="cursor-pointer"
-                onClick={() => onSelectRange(p.bucket.startYear, p.bucket.endYear)}
-              >
-                <title>{`${formatYear(p.bucket.startYear)} ~ ${formatYear(p.bucket.endYear)}: ${p.bucket.count} 条事件`}</title>
-              </circle>
-            )}
+            {/* 交互热区 */}
+            <circle
+              cx={p.x}
+              cy={p.y}
+              r={8}
+              fill="transparent"
+              className="cursor-pointer"
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              onClick={() => onSelectRange?.(p.bucket.startYear, p.bucket.endYear)}
+            />
           </g>
         ))}
 
@@ -253,6 +252,22 @@ export function EventDensityChart({ events, onSelectRange }: EventDensityChartPr
           strokeOpacity={0.15}
         />
       </svg>
+      {/* 自定义 Tooltip */}
+      {hoveredIdx !== null && points[hoveredIdx] && (
+        <div
+          className="absolute px-2.5 py-1.5 bg-card border border-border rounded-lg shadow-lg text-[10px] pointer-events-none whitespace-nowrap z-10 -translate-x-1/2"
+          style={{
+            left: `${(points[hoveredIdx].x / W) * 100}%`,
+            top: `${(points[hoveredIdx].y / H) * 100 - 8}%`,
+          }}
+        >
+          <span className="font-semibold">{formatYear(points[hoveredIdx].bucket.startYear)} ~ {formatYear(points[hoveredIdx].bucket.endYear)}</span>
+          <span className="text-muted-foreground mx-1">·</span>
+          <span className="text-amber-500 font-bold">{points[hoveredIdx].bucket.count}</span>
+          <span className="text-muted-foreground ml-0.5">条事件</span>
+          {onSelectRange && <span className="text-muted-foreground/50 ml-1">(点击跳转)</span>}
+        </div>
+      )}
     </div>
   )
 }

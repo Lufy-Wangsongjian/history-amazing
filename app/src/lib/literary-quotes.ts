@@ -1356,6 +1356,143 @@ const QUOTES_BY_KEYWORD: Array<{ keywords: string[]; quotes: LiteraryQuote[] }> 
     keywords: ['斯普特尼克', '卫星'],
     quotes: [{ text: 'The Earth is the cradle of humanity, but mankind cannot stay in the cradle forever.', source: 'Konstantin Tsiolkovsky', translation: '地球是人类的摇篮，但人类不能永远待在摇篮里。' }],
   },
+  // ═══ 中国经典名言扩充（先秦诸子 → 两汉散文 → 魏晋名言 → 宋明理学 → 近代名言） ═══
+  {
+    keywords: ['孔子', '儒家', '论语'],
+    quotes: [
+      { text: '三人行，必有我师焉。择其善者而从之，其不善者而改之。', source: '《论语·述而》' },
+      { text: '知之为知之，不知为不知，是知也。', source: '《论语·为政》' },
+      { text: '朝闻道，夕死可矣。', source: '《论语·里仁》' },
+    ],
+  },
+  {
+    keywords: ['老子', '道德经', '道家'],
+    quotes: [
+      { text: '道可道，非常道；名可名，非常名。', source: '老子《道德经》' },
+      { text: '上善若水。水善利万物而不争。', source: '老子《道德经》' },
+      { text: '千里之行，始于足下。', source: '老子《道德经》' },
+    ],
+  },
+  {
+    keywords: ['孟子', '仁政'],
+    quotes: [{ text: '天将降大任于斯人也，必先苦其心志，劳其筋骨，饿其体肤。', source: '《孟子·告子下》' }],
+  },
+  {
+    keywords: ['庄子', '逍遥'],
+    quotes: [{ text: '北冥有鱼，其名为鲲。鲲之大，不知其几千里也。', source: '《庄子·逍遥游》' }],
+  },
+  {
+    keywords: ['孙子', '兵法', '军事'],
+    quotes: [
+      { text: '知己知彼，百战不殆。', source: '《孙子兵法·谋攻篇》' },
+      { text: '不战而屈人之兵，善之善者也。', source: '《孙子兵法·谋攻篇》' },
+    ],
+  },
+  {
+    keywords: ['司马迁', '史记'],
+    quotes: [{ text: '人固有一死，或重于泰山，或轻于鸿毛。', source: '司马迁《报任安书》' }],
+  },
+  {
+    keywords: ['曹操', '建安'],
+    quotes: [{ text: '对酒当歌，人生几何！\n譬如朝露，去日苦多。', source: '曹操《短歌行》' }],
+  },
+  {
+    keywords: ['诸葛亮', '出师表'],
+    quotes: [{ text: '鞠躬尽瘁，死而后已。', source: '诸葛亮《后出师表》' }],
+  },
+  {
+    keywords: ['陶渊明', '桃花源'],
+    quotes: [{ text: '采菊东篱下，悠然见南山。', source: '陶渊明《饮酒·其五》' }],
+  },
+  {
+    keywords: ['范仲淹', '岳阳楼'],
+    quotes: [{ text: '先天下之忧而忧，后天下之乐而乐。', source: '范仲淹《岳阳楼记》' }],
+  },
+  {
+    keywords: ['王阳明', '心学'],
+    quotes: [{ text: '知是行之始，行是知之成。', source: '王阳明《传习录》' }],
+  },
+  {
+    keywords: ['李白', '唐诗', '诗仙'],
+    quotes: [
+      { text: '举头望明月，低头思故乡。', source: '李白《静夜思》' },
+      { text: '长风破浪会有时，直挂云帆济沧海。', source: '李白《行路难》' },
+    ],
+  },
+  {
+    keywords: ['杜甫', '诗圣'],
+    quotes: [
+      { text: '国破山河在，城春草木深。', source: '杜甫《春望》' },
+      { text: '安得广厦千万间，大庇天下寒士俱欢颜。', source: '杜甫《茅屋为秋风所破歌》' },
+    ],
+  },
+  {
+    keywords: ['王维', '山水'],
+    quotes: [{ text: '空山新雨后，天气晚来秋。\n明月松间照，清泉石上流。', source: '王维《山居秋暝》' }],
+  },
+  {
+    keywords: ['白居易', '长恨歌'],
+    quotes: [{ text: '在天愿作比翼鸟，在地愿为连理枝。\n天长地久有时尽，此恨绵绵无绝期。', source: '白居易《长恨歌》' }],
+  },
+  {
+    keywords: ['李清照', '声声慢'],
+    quotes: [{ text: '寻寻觅觅，冷冷清清，凄凄惨惨戚戚。', source: '李清照《声声慢》' }],
+  },
+  {
+    keywords: ['辛弃疾', '破阵'],
+    quotes: [{ text: '醉里挑灯看剑，梦回吹角连营。', source: '辛弃疾《破阵子》' }],
+  },
+  {
+    keywords: ['岳飞', '满江红'],
+    quotes: [{ text: '三十功名尘与土，八千里路云和月。', source: '岳飞《满江红》' }],
+  },
+  {
+    keywords: ['文天祥', '正气歌'],
+    quotes: [{ text: '人生自古谁无死，留取丹心照汗青。', source: '文天祥《过零丁洋》' }],
+  },
+  {
+    keywords: ['林则徐', '鸦片', '禁烟'],
+    quotes: [{ text: '苟利国家生死以，岂因祸福避趋之。', source: '林则徐《赴戍登程口占示家人》' }],
+  },
+  {
+    keywords: ['秦始皇', '秦朝', '统一'],
+    quotes: [{ text: '六王毕，四海一。蜀山兀，阿房出。', source: '杜牧《阿房宫赋》' }],
+  },
+  {
+    keywords: ['丝绸之路', '张骞', '西域'],
+    quotes: [{ text: '劝君更尽一杯酒，西出阳关无故人。', source: '王维《送元二使安西》' }],
+  },
+  {
+    keywords: ['长城', '边塞'],
+    quotes: [{ text: '秦时明月汉时关，万里长征人未还。', source: '王昌龄《出塞》' }],
+  },
+  {
+    keywords: ['鲁迅', '呐喊', '狂人'],
+    quotes: [
+      { text: '横眉冷对千夫指，俯首甘为孺子牛。', source: '鲁迅《自嘲》' },
+      { text: '其实地上本没有路，走的人多了，也便成了路。', source: '鲁迅《故乡》' },
+    ],
+  },
+  {
+    keywords: ['五四', '新文化', '觉醒'],
+    quotes: [{ text: '世上如果还有真要活下去的人们，就先该敢说，敢笑，敢怒，敢骂，敢打。', source: '鲁迅《忽然想到》' }],
+  },
+  {
+    keywords: ['改革开放', '邓小平'],
+    quotes: [{ text: '不管黑猫白猫，抓住老鼠就是好猫。', source: '邓小平' }],
+  },
+  {
+    keywords: ['大运河', '隋朝'],
+    quotes: [{ text: '尽道隋亡为此河，至今千里赖通波。\n若无水殿龙舟事，共禹论功不较多。', source: '皮日休《汴河怀古》' }],
+  },
+  {
+    keywords: ['武则天', '女皇'],
+    quotes: [{ text: '日月当空曌。', source: '武则天自造字——"曌"，取"日月当空"之意' }],
+  },
+  {
+    keywords: ['赤壁', '三国'],
+    quotes: [{ text: '大江东去，浪淘尽，千古风流人物。', source: '苏轼《念奴娇·赤壁怀古》' }],
+  },
 ]
 
 /**

@@ -13,6 +13,7 @@ interface HistoryQuizProps {
   onClose: () => void
   events: HistoricalEvent[]
   onSelectEvent: (event: HistoricalEvent) => void
+  mode?: 'global' | 'china'
 }
 
 interface QuizQuestion {
@@ -133,9 +134,15 @@ function generateQuiz(events: HistoricalEvent[], count: number = 5): QuizQuestio
   return questions
 }
 
-const QUIZ_SIZE = 5
+const DIFFICULTY_LEVELS = [
+  { label: '简单', key: 'easy', yearOffset: [-500, 500], types: ['year', 'category'] as const },
+  { label: '普通', key: 'normal', yearOffset: [-200, 200], types: ['year', 'region', 'category', 'figure'] as const },
+  { label: '困难', key: 'hard', yearOffset: [-100, 100], types: ['year', 'region', 'category', 'figure'] as const },
+] as const
 
-export function HistoryQuiz({ open, onClose, events, onSelectEvent }: HistoryQuizProps) {
+const QUIZ_SIZES = [5, 10, 15] as const
+
+export function HistoryQuiz({ open, onClose, events, onSelectEvent, mode = 'global' }: HistoryQuizProps) {
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -143,9 +150,15 @@ export function HistoryQuiz({ open, onClose, events, onSelectEvent }: HistoryQui
   const [answered, setAnswered] = useState(false)
   const [quizFinished, setQuizFinished] = useState(false)
   const [started, setStarted] = useState(false)
+  const [quizMode, setQuizMode] = useState<'global' | 'china'>(mode)
+  const [difficultyIdx, setDifficultyIdx] = useState(1)
+  const [quizSize, setQuizSize] = useState<number>(5)
 
-  const startQuiz = useCallback(() => {
-    const qs = generateQuiz(events, QUIZ_SIZE)
+  const startQuiz = useCallback((selectedMode?: 'global' | 'china') => {
+    const m = selectedMode ?? quizMode
+    setQuizMode(m)
+    const filteredEvents = m === 'china' ? events.filter(e => e.region === 'china') : events
+    const qs = generateQuiz(filteredEvents, quizSize)
     setQuestions(qs)
     setCurrentIdx(0)
     setSelectedAnswer(null)
@@ -153,7 +166,7 @@ export function HistoryQuiz({ open, onClose, events, onSelectEvent }: HistoryQui
     setAnswered(false)
     setQuizFinished(false)
     setStarted(true)
-  }, [events])
+  }, [events, quizMode])
 
   const handleAnswer = useCallback((optionIdx: number) => {
     if (answered || !questions[currentIdx]) return
@@ -239,17 +252,42 @@ export function HistoryQuiz({ open, onClose, events, onSelectEvent }: HistoryQui
                 <div className="text-center py-6">
                   <div className="text-4xl mb-3">🧠</div>
                   <h3 className="text-lg font-bold text-foreground mb-2">准备好了吗？</h3>
-                  <p className="text-sm text-muted-foreground mb-6 max-w-xs mx-auto">
-                    {QUIZ_SIZE} 道题目，基于 {events.length} 条历史事件随机生成。<br />
-                    看看你能答对几题！
+                  <p className="text-sm text-muted-foreground mb-4 max-w-xs mx-auto">
+                    {quizSize} 道题目，随机生成。看看你能答对几题！
                   </p>
-                  <button
-                    onClick={startQuiz}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5"
-                  >
-                    <Zap size={16} />
-                    开始测验
-                  </button>
+                  {/* 难度选择 */}
+                  <div className="flex items-center justify-center gap-2 mb-3">
+                    <span className="text-[10px] text-muted-foreground">难度：</span>
+                    {DIFFICULTY_LEVELS.map((d, i) => (
+                      <button key={d.key} onClick={() => setDifficultyIdx(i)} className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${i === difficultyIdx ? 'bg-violet-500 text-white' : 'bg-muted text-muted-foreground hover:text-foreground'}`}>{d.label}</button>
+                    ))}
+                  </div>
+                  {/* 题量选择 */}
+                  <div className="flex items-center justify-center gap-2 mb-5">
+                    <span className="text-[10px] text-muted-foreground">题量：</span>
+                    {QUIZ_SIZES.map(n => (
+                      <button key={n} onClick={() => setQuizSize(n)} className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${quizSize === n ? 'bg-violet-500 text-white' : 'bg-muted text-muted-foreground hover:text-foreground'}`}>{n}题</button>
+                    ))}
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button
+                      onClick={() => startQuiz('global')}
+                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5"
+                    >
+                      <Zap size={16} />
+                      全球历史测验
+                    </button>
+                    <button
+                      onClick={() => startQuiz('china')}
+                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-red-500 to-orange-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-red-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5"
+                    >
+                      <Zap size={16} />
+                      中国历史专题
+                    </button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-3">
+                    全球模式：{events.length} 条事件 | 中国专题：{events.filter(e => e.region === 'china').length} 条事件
+                  </p>
                 </div>
               )}
 
@@ -357,7 +395,7 @@ export function HistoryQuiz({ open, onClose, events, onSelectEvent }: HistoryQui
                   </div>
                   <div className="flex gap-3 justify-center">
                     <button
-                      onClick={startQuiz}
+                      onClick={() => startQuiz(quizMode)}
                       className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5"
                     >
                       <RotateCcw size={14} />

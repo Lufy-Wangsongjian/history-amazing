@@ -98,10 +98,13 @@ async function seed() {
     }
 
     // 第二轮：插入关联关系（需要所有事件已入库）
+    const validEventIds = new Set(events.map(e => e.id))
     for (const e of events) {
       if (e.relatedIds) {
         for (const relatedId of e.relatedIds) {
-          insertRelation.run({ eventId: e.id, relatedId })
+          if (validEventIds.has(relatedId)) {
+            insertRelation.run({ eventId: e.id, relatedId })
+          }
         }
       }
     }

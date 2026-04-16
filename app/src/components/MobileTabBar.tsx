@@ -26,8 +26,8 @@ export function MobileTabBar({ viewMode, setViewMode }: MobileTabBarProps) {
             onClick={() => setViewMode(tab.mode)}
             className={`flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 rounded-lg transition-all duration-200 ${
               isActive
-                ? 'text-primary'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'text-primary bg-primary/10'
+                : 'text-muted-foreground hover:text-foreground active:bg-accent/50'
             }`}
           >
             <div className={`relative ${isActive ? 'scale-110' : ''} transition-transform`}>

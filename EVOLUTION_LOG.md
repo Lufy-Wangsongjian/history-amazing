@@ -2,6 +2,128 @@
 
 ## 进化记录
 
+### 2026-04-16 P1/P2 深度优化续（统计交互/游戏打磨/深链接/对照视图）
+
+**P1 修复**：
+
+| 问题 | 修复 |
+|------|------|
+| 事件详情无 URL 深链接 | App.tsx 新增 hash 路由：打开事件时 `#event=<id>`，从 URL hash 可恢复事件详情 |
+| EventDensityChart Bug：`onSelectRange` 未传入 | StatsView 修复传入 `onSelectRange`，"点击柱段可跳转"现在真正生效 |
+| EventDensityChart tooltip 差（SVG title） | 替换为自定义悬浮 div tooltip，显示年份范围/事件数/点击提示 |
+| EventDensityChart `hover:r-4` 无效 CSS | 替换为 state 驱动的 radius 变化，hover 时圆点放大 |
+
+**P2 修复**：
+
+| 问题 | 修复 |
+|------|------|
+| 类目分布条形图不可点击 | 从 `<div>` 改为 `<button>`，点击跳转到对应类目的时间线 |
+| RegionEraHeatmap 不可点击 | 格子从 `<div>` 改为 `<button>`，新增 `onDrillDown` prop，点击跳转 |
+| HistoryQuiz 无难度/题量选择 | 新增简单/普通/困难三档 + 5/10/15 题量可选 |
+| HistoryRiddle onSelectEvent 未使用 | 修复：答对/答错后可点击"查看事件详情"跳转 |
+| HistoryRiddle 渲染中 setState | 从渲染体内移到 `useEffect` |
+| CompareView 缺乏时间感 | 新增时间间隔指示器：相邻行年份差 >50 年时显示间隔标记 |
+
+**修改文件**：
+- `app/src/App.tsx`（+URL 深链接）
+- `app/src/components/StatsView.tsx`（传入 onSelectRange/onDrillDown，类目条形图可点击）
+- `app/src/components/EventDensityChart.tsx`（自定义 tooltip + hover 放大 + Bug 修复）
+- `app/src/components/RegionEraHeatmap.tsx`（格子可点击 + onDrillDown）
+- `app/src/components/HistoryQuiz.tsx`（+难度选择 + 题量选择）
+- `app/src/components/HistoryRiddle.tsx`（修复 onSelectEvent + useEffect + 查看详情）
+- `app/src/components/CompareView.tsx`（+时间间隔指示器）
+
+**验证**：passed（编译 ✅）
+
+### 2026-04-16 P0 虚拟滚动 + P1/P2 全面优化（基于 chrono-atlas-review.md）
+
+**P0 虚拟滚动**：
+
+用 `react-virtuoso` 重写 TimelineView，只渲染可视区域 ±600px 的事件卡片。
+
+| 改造项 | 说明 |
+|--------|------|
+| 数据扁平化 | `displayEraGroups` → `flatItems[]`（5 种 item 类型） |
+| 虚拟滚动引擎 | `react-virtuoso` Virtuoso 组件，自动测量动态高度 |
+| 跳转迁移 | `yearRefs.scrollIntoView()` → `virtuosoRef.scrollToIndex()` |
+| 时代检测 | IntersectionObserver → `rangeChanged` 可见范围 |
+
+**P1 修复**：
+
+| 问题 | 修复 |
+|------|------|
+| 搜索下拉遮挡视图切换 | 搜索下拉 z-index 从 z-50 降为 z-30，不再遮挡侧边栏 |
+| 导航栏 14 按钮拥挤 | 重构为 4 一级入口 + 2 下拉菜单（互动/更多），新增 NavDropdown 组件 |
+
+**P2 修复**：
+
+| 问题 | 修复 |
+|------|------|
+| 连连看缺难度选择 | 新增简单(4对)/普通(6对)/困难(8对) 三档，切换自动重开 |
+| 人物图鉴缺筛选 | 新增按领域筛选 pills（最多 8 个类目），统计各领域人物数 |
+| 文明图谱加载状态简陋 | 增加数据量提示（76 个国家/地区）和 animate-pulse 动效 |
+| 移动端底部 Tab 辨识度弱 | 选中态增加 bg-primary/10 背景色 + active 按下态 |
+
+**修改文件**：
+- `app/src/components/TimelineView.tsx`（虚拟滚动完全重写）
+- `app/src/components/SearchAutocomplete.tsx`（z-index 降级）
+- `app/src/components/MemoryMatch.tsx`（+难度选择）
+- `app/src/components/FigureGallery.tsx`（+领域筛选）
+- `app/src/components/CivilizationMapView.tsx`（加载状态增强）
+- `app/src/components/MobileTabBar.tsx`（选中态增强）
+- `app/src/App.tsx`（导航栏重构 + NavDropdown）
+
+**新增依赖**：`react-virtuoso`
+
+**验证**：passed（编译 ✅）
+
+### 2026-04-15 产品体验优化（基于 chrono-atlas-review.md）
+
+**审查来源**：外部产品体验报告，评分 8.0/10
+
+**P0 修复**：
+
+| 问题 | 修复 | 效果 |
+|------|------|------|
+| 数据重复（莱特兄弟4条、帖木儿4条等） | `events.ts` 新增 `deduplicateEvents()` 按 title+year 去重，保留 details 最丰富版本，合并 relatedIds，ID 映射清理无效引用 | 基础事件 2340→2267（-73），总事件 10700→10305（-395） |
+| 弹窗叠加（Modal Stacking） | `App.tsx` 新增 `closeAllModals()` + `openModal()` 单例策略，所有 14 个弹窗入口统一使用 `openModal`，打开新弹窗时自动关闭其他 | 不再出现弹窗叠加 |
+| seed 外键约束失败 | `seed.ts` 插入关联前校验目标 ID 存在性，跳过无效引用 | seed 成功 10305 事件 / 45350 关联 |
+
+**P1 修复**：
+
+| 问题 | 修复 |
+|------|------|
+| 穿越模式无法退出 | `TimeWarpOverlay.tsx` 新增 Escape 键监听，按 Escape 立即清理定时器、取消动画、关闭穿越 |
+
+**修改文件**：
+- `app/src/data/events.ts`（+deduplicateEvents 去重逻辑）
+- `app/src/App.tsx`（+closeAllModals/openModal 弹窗单例）
+- `app/src/components/TimeWarpOverlay.tsx`（+Escape 退出）
+- `server/src/seed.ts`（+validEventIds 外键校验）
+
+**验证**：passed（编译 ✅ / seed ✅ 10305 事件 45350 关联）
+
+### 2026-04-15 中国历史事件大规模扩充
+
+**新增文件**：
+- `events-china-seed-expansion.ts` — 48 条中国历史基础事件，覆盖：
+  - 春秋战国（管仲、勾践、商鞅、屈原、长平之战、老子、墨子、荀子、孙武、都江堰）
+  - 秦汉（张骞丝路、司马迁史记、张衡）
+  - 魏晋南北朝（竹林七贤、王羲之兰亭序、法显、孝文帝汉化、云冈石窟、水经注/齐民要术）
+  - 隋唐（科举制度、击灭东突厥、遣唐使、金刚经印刷）
+  - 宋（澶渊之盟、交子、王安石变法、苏颂水运仪象台）
+  - 明（王阳明心学、戚继光抗倭、张居正改革、天工开物、崇祯亡国、利玛窦入华、郑和、明末动荡）
+  - 清（雍正改革、四库全书、闭关锁国、洋务运动、百日维新、八国联军）
+  - 近现代（五四运动、红军长征、加入WTO、北京奥运、载人航天）
+  - 文化（陶渊明、范仲淹、四大名著、火烧圆明园）
+
+- `events-song-mingqing-deep.ts` — 20 条宋明清深度事件，含详细 details：
+  - 宋（杯酒释兵权、资治通鉴、清明上河图、海上丝路/泉州、朱陆鹅湖之会、绍兴和议/岳飞之死、崖山海战、市民文化）
+  - 明（靖难之役、永乐迁都、东林党争、万历朝鲜之役、利玛窦入华）
+  - 清（扬州十日、收复台湾、尼布楚条约、平定准噶尔、马戛尔尼访华、太平天国、废除科举）
+
+**数据量变化**：中国基础事件从约 256 条增至约 324 条（+68），5x 衍生后约 1620 条。
+
 ### 2026-04-15 v4.0 全量代码审查 + 版本测试
 
 **审查范围**：108 个 TS/TSX 文件全量审查（48 组件 + 7 hooks + 9 lib + 42 data）
@@ -1456,6 +1578,53 @@ lazy 组件：MatrixView, StatsView, CompareView, CivilizationMapView, WelcomeDi
 
 ---
 
+### 2026-04-15 Round 78-82（欧洲内容深度与质量自动进化 × 5 特性）
+
+**本轮聚焦**：填补欧洲内容的结构性缺口——策展路线、因果链、叙事引擎和事件数据四个维度全面提升。
+
+#### Round 78 — "欧洲文明脉络"策展路线
+- 新增 `europe-civilization` 策展路线，19 个 stepGuide 导读
+- 从米诺斯宫殿到欧盟，覆盖：雅典民主、亚历山大、罗马帝国、基督教化、查理曼、十字军、黑死病、文艺复兴、宗教改革、威斯特伐利亚、启蒙运动、法国大革命、拿破仑、工业革命、一战、二战/大屠杀、柏林墙、欧盟
+- 包含 prologue（"欧洲不是国家，是辩论场"）和 epilogue（自我纠错机制的讨论）
+
+#### Round 79 — "启蒙与革命"因果链
+- 大宪章 → 光荣革命 → 洛克 → 美国独立 → 法国大革命 → 拿破仑 → 德意志统一 → 俄国革命 → 柏林墙倒塌
+- 串联欧洲政治思想从中世纪限制王权到现代民主化的核心线索
+
+#### Round 80 — 补齐 6 个欧洲地区的 REGION_PERSPECTIVES
+- spain（收复运动/大航海）、netherlands（商业创新/格劳秀斯）、austria（哈布斯堡/联姻帝国）、portugal（航海先驱）、norway（维京→福利国家）、denmark（维京→丹麦模式）、poland（三次瓜分与复活）、sweden（北欧霸主→和平中立）
+- 从 6 个欧洲视角扩展到 14 个
+
+#### Round 81 — 深化多文明对比叙事中的欧洲段落
+- 为全部 11 个时代的 `europe` 洞察从 ~30 字扩写至 80-150 字
+- 新增具体数据（罗马道路 8 万公里、帝国人口 6000 万、瓦特蒸汽机 1769 年等）
+- 补充关键机构（皇家学会 1660 年、博洛尼亚大学 1088 年等）
+
+#### Round 82 — 维京与北欧文明事件集 + 因果链
+- 新增 `events-viking-nordic.ts`，15 条事件
+- 覆盖：造船革命、林迪斯法恩、巴黎围攻、冰岛定居、诺曼底公国、基辅罗斯、莱夫·埃里克松发现美洲、北欧基督教化、汉萨同盟、卡尔马联合、瑞典帝国、斯坦福桥（维京时代终结）、北欧福利国家、诺贝尔奖、通贝里气候运动
+- 新增 15 节点维京文明因果链
+
+**新增文件**：
+- `app/src/data/events-viking-nordic.ts`
+
+**修改文件**：
+- `app/src/components/CuratedPaths.tsx`（+1 策展路线）
+- `app/src/data/causal-chains.ts`（+2 因果链）
+- `app/src/lib/event-detail.ts`（+8 REGION_PERSPECTIVES）
+- `app/src/lib/compare-narratives.ts`（11 个时代的欧洲段落全面扩写）
+- `app/src/data/events.ts`（注册新文件）
+
+**验证**：passed（编译 ✅ / E2E 25 passed / seed 10380 事件 45830 关联）
+
+**下一步建议**：
+- 深化荷兰/低地国家事件（黄金时代、VOC、独立战争）
+- 深化西班牙事件（收复运动细节、黄金时代、内战、佛朗哥）
+- 新增"哈布斯堡帝国"因果链
+- 丰富东欧专题（波兰分区、匈牙利革命、团结工会）
+
+---
+
 ### 2026-04-15 Round 77（里程碑 details 100% 达标）
 
 **本轮聚焦**：补完全部剩余 88 条里程碑事件的 details，实现 100% 覆盖。
@@ -1483,3 +1652,74 @@ lazy 组件：MatrixView, StatsView, CompareView, CivilizationMapView, WelcomeDi
 **覆盖率**：**100.0%（888/888）** — 全部里程碑事件均已拥有深度叙事内容
 
 **验证**：passed（编译 ✅ / E2E 25 passed / seed 10700 事件 47505 关联）
+
+---
+
+### 2026-04-15 Round 78（中国事件深化专题 × 10 特性）
+
+**本轮聚焦**：全面深化 Chrono Atlas 的中国事件体验——因果关联、叙事内容、互动体验和数据探索。
+
+| # | 特性 | 规模 | 描述 |
+|---|------|------|------|
+| 1 | 因果关联网络深化 | M | +5 条中国主题因果链（科技传播/思想演变/制度演变/丝路交流/文学精神） |
+| 2 | "你知道吗"专项增强 | S | +20 个中国地区匹配规则（夏→改革开放全覆盖） |
+| 3 | 沉浸式视角扩充 | S | +10 条中国专属第二人称叙事（5 时间段×2） |
+| 4 | 反事实推演模板 | S | +10 个中国里程碑反事实推演（秦始皇→改革开放） |
+| 5 | "华夏文明脉络"路线 | M | +1 条策展路线（21 个 stepGuide + prologue/epilogue） |
+| 6 | 趣味冷知识专项 | M | +20 条中国历史冷知识 |
+| 7 | 经典引文扩充 | M | +30 条中国经典名言（先秦→近代） |
+| 8 | 多文明圈叙事增强 | M | 10 个时代东亚洞察扩写至 150-200 字 |
+| 9 | 中国历史测验专题 | M | HistoryQuiz 新增 'china' 模式，双按钮选择 |
+| 10 | 名人群像扩充 | M | +8 个人物事件 + figure 补丁注入机制 |
+
+**新增文件**：`app/src/data/china-figures-patch.ts`
+
+**修改文件**：causal-chains.ts / event-detail.ts / CuratedPaths.tsx / fun-facts.ts / literary-quotes.ts / compare-narratives.ts / HistoryQuiz.tsx / events.ts
+
+**验证**：passed（编译 ✅ / E2E 24 passed, 1 pre-existing failure）
+
+---
+
+### 2026-04-15 Round 83-85（荷兰/西班牙/哈布斯堡/东欧专题深化）
+
+**本轮聚焦**：深化欧洲三大结构性薄弱区域——荷兰/低地国家、西班牙/伊比利亚、东欧（波兰/匈牙利/捷克/巴尔干/乌克兰），并建立哈布斯堡帝国等核心因果链。
+
+**现状诊断**：
+- 荷兰：16 条 → 需大幅充实黄金时代、独立战争、殖民贸易
+- 西班牙：24 条 → 缺收复运动详细过程、哈布斯堡时期、内战
+- 东欧：波兰 8、匈牙利 6、捷克 8、其他 20 → 严重不足
+
+#### Round 83 — 荷兰/低地国家深化（+15 条）
+- 新增 `events-enrichment-15.ts` 的 `netherlandsEvents`
+- 覆盖：布鲁日贸易中心（1356）→ 同性婚姻合法化（2002）
+- 重点事件：勃艮第终结、破坏圣像运动、八十年战争、东印度公司、郁金香狂热、黄金时代巅峰、光荣革命、比利时独立、饥饿之冬、三角洲工程
+- 多数事件附有深度 details
+
+#### Round 84 — 西班牙/伊比利亚深化（+15 条）
+- 同文件 `spainEvents`
+- 覆盖：摩尔人入侵（711）→ 民主转型（1975）
+- 重点事件：科尔多瓦哈里发、托莱多收复、双王联姻、格拉纳达陷落、查理五世、勒班陀海战、无敌舰队、堂吉诃德、西班牙继承战争、半岛战争、美西战争、内战、佛朗哥去世
+- 填补了收复运动（Reconquista）和哈布斯堡西班牙的重大空白
+
+#### Round 85 — 东欧专题（+20 条）+ 因果链
+- 同文件 `easternEuropeEvents`
+- 波兰 6 条：受洗→波兰-立陶宛→格伦瓦尔德→卢布林联合→维也纳之战→三次瓜分
+- 匈牙利 6 条：马扎尔定居→建国→莫哈奇→1848革命→奥匈妥协→1956事件
+- 捷克 3 条：胡斯→布拉格掷窗→布拉格之春→天鹅绒革命
+- 巴尔干 2 条：科索沃战役→弗拉德三世
+- 乌克兰 2 条：赫梅利尼茨基起义→大饥荒
+
+**新增因果链 5 条**：
+1. 哈布斯堡帝国线：低地接管→查理五世→破坏圣像→八十年战争→勒班陀→无敌舰队→乌得勒支→布拉格掷窗→威斯特伐利亚→继承战争→奥匈妥协
+2. 荷兰黄金时代线：八十年战争→乌得勒支→东印度→郁金香→威斯特伐利亚→黄金时代→光荣革命→巴达维亚
+3. 西班牙兴衰线：摩尔人→科尔多瓦→托莱多→纳瓦斯→双王→格拉纳达→查理五世→无敌舰队→堂吉诃德→继承战争→拿破仑→美西→内战→民主转型
+4. 东欧民族觉醒线：波兰立陶宛→格伦瓦尔德→卢布林→维也纳→瓜分→匈牙利革命→匈牙利十月→布拉格之春→天鹅绒革命
+
+**新增文件**：
+- `app/src/data/events-enrichment-15.ts`
+
+**修改文件**：
+- `app/src/data/events.ts`（注册新事件）
+- `app/src/data/causal-chains.ts`（+5 条因果链）
+
+**验证**：passed（编译 ✅ / E2E 25 passed / seed 10610 事件 47110 关联）

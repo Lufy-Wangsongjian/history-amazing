@@ -24,6 +24,7 @@ interface FigureEntry {
 
 export function FigureGallery({ open, onClose, events, onSelectEvent }: FigureGalleryProps) {
   const [searchQuery, setSearchQuery] = useState('')
+  const [filterCategory, setFilterCategory] = useState<string | null>(null)
 
   const figures = useMemo(() => {
     const map = new Map<string, HistoricalEvent[]>()
@@ -60,10 +61,23 @@ export function FigureGallery({ open, onClose, events, onSelectEvent }: FigureGa
   }, [events])
 
   const filteredFigures = useMemo(() => {
-    if (!searchQuery.trim()) return figures
-    const q = searchQuery.trim().toLowerCase()
-    return figures.filter(f => f.name.toLowerCase().includes(q))
-  }, [figures, searchQuery])
+    let result = figures
+    if (filterCategory) {
+      result = result.filter(f => f.primaryCategory === filterCategory)
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase()
+      result = result.filter(f => f.name.toLowerCase().includes(q))
+    }
+    return result
+  }, [figures, searchQuery, filterCategory])
+
+  // 统计各领域人物数
+  const categoryStats = useMemo(() => {
+    const counts = new Map<string, number>()
+    figures.forEach(f => counts.set(f.primaryCategory, (counts.get(f.primaryCategory) || 0) + 1))
+    return Array.from(counts.entries()).sort((a, b) => b[1] - a[1])
+  }, [figures])
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) onClose() }}>
@@ -104,6 +118,29 @@ export function FigureGallery({ open, onClose, events, onSelectEvent }: FigureGa
                 className="pl-8 h-8 text-xs bg-white/10 border-white/10 text-white placeholder:text-slate-500"
               />
             </div>
+          </div>
+
+          {/* 领域筛选 */}
+          <div className="flex flex-wrap gap-1 px-4 pt-3 pb-1">
+            <button
+              onClick={() => setFilterCategory(null)}
+              className={`px-2 py-0.5 rounded-full text-[10px] font-medium transition-colors ${!filterCategory ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+            >
+              全部
+            </button>
+            {categoryStats.slice(0, 8).map(([cat, count]) => {
+              const cfg = CATEGORY_CONFIG[cat as keyof typeof CATEGORY_CONFIG]
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setFilterCategory(filterCategory === cat ? null : cat)}
+                  className={`px-2 py-0.5 rounded-full text-[10px] font-medium transition-colors ${filterCategory === cat ? 'text-white' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+                  style={filterCategory === cat ? { backgroundColor: cfg?.color } : undefined}
+                >
+                  {cfg?.label || cat} {count}
+                </button>
+              )
+            })}
           </div>
 
           {/* 人物列表 */}

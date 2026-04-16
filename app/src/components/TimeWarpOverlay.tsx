@@ -66,6 +66,22 @@ export function TimeWarpOverlay({ active, targetEvent, allEvents, onComplete }: 
     yearTimeoutRefs.current.forEach(id => clearTimeout(id))
     yearTimeoutRefs.current = []
   }
+
+  // Escape 键退出穿越模式
+  useEffect(() => {
+    if (!active) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        clearMainTimeouts()
+        clearYearTimeouts()
+        cancelAnimationFrame(animFrameRef.current)
+        setPhase('idle')
+        onCompleteRef.current(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [active])
   const clearAll = () => {
     clearMainTimeouts()
     clearYearTimeouts()

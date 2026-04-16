@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear } from '@/data/types'
 import { Search, HelpCircle, CheckCircle2, XCircle, RotateCcw } from 'lucide-react'
@@ -55,7 +55,7 @@ function pickMilestoneEvents(events: HistoricalEvent[], count: number): Historic
   return shuffled.slice(0, count)
 }
 
-export function HistoryRiddle({ open, onClose, events, onSelectEvent: _onSelectEvent }: HistoryRiddleProps) {
+export function HistoryRiddle({ open, onClose, events, onSelectEvent }: HistoryRiddleProps) {
   const TOTAL_ROUNDS = 5
   const targetPool = useMemo(() => pickMilestoneEvents(events, TOTAL_ROUNDS), [events, open])
 
@@ -81,6 +81,13 @@ export function HistoryRiddle({ open, onClose, events, onSelectEvent: _onSelectE
     setSuggestions([])
     setGameOver(false)
   }, [targetPool])
+
+  // Auto-start when opening (moved from render to useEffect)
+  useEffect(() => {
+    if (open && !state && !gameOver) {
+      startGame()
+    }
+  }, [open, state, gameOver, startGame])
 
   const revealNextClue = useCallback(() => {
     if (!state || state.revealedClues >= 3) return
@@ -127,11 +134,6 @@ export function HistoryRiddle({ open, onClose, events, onSelectEvent: _onSelectE
       setSuggestions([])
     }
   }, [events])
-
-  // Auto-start when opening
-  if (open && !state && !gameOver) {
-    startGame()
-  }
 
   const handleClose = () => {
     setState(null)
@@ -208,9 +210,14 @@ export function HistoryRiddle({ open, onClose, events, onSelectEvent: _onSelectE
             ) : (
               <div className={`flex items-center gap-3 px-4 py-3 rounded-lg border ${state.guessedCorrectly ? 'bg-green-500/5 border-green-500/30' : 'bg-red-500/5 border-red-500/30'}`}>
                 {state.guessedCorrectly ? <CheckCircle2 size={20} className="text-green-500" /> : <XCircle size={20} className="text-red-500" />}
-                <div>
+                <div className="flex-1">
                   <p className="text-sm font-medium">{state.guessedCorrectly ? '答对了！' : '答错了！'}</p>
-                  <p className="text-xs text-muted-foreground">答案是：{state.targetEvent.title}（{formatYear(state.targetEvent.year)}）</p>
+                  <button
+                    onClick={() => onSelectEvent(state.targetEvent)}
+                    className="text-xs text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {state.targetEvent.title}（{formatYear(state.targetEvent.year)}）· 点击查看详情 →
+                  </button>
                 </div>
               </div>
             )}

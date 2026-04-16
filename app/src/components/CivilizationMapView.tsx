@@ -259,9 +259,10 @@ export function CivilizationMapView({ onSelectEvent }: CivilizationMapViewProps)
   if (loading) {
     return (
       <div className="flex-1 min-h-0 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-muted-foreground">
-          <Loader2 size={24} className="animate-spin" />
-          <span className="text-sm">正在加载文明图谱数据…</span>
+        <div className="flex flex-col items-center gap-3 text-muted-foreground animate-pulse">
+          <Loader2 size={28} className="animate-spin text-primary" />
+          <span className="text-sm font-medium">正在加载文明图谱数据…</span>
+          <span className="text-xs text-muted-foreground/60">76 个国家/地区的王朝时间线</span>
         </div>
       </div>
     )

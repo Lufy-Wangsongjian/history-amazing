@@ -309,12 +309,25 @@ export function CompareView({ events, onSelectEvent }: CompareViewProps) {
 
                   {/* 数据行 — 表格化布局 */}
                   <div className="border-x border-border/20 divide-y divide-border/10">
-                    {group.rows.map(row => {
+                    {group.rows.map((row, rowIdx) => {
                       const isResonance = row.activeCivCount >= 2
                       const isResonanceOpen = expandedResonances.has(row.year)
+                      const prevRow = rowIdx > 0 ? group.rows[rowIdx - 1] : null
+                      const yearGap = prevRow ? row.year - prevRow.year : 0
 
                       return (
                         <div key={row.year}>
+                          {/* 时间间隔指示器 */}
+                          {prevRow && yearGap > 50 && (
+                            <div className="flex gap-px">
+                              <div className="w-[72px] md:w-[88px] flex-shrink-0 flex items-center justify-center">
+                                <span className="text-[8px] font-mono text-muted-foreground/40 px-1.5 py-0.5 rounded-full bg-muted/20 border border-dashed border-border/20">
+                                  ↕ {yearGap >= 1000 ? `${(yearGap / 1000).toFixed(1)}千年` : `${yearGap}年`}
+                                </span>
+                              </div>
+                              <div className="flex-1 border-b border-dashed border-border/10" />
+                            </div>
+                          )}
                           {/* 事件行 */}
                           <div className="flex gap-px min-h-[44px]">
                             {/* 年份单元格 */}

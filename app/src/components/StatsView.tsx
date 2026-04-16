@@ -159,7 +159,7 @@ export function StatsView({ events, onSelectEvent, onSearch, onDrillDown }: Stat
                 每百年事件密度分布 · 点击柱段可跳转
               </span>
             </h3>
-            <EventDensityChart events={events} />
+            <EventDensityChart events={events} onSelectRange={onDrillDown ? (min, max) => onDrillDown([min, max]) : undefined} />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -205,8 +205,13 @@ export function StatsView({ events, onSelectEvent, onSearch, onDrillDown }: Stat
               </h3>
               <div className="space-y-2.5">
                 {categoryStats.map(cat => (
-                  <div key={cat.key} className="flex items-center gap-3">
-                    <span className="text-[10px] font-medium w-12 text-right flex-shrink-0" style={{ color: cat.color }}>
+                  <button
+                    key={cat.key}
+                    className="flex items-center gap-3 group w-full"
+                    onClick={() => onDrillDown?.([-4000, 2030], cat.key)}
+                    title={`点击查看 ${cat.label} 类事件`}
+                  >
+                    <span className="text-[10px] font-medium w-12 text-right flex-shrink-0 group-hover:underline" style={{ color: cat.color }}>
                       {cat.label}
                     </span>
                     <div className="flex-1 h-6 bg-muted/30 rounded-md overflow-hidden relative">
@@ -221,7 +226,7 @@ export function StatsView({ events, onSelectEvent, onSearch, onDrillDown }: Stat
                         {cat.count}
                       </span>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -437,7 +442,7 @@ export function StatsView({ events, onSelectEvent, onSearch, onDrillDown }: Stat
                 地域 × 时代活跃度
                 <span className="text-[10px] text-muted-foreground font-normal ml-1">哪些地区在哪些时代最活跃</span>
               </h3>
-              <RegionEraHeatmap events={events} />
+              <RegionEraHeatmap events={events} onDrillDown={onDrillDown ? (yr) => onDrillDown(yr) : undefined} />
             </div>
           </div>
         </div>

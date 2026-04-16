@@ -95,6 +95,53 @@ function App() {
   const [showHistoryRiddle, setShowHistoryRiddle] = useState(false)
   const [showTimelineSorter, setShowTimelineSorter] = useState(false)
   const [showProgressHeatmap, setShowProgressHeatmap] = useState(false)
+
+  // ── P0 弹窗单例策略：打开新弹窗时关闭所有其他弹窗 ──
+  const closeAllModals = useCallback(() => {
+    setShowTodayInHistory(false)
+    setShowCuratedPaths(false)
+    setShowQuiz(false)
+    setShowMissions(false)
+    setShowTimelineChallenge(false)
+    setShowFavorites(false)
+    setShowAutoExplore(false)
+    setShowFigureGallery(false)
+    setShowAchievements(false)
+    setShowMemoryMatch(false)
+    setShowHistoryRiddle(false)
+    setShowTimelineSorter(false)
+    setShowProgressHeatmap(false)
+  }, [])
+  const openModal = useCallback((setter: (v: boolean) => void) => {
+    closeAllModals()
+    dismissWelcome()
+    setter(true)
+  }, [closeAllModals])
+
+  // ── P1 事件详情 URL 深链接 ──
+  // 打开事件时同步 hash
+  useEffect(() => {
+    if (state.selectedEvent) {
+      window.history.replaceState(null, '', `#event=${state.selectedEvent.id}`)
+    } else {
+      if (window.location.hash.startsWith('#event=')) {
+        window.history.replaceState(null, '', window.location.pathname)
+      }
+    }
+  }, [state.selectedEvent])
+
+  // 从 URL hash 恢复事件
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash.startsWith('#event=') && state.filteredEvents.length > 0) {
+      const eventId = hash.slice(7)
+      const event = state.filteredEvents.find(e => e.id === eventId)
+      if (event) {
+        state.setSelectedEvent(event)
+      }
+    }
+  }, [state.filteredEvents.length > 0]) // 只在事件列表首次加载完成时触发
+
   const [showWelcome, setShowWelcome] = useState(() => {
     try {
       if (typeof window === 'undefined') return false
@@ -252,212 +299,55 @@ function App() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-3">
-          <button
-            onClick={() => {
-              dismissWelcome()
-              setShowTodayInHistory(true)
-            }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20
-              text-amber-600 dark:text-amber-400 hover:from-amber-500/20 hover:to-orange-500/20
-              transition-all duration-200 hover:shadow-sm"
-            title="历史上的今天"
-          >
-            <CalendarDays size={14} />
-            <span className="hidden sm:inline">今天</span>
+        <div className="flex items-center gap-1.5 md:gap-2">
+          {/* ── 一级入口：今天 / 路线 / 穿越 / 收藏 ── */}
+          <button onClick={() => openModal(setShowTodayInHistory)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 hover:from-amber-500/20 hover:to-orange-500/20 transition-all duration-200 hover:shadow-sm" title="历史上的今天">
+            <CalendarDays size={14} /><span className="hidden sm:inline">今天</span>
+          </button>
+          <button onClick={() => openModal(setShowCuratedPaths)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:from-emerald-500/20 hover:to-teal-500/20 transition-all duration-200 hover:shadow-sm" title="策展路线">
+            <BookOpen size={14} /><span className="hidden sm:inline">路线</span>
+          </button>
+          <button onClick={handleRandomExplore} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20 text-violet-600 dark:text-violet-400 hover:from-violet-500/20 hover:to-purple-500/20 transition-all duration-200 hover:shadow-sm" title="随机穿越">
+            <Shuffle size={14} /><span className="hidden sm:inline">穿越</span>
+          </button>
+          <button onClick={() => openModal(setShowFavorites)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-rose-500/10 to-red-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 hover:from-rose-500/20 hover:to-red-500/20 transition-all duration-200 hover:shadow-sm relative" title="我的收藏">
+            <Heart size={14} /><span className="hidden sm:inline">收藏</span>
+            {favs.count > 0 && (<span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center px-1">{favs.count > 99 ? '99+' : favs.count}</span>)}
           </button>
 
-          <button
-            onClick={() => {
-              dismissWelcome()
-              setShowCuratedPaths(true)
-            }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20
-              text-emerald-600 dark:text-emerald-400 hover:from-emerald-500/20 hover:to-teal-500/20
-              transition-all duration-200 hover:shadow-sm"
-            title="策展路线"
-          >
-            <BookOpen size={14} />
-            <span className="hidden sm:inline">路线</span>
-          </button>
+          {/* ── 🎮 互动下拉菜单（6 个游戏） ── */}
+          <NavDropdown
+            icon={<Brain size={14} />}
+            label="互动"
+            gradientFrom="from-pink-500/10"
+            gradientTo="to-rose-500/10"
+            borderColor="border-pink-500/20"
+            textColor="text-pink-600 dark:text-pink-400"
+            items={[
+              { icon: <Brain size={14} />, label: '知识测验', onClick: () => openModal(setShowQuiz) },
+              { icon: <Puzzle size={14} />, label: '连连看', onClick: () => openModal(setShowMemoryMatch) },
+              { icon: <HelpCircle size={14} />, label: '猜谜', onClick: () => openModal(setShowHistoryRiddle) },
+              { icon: <ArrowUpDown size={14} />, label: '排序挑战', onClick: () => openModal(setShowTimelineSorter) },
+              { icon: <Target size={14} />, label: '今日挑战', onClick: () => openModal(setShowMissions), testId: 'open-missions' },
+              { icon: <Swords size={14} />, label: '时间对决', onClick: () => openModal(setShowTimelineChallenge), testId: 'open-timeline-challenge' },
+            ]}
+          />
 
-          <button
-            onClick={() => {
-              dismissWelcome()
-              setShowQuiz(true)
-            }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20
-              text-pink-600 dark:text-pink-400 hover:from-pink-500/20 hover:to-rose-500/20
-              transition-all duration-200 hover:shadow-sm"
-            title="历史知识测验"
-          >
-            <Brain size={14} />
-            <span className="hidden sm:inline">测验</span>
-          </button>
-
-          <button
-            onClick={() => {
-              dismissWelcome()
-              setShowMemoryMatch(true)
-            }}
-            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20
-              text-teal-600 dark:text-teal-400 hover:from-teal-500/20 hover:to-cyan-500/20
-              transition-all duration-200 hover:shadow-sm hidden md:flex"
-            title="历史连连看"
-          >
-            <Puzzle size={14} />
-            <span className="hidden lg:inline">连连看</span>
-          </button>
-
-          <button
-            onClick={() => {
-              dismissWelcome()
-              setShowHistoryRiddle(true)
-            }}
-            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 border border-violet-500/20
-              text-violet-600 dark:text-violet-400 hover:from-violet-500/20 hover:to-fuchsia-500/20
-              transition-all duration-200 hover:shadow-sm hidden md:flex"
-            title="历史猜谜"
-          >
-            <HelpCircle size={14} />
-            <span className="hidden lg:inline">猜谜</span>
-          </button>
-
-          <button
-            onClick={() => {
-              dismissWelcome()
-              setShowTimelineSorter(true)
-            }}
-            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-500/20
-              text-orange-600 dark:text-orange-400 hover:from-orange-500/20 hover:to-amber-500/20
-              transition-all duration-200 hover:shadow-sm hidden md:flex"
-            title="历史排序挑战"
-          >
-            <ArrowUpDown size={14} />
-            <span className="hidden lg:inline">排序</span>
-          </button>
-
-          <button
-            onClick={() => {
-              dismissWelcome()
-              setShowMissions(true)
-            }}
-            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20
-              text-amber-600 dark:text-amber-400 hover:from-amber-500/20 hover:to-orange-500/20
-              transition-all duration-200 hover:shadow-sm hidden md:flex"
-            title="今日文明挑战"
-            data-testid="open-missions"
-          >
-            <Target size={14} />
-            <span className="hidden lg:inline">挑战</span>
-          </button>
-
-          <button
-            onClick={() => {
-              dismissWelcome()
-              setShowTimelineChallenge(true)
-            }}
-            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-violet-500/10 to-indigo-500/10 border border-violet-500/20
-              text-violet-600 dark:text-violet-400 hover:from-violet-500/20 hover:to-indigo-500/20
-              transition-all duration-200 hover:shadow-sm hidden md:flex"
-            title="时间对决"
-            data-testid="open-timeline-challenge"
-          >
-            <Swords size={14} />
-            <span className="hidden lg:inline">对决</span>
-          </button>
-
-          <button
-            onClick={() => {
-              dismissWelcome()
-              setShowFavorites(true)
-            }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-rose-500/10 to-red-500/10 border border-rose-500/20
-              text-rose-600 dark:text-rose-400 hover:from-rose-500/20 hover:to-red-500/20
-              transition-all duration-200 hover:shadow-sm relative"
-            title="我的收藏"
-          >
-            <Heart size={14} />
-            <span className="hidden sm:inline">收藏</span>
-            {favs.count > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center px-1">
-                {favs.count > 99 ? '99+' : favs.count}
-              </span>
-            )}
-          </button>
-
-          <button
-            onClick={() => { dismissWelcome(); setShowFigureGallery(true) }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-indigo-500/10 to-blue-500/10 border border-indigo-500/20
-              text-indigo-600 dark:text-indigo-400 hover:from-indigo-500/20 hover:to-blue-500/20
-              transition-all duration-200 hover:shadow-sm hidden md:flex"
-            title="历史人物图鉴"
-          >
-            <Users size={14} />
-            <span className="hidden lg:inline">人物</span>
-          </button>
-
-          <button
-            onClick={() => { dismissWelcome(); setShowAutoExplore(true) }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-500/20
-              text-cyan-600 dark:text-cyan-400 hover:from-cyan-500/20 hover:to-teal-500/20
-              transition-all duration-200 hover:shadow-sm hidden md:flex"
-            title="连续穿越（自动探索）"
-          >
-            <Clapperboard size={14} />
-            <span className="hidden lg:inline">漫游</span>
-          </button>
-
-          <button
-            onClick={() => { dismissWelcome(); setShowAchievements(true) }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/20
-              text-amber-600 dark:text-amber-400 hover:from-amber-500/20 hover:to-yellow-500/20
-              transition-all duration-200 hover:shadow-sm relative hidden md:flex"
-            title="文明成就"
-          >
-            <Trophy size={14} />
-            <span className="hidden lg:inline">成就</span>
-            {achievements.unlockedCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 rounded-full bg-amber-500 text-white text-[9px] font-bold flex items-center justify-center px-1">
-                {achievements.unlockedCount}
-              </span>
-            )}
-          </button>
-
-          <button
-            onClick={() => { dismissWelcome(); setShowProgressHeatmap(true) }}
-            className="items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-emerald-500/10 to-green-500/10 border border-emerald-500/20
-              text-emerald-600 dark:text-emerald-400 hover:from-emerald-500/20 hover:to-green-500/20
-              transition-all duration-200 hover:shadow-sm hidden lg:flex"
-            title="探索热力图"
-          >
-            <Grid3X3 size={14} />
-          </button>
-
-          <button
-            onClick={handleRandomExplore}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium
-              bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20
-              text-violet-600 dark:text-violet-400 hover:from-violet-500/20 hover:to-purple-500/20
-              transition-all duration-200 hover:shadow-sm"
-            title="随机穿越"
-          >
-            <Shuffle size={14} />
-            <span className="hidden sm:inline">穿越</span>
-          </button>
+          {/* ── 📚 更多下拉菜单（5 个工具） ── */}
+          <NavDropdown
+            icon={<Sparkles size={14} />}
+            label="更多"
+            gradientFrom="from-indigo-500/10"
+            gradientTo="to-blue-500/10"
+            borderColor="border-indigo-500/20"
+            textColor="text-indigo-600 dark:text-indigo-400"
+            items={[
+              { icon: <Users size={14} />, label: '人物图鉴', onClick: () => openModal(setShowFigureGallery) },
+              { icon: <Clapperboard size={14} />, label: '连续漫游', onClick: () => openModal(setShowAutoExplore) },
+              { icon: <Trophy size={14} />, label: `成就${achievements.unlockedCount > 0 ? ` (${achievements.unlockedCount})` : ''}`, onClick: () => openModal(setShowAchievements) },
+              { icon: <Grid3X3 size={14} />, label: '探索热力图', onClick: () => openModal(setShowProgressHeatmap) },
+            ]}
+          />
 
           <div className="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground">
             <Sparkles size={12} className="text-amber-500" />
@@ -465,27 +355,19 @@ function App() {
               <strong className="text-foreground">{state.filteredEvents.length}</strong>
               <span className="mx-1">/</span>
               <strong className="text-foreground">{state.totalEvents}</strong>
-              <span className="ml-1">条历史事件</span>
+              <span className="ml-1 hidden lg:inline">条历史事件</span>
             </span>
-            {state.isLoading && (
-              <span className="text-[10px] text-primary">同步中…</span>
-            )}
+            {state.isLoading && (<span className="text-[10px] text-primary">同步中…</span>)}
           </div>
 
-          {/* 冷知识提示 — 桌面端 */}
           {randomFact && !state.isLoading && (
-            <div className="hidden xl:flex items-center gap-1.5 max-w-[280px]" title={randomFact.text}>
+            <div className="hidden xl:flex items-center gap-1.5 max-w-[240px]" title={randomFact.text}>
               <span className="text-sm flex-shrink-0">{randomFact.emoji}</span>
               <span className="text-[10px] text-muted-foreground/70 truncate">{randomFact.text}</span>
             </div>
           )}
 
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground"
-            title={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
-            aria-label={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
-          >
+          <button onClick={toggleTheme} className="p-2 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground" title={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'} aria-label={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}>
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
         </div>
@@ -760,6 +642,58 @@ function App() {
         readIds={progress.readIds}
       />
       </Suspense>
+    </div>
+  )
+}
+
+/** 导航栏下拉菜单组件 */
+interface NavDropdownItem {
+  icon: React.ReactNode
+  label: string
+  onClick: () => void
+  testId?: string
+}
+function NavDropdown({ icon, label, gradientFrom, gradientTo, borderColor, textColor, items }: {
+  icon: React.ReactNode; label: string
+  gradientFrom: string; gradientTo: string; borderColor: string; textColor: string
+  items: NavDropdownItem[]
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [open])
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(prev => !prev)}
+        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r ${gradientFrom} ${gradientTo} border ${borderColor} ${textColor} hover:shadow-sm transition-all duration-200`}
+      >
+        {icon}<span className="hidden sm:inline">{label}</span>
+        <svg className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1 z-50 min-w-[160px] rounded-lg border border-border/60 bg-popover shadow-xl overflow-hidden">
+          {items.map((item, i) => (
+            <button
+              key={i}
+              onClick={() => { item.onClick(); setOpen(false) }}
+              className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-foreground hover:bg-accent transition-colors"
+              data-testid={item.testId}
+            >
+              <span className="text-muted-foreground">{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

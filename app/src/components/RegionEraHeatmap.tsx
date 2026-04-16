@@ -6,9 +6,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 interface RegionEraHeatmapProps {
   events: HistoricalEvent[]
+  onDrillDown?: (yearRange: [number, number]) => void
 }
 
-export function RegionEraHeatmap({ events }: RegionEraHeatmapProps) {
+export function RegionEraHeatmap({ events, onDrillDown }: RegionEraHeatmapProps) {
   // 按大洲 × 时代分桶
   const { matrix, maxCount } = useMemo(() => {
     const m: Record<string, Record<string, number>> = {}
@@ -60,20 +61,21 @@ export function RegionEraHeatmap({ events }: RegionEraHeatmapProps) {
                     <td key={era.name} className="p-0.5">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <div
+                          <button
                             className="w-full h-6 rounded-sm flex items-center justify-center transition-all hover:scale-110 hover:z-10"
                             style={{
                               backgroundColor: count > 0
                                 ? `rgba(245, 158, 11, ${Math.max(intensity * 0.7, 0.05)})`
                                 : 'rgba(128,128,128,0.03)',
                             }}
+                            onClick={() => count > 0 && onDrillDown?.([era.startYear, era.endYear])}
                           >
                             {count > 0 && (
                               <span className="text-[8px] font-bold" style={{ color: intensity > 0.4 ? '#fff' : 'rgba(245,158,11,0.8)' }}>
                                 {count}
                               </span>
                             )}
-                          </div>
+                          </button>
                         </TooltipTrigger>
                         <TooltipContent side="top" className="text-xs">
                           <p className="font-semibold">{group.name} · <span style={{ color: era.color }}>{era.name}</span></p>

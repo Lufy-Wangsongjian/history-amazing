@@ -159,6 +159,14 @@ const REGION_PERSPECTIVES: Record<string, string> = {
   germany: '德国的历史是一部在分裂与统一、理性与狂热之间剧烈摆荡的戏剧。这一事件映射着那种张力。',
   egypt: '尼罗河畔的文明是人类最古老的文明之一。即使在法老时代过去数千年后，埃及仍然是连接非洲、中东和地中海世界的关键枢纽。',
   russia: '横跨欧亚的俄罗斯，其历史事件往往同时带有东方和西方的双重印记。这种地缘特质使得它的每一个转折点都格外复杂。',
+  spain: '伊比利亚半岛是欧洲唯一经历过近八百年伊斯兰-基督教共存的地区。这种独特的文化交融和持续的"收复运动"塑造了西班牙激烈而矛盾的性格——它既是宗教裁判所的发源地，也是大航海时代的先驱。',
+  netherlands: '低地国家用海堤和风车从海洋手中夺回了自己的国土——这种与自然抗争的传统也塑造了荷兰人在商业和思想上的大胆创新精神。从东印度公司到国际法之父格劳秀斯，荷兰的影响力远超其面积。',
+  austria: '哈布斯堡家族通过联姻而非战争建立了跨越中欧的多民族帝国——"让别人去打仗吧，你，幸运的奥地利，去联姻。"这种独特的帝国模式既是多元共存的实验，也是民族矛盾的火药桶。',
+  portugal: '这个偏居欧洲西南角的小国在15世纪率先开启了大航海时代——恩里克王子的航海学校和达伽马的印度航线改变了世界的版图。葡萄牙证明了：地缘上的边缘位置有时恰恰是创新的优势。',
+  norway: '从维京海盗到世界上最先进的福利国家——挪威的转变是人类社会演化中最戏剧性的弧线之一。石油财富被转化为主权财富基金而非挥霍，这在资源丰富的国家中几乎是独一无二的自律。',
+  denmark: '丹麦是北欧文明的南大门——从维京时代的强大海权到现代的"丹麦模式"（高福利、高信任、高幸福感），这个小国始终在探索人类社会的可能性边界。安徒生的童话和玻尔的量子力学同样源自这片土地。',
+  poland: '波兰是欧洲地图上最"不稳定"的存在——它曾三次被邻国瓜分而从地图上消失，又三次复活。这种经历铸就了波兰人对自由和独立的执着，也使波兰成为理解欧洲民族主义的关键案例。',
+  sweden: '瑞典从17世纪的北欧霸主转变为20世纪的和平中立国——"瑞典模式"在福利国家、性别平等和环境保护方面成为全球标杆。诺贝尔奖的设立本身就是瑞典精神的体现：将炸药的利润转化为人类进步的奖励。',
   global: '这是一个真正全球性的事件——它的影响不局限于某一个国家或地区，而是深刻改变了人类文明的整体走向。',
 }
 
@@ -306,6 +314,52 @@ export function generateDidYouKnow(event: HistoricalEvent): DidYouKnow[] {
         emoji: '👥',
         text: `这一事件涉及 ${names.length} 位关键人物：${names.join('、')}。历史的走向往往由多个个体的交汇决定。`,
       })
+    }
+  }
+
+  // 中国地区事件专属知识点
+  if (event.region === 'china') {
+    const title = event.title
+    const desc = event.description || ''
+    const combined = `${title} ${desc}`
+    if (combined.includes('夏朝') || combined.includes('大禹') || combined.includes('二里头')) {
+      facts.push({ emoji: '🏛️', text: '夏朝是否存在？这是中国考古学最激烈的争论之一。二里头遗址（河南偃师）的宫殿基址和青铜器作坊在时空上与文献记载吻合，但至今未发现"夏"字自称——这让"夏朝"仍悬在信史与传说的边界上。' })
+    } else if (combined.includes('商朝') || combined.includes('甲骨') || combined.includes('殷墟')) {
+      facts.push({ emoji: '🏛️', text: '甲骨文是中国最早的成熟文字，约有 4500 个不同字符，至今仍有一半以上未被破译。殷墟出土的后母戊鼎重达 832 公斤，是世界上最大的古代青铜器。' })
+    } else if (combined.includes('周朝') || combined.includes('封建') || combined.includes('宗法') || combined.includes('周公')) {
+      facts.push({ emoji: '🏛️', text: '西周的分封制不是"给你一块地"那么简单——每个诸侯国都是一个军事殖民据点，带着周人的礼乐制度在"蛮荒之地"建立文明秩序。这种模式有点像后来英国的殖民地——只不过早了两千年。' })
+    } else if (combined.includes('春秋') || combined.includes('霸主') || combined.includes('管仲')) {
+      facts.push({ emoji: '🏛️', text: '春秋时期有"五霸"——齐桓公、宋襄公、晋文公、秦穆公、楚庄王（一说越王勾践）。诸侯争霸的本质是"尊王攘夷"——表面上尊崇周天子，实际上各自扩张。这是中国历史上第一个大国博弈的时代。' })
+    } else if (combined.includes('战国') || combined.includes('百家争鸣') || combined.includes('商鞅') || combined.includes('秦统一')) {
+      facts.push({ emoji: '🏛️', text: '"百家争鸣"是中国思想的大爆炸——儒、道、法、墨、名、兵、阴阳等上百个学派同时活跃。战国是中国历史上最"卷"的时代：各国变法图强，人才在诸侯间自由流动，类似于文艺复兴时期的意大利城邦。' })
+    } else if (combined.includes('秦朝') || combined.includes('秦始皇') || combined.includes('兵马俑') || combined.includes('长城')) {
+      facts.push({ emoji: '🏛️', text: '秦始皇统一度量衡、文字和车轨——这些标准化措施比法国大革命后推行米制早了两千年。他的"书同文"政策让中国虽方言千差万别，却始终共享同一套书写系统——这是中华文明持续统一的密码之一。' })
+    } else if (combined.includes('汉朝') || combined.includes('刘邦') || combined.includes('汉武帝') || combined.includes('丝绸之路')) {
+      facts.push({ emoji: '🏛️', text: '"汉族"这个名称就来自汉朝。汉朝是中国历史上第一个长期稳定的大一统王朝（前后 400 余年），其国力之强盛使得"汉"成了中华民族的代名词——汉字、汉语、汉人，都是这个伟大王朝的遗产。' })
+    } else if (combined.includes('三国') || combined.includes('曹操') || combined.includes('诸葛亮') || combined.includes('赤壁')) {
+      facts.push({ emoji: '🏛️', text: '三国是中国最"全民皆知"的历史时期——不是因为它多重要（实际上只持续了 60 年），而是因为罗贯中的《三国演义》让它成了中国人最早接触的"历史故事"。"借东风""空城计""草船借箭"——这些故事有多少是真的？答案是：大部分是小说家的创作。' })
+    } else if (combined.includes('隋朝') || combined.includes('大运河') || combined.includes('科举')) {
+      facts.push({ emoji: '🏛️', text: '隋朝虽然只存在了 38 年，但它留下了两项改变中国一千多年的遗产：大运河和科举制度。大运河让南方的粮食可以运到北方养活帝国，科举让寒门子弟可以通过考试入仕——这是一项比欧洲早一千年的"高考"制度。' })
+    } else if (combined.includes('唐朝') || combined.includes('贞观') || combined.includes('开元') || combined.includes('安史之乱')) {
+      facts.push({ emoji: '🏛️', text: '唐朝的开放程度令人惊讶——长安城里住着来自波斯、阿拉伯、日本、朝鲜、东南亚的商人和学者。一个唐朝人可以在街头吃到胡饼（西域烤饼）、听胡旋舞的音乐、读佛经和道藏。这种文化自信和包容，是盛世最好的注脚。' })
+    } else if (combined.includes('武则天') || combined.includes('女皇')) {
+      facts.push({ emoji: '🏛️', text: '武则天是中国历史上唯一正式称帝的女性。她当政期间大力推行科举，扩大了庶族参政的机会。她死后立了一块"无字碑"——功过是非，留待后人评说。' })
+    } else if (combined.includes('宋朝') || combined.includes('北宋') || combined.includes('南宋') || combined.includes('交子')) {
+      facts.push({ emoji: '🏛️', text: '宋朝发明了世界上最早的纸币"交子"、最早的活字印刷、最早的火药武器。如果仅看科技和经济指标，宋朝是当时全球最先进的文明——但它在军事上却始终处于被动。"弱宋"的标签掩盖了一个文化巅峰的时代。' })
+    } else if (combined.includes('元朝') || combined.includes('忽必烈') || combined.includes('蒙古')) {
+      facts.push({ emoji: '🏛️', text: '元朝是中国历史上疆域最辽阔的朝代——从朝鲜到东欧，从西伯利亚到缅甸。马可·波罗描述的元大都（北京）繁华程度让欧洲人难以置信。元朝也是中国唯一一个将社会分为"四等人"的朝代。' })
+    } else if (combined.includes('明朝') || combined.includes('朱元璋') || combined.includes('紫禁城') || combined.includes('永乐')) {
+      facts.push({ emoji: '🏛️', text: '明朝是一个矛盾的时代——郑和下西洋展示了无与伦比的海洋实力，但随后的"海禁"政策让中国与大航海时代擦肩而过。紫禁城 72 万平方米、9999 间半房间，是世界上现存最大的古代宫殿建筑群。' })
+    } else if (combined.includes('清朝') || combined.includes('满族') || combined.includes('康熙') || combined.includes('乾隆')) {
+      facts.push({ emoji: '🏛️', text: '康雍乾三朝（1661-1796）被称为"康乾盛世"——中国人口从 1 亿增长到 3 亿，版图达到 1300 万平方公里。但这个盛世的尾声正好赶上了西方工业革命，此后中国用了近两百年追赶这个差距。' })
+    } else if (combined.includes('鸦片') || combined.includes('南京条约') || combined.includes('近代')) {
+      facts.push({ emoji: '🏛️', text: '鸦片战争是中国从"天朝上国"到"救亡图存"的转折点。战前清朝 GDP 占全球约三分之一，但鸦片使每年数百吨白银外流。林则徐虎门销烟（1839）成为战争导火索——中国最后一次以传统方式拒绝全球化。' })
+    } else if (combined.includes('改革开放') || combined.includes('邓小平')) {
+      facts.push({ emoji: '🏛️', text: '1978 年改革开放以来，中国创造了人类历史上最大规模的减贫奇迹——超过 8 亿人脱离贫困。中国的 GDP 从 1978 年的 3679 亿元增长到 2023 年的 126 万亿元——这是一个 340 倍的增长。' })
+    } else if (combined.includes('造纸') || combined.includes('蔡伦')) {
+      facts.push({ emoji: '🏛️', text: '蔡伦改进造纸术之前，秦始皇每天要批阅 120 斤竹简——这意味着"读书"在物理上就是一项体力活。纸张让知识的记录和传播成本降低了几十倍，堪称人类信息革命的第一步。' })
+    } else if (combined.includes('孔子') || combined.includes('儒家') || combined.includes('论语')) {
+      facts.push({ emoji: '🏛️', text: '孔子创办了中国最早的私学，号称"弟子三千，贤人七十二"。《论语》只有 15000 字——但这 15000 字塑造了东亚文化圈两千年的价值观。耶鲁大学校训"Lux et Veritas"翻译成中文就是"真理之光"，与孔子"朝闻道，夕死可矣"遥相呼应。' })
     }
   }
 
@@ -667,10 +721,43 @@ function getTimeSlot(year: number): string {
   return 'modern'
 }
 
+// 中国地区专属沉浸式叙事模板
+const CHINA_IMMERSIVE: Record<string, string[]> = {
+  ancient: [
+    '你站在殷墟的宫殿遗址旁，巫师正在龟甲上刻下占卜文字。火烤龟壳发出细微的裂响，每一道裂纹都被解读为天意——三千年后，这些"天意"将成为解读整个商朝的密码。',
+    '你站在黄河中游的台地上，远处炊烟袅袅，一座由夯土城墙围起的聚落正在形成。族长正在分配今年的收成——这片后来被称为"中原"的土地上，华夏文明的种子刚刚萌芽。',
+  ],
+  classical: [
+    '你坐在杏坛下的竹席上，一位须发皆白的老者正在和弟子们讨论"仁"的含义。他说话不快，但每个字都掷地有声。你正在见证孔子授课的现场——两千五百年后，东亚文明的底层代码正在这里编写。',
+    '你站在咸阳宫前的台阶上，大殿里传来群臣的争论声。一位面容严厉的帝王拍案而起——他刚刚下令"车同轨、书同文"。你正在见证秦始皇统一中国的历史性时刻。',
+  ],
+  medieval: [
+    '你走在长安城的朱雀大街上，两侧坊市热闹非凡。波斯商人、日本遣唐使和吐蕃使者擦肩而过，胡饼的香味混着酒肆的喧哗。这是公元八世纪，全世界最繁华的都市。',
+    '你站在汴京的虹桥上，脚下汴河舟楫如织。茶楼里说书人正在讲三国故事，对面瓦肆传来杂剧的锣鼓声。北宋的开封城里，人间烟火气浓得化不开。',
+  ],
+  early_modern: [
+    '你站在紫禁城太和殿的丹陛之上，晨光照亮了金色的琉璃瓦。数百名官员按品级跪在广场上，三呼万岁的声音回荡在红墙黄瓦之间。这是明清帝国权力最集中的展示。',
+    '你站在南京下关码头，宝船舰队正在集结。最大的宝船长约 120 米，九桅十二帆，船队中有两万七千多人。郑和即将开始他的第一次远航——这支舰队比哥伦布的三艘小船庞大一百倍。',
+  ],
+  modern: [
+    '你站在天安门广场上，周围挤满了激昂的学生。他们高举旗帜，喊着"民主与科学"的口号——五四运动正在改写中国的精神面貌，古老的文明正在痛苦而坚定地转向现代。',
+    '你站在深圳蛇口的渔村边，几台推土机正在平整土地。谁也不知道，这片荒芜之地将在四十年后变成一座拥有千万人口的科技之城。改革开放的故事，从这里开始。',
+  ],
+}
+
 export function generateImmersiveNarrative(event: HistoricalEvent): string | null {
   const timeSlot = getTimeSlot(event.year)
   const yearStr = formatYear(event.year)
   const regionLabel = REGION_CONFIG[event.region]?.label || event.region
+
+  // 中国地区优先使用专属模板
+  if (event.region === 'china') {
+    const chinaPool = CHINA_IMMERSIVE[timeSlot] || CHINA_IMMERSIVE.modern || []
+    if (chinaPool.length > 0) {
+      const idx = hashCode(event.id) % chinaPool.length
+      return `如果你在${yearStr}的${regionLabel}——${chinaPool[idx]}`
+    }
+  }
 
   // Try category-specific templates first
   const catTemplates = IMMERSIVE_TEMPLATES[event.category]
@@ -955,6 +1042,49 @@ export function generateCounterfactual(
   const relatedCount = event.relatedIds?.length ?? 0
   const cat = event.category
   const era = getEra(event.year)
+
+  // 中国地区专属反事实推演
+  if (event.region === 'china') {
+    const chinaTitle = event.title
+    const combined = `${chinaTitle} ${event.description || ''}`
+    let chinaFrame = ''
+    if (combined.includes('秦始皇') || combined.includes('秦朝') || combined.includes('统一六国')) {
+      chinaFrame = `如果秦始皇没有统一六国，中国可能像欧洲一样长期保持数十个独立国家的状态。"书同文、车同轨"不会发生，汉字可能分化为多种互不相通的文字系统——那么"中华文明"的整体性将不复存在。`
+    } else if (combined.includes('孔子') || combined.includes('儒家')) {
+      chinaFrame = `如果孔子的思想没有被后世接受，东亚可能发展出一种完全不同的文明模式——没有科举制度、没有"修身齐家治国平天下"的人生理想、没有对教育的极度重视。中国的社会结构和价值观可能更接近中世纪欧洲的封建等级制。`
+    } else if (combined.includes('造纸') || combined.includes('蔡伦')) {
+      chinaFrame = `如果造纸术没有被发明或推迟数百年，知识的传播成本将高出数十倍——竹简太重、丝帛太贵，人类文明的加速可能被大幅延迟。更关键的是，没有纸张就没有印刷术，没有印刷术就没有宗教改革和科学革命。`
+    } else if (combined.includes('郑和') || combined.includes('下西洋')) {
+      chinaFrame = `如果郑和之后明朝没有禁海，而是继续大航海——以当时中国的造船技术和国力，很可能比欧洲人更早抵达美洲。全球殖民史和现代世界格局将被彻底改写：也许今天的美洲居民说的是中文而非英语和西班牙语。`
+    } else if (combined.includes('鸦片战争') || combined.includes('南京条约')) {
+      chinaFrame = `如果清朝在鸦片战争中获胜，或者更早地开始工业化，19世纪的全球格局可能截然不同。但历史的吊诡在于：正是这场屈辱，最终激发了中国长达百年的现代化追求——痛苦是觉醒的代价。`
+    } else if (combined.includes('五四') || combined.includes('新文化')) {
+      chinaFrame = `如果五四运动没有发生，白话文可能不会迅速取代文言文，"赛先生"（科学）和"德先生"（民主）也不会成为一代人的精神旗帜。中国思想的现代转型可能推迟几十年，而那个时代的知识分子可能至今仍在用文言文写作。`
+    } else if (combined.includes('改革开放') || combined.includes('邓小平')) {
+      chinaFrame = `如果1978年的历史走向另一个方向，8亿人可能仍未脱贫，深圳可能仍是一个渔村，中国可能至今还不是全球第二大经济体。改革开放证明了一个道理：一个正确的转折点，可以改变十几亿人的命运。`
+    } else if (combined.includes('活字印刷') || combined.includes('毕昇')) {
+      chinaFrame = `如果毕昇没有发明活字印刷术，知识传播的技术革命可能推迟数百年。尽管泥活字在中国没有像金属活字在欧洲那样引发信息革命，但这个概念的种子最终在古腾堡手中开花结果——改变了整个人类文明。`
+    } else if (combined.includes('大运河') || combined.includes('隋朝')) {
+      chinaFrame = `如果大运河没有修建，中国南北的经济联系将大幅削弱——北方可能无法获得南方的粮食供给，唐宋的繁荣可能大打折扣。大运河用数百万民夫的血汗，换来了中国一千多年的南北一体。`
+    } else if (combined.includes('唐朝') || combined.includes('贞观')) {
+      chinaFrame = `如果唐朝没有出现，中国可能错过那个最开放包容的时代——长安不会成为国际大都市，"唐人"不会成为海外华人的代称，唐诗也不会成为中国文学永恒的巅峰。唐朝的文化自信为中华文明定义了一个至今仍被怀念的黄金标准。`
+    }
+    if (chinaFrame) {
+      // Find downstream events
+      const downstream = (event.relatedIds ?? [])
+        .map(id => allEvents.find(e => e.id === id))
+        .filter((e): e is HistoricalEvent => !!e && e.year > event.year)
+        .slice(0, 3)
+      let consequence = ''
+      if (downstream.length > 0) {
+        const names = downstream.map(e => `「${e.title}」（${formatYear(e.year)}）`).join('、')
+        consequence = `直接受影响的后续事件包括${names}——它们中的每一个都以不同的方式延续了「${event.title}」的历史能量。`
+      } else {
+        consequence = `它在${era?.name ?? '那个时代'}激起的涟漪，以我们今天仍能感受到的方式持续扩散着。`
+      }
+      return `${chinaFrame}\n\n${consequence}\n\n这当然只是思想实验——历史没有"如果"。但正是这种反事实推演，帮助我们更深刻地理解每一个关键时刻的分量。`
+    }
+  }
 
   // Build a category-specific counterfactual frame
   const frames: Record<string, string> = {

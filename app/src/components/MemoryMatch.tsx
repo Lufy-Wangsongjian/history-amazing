@@ -30,7 +30,14 @@ function shuffleArray<T>(arr: T[]): T[] {
 }
 
 export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
-  const PAIR_COUNT = 6
+  const DIFFICULTY_LEVELS = [
+    { label: '简单', pairs: 4, cols: 'grid-cols-4' },
+    { label: '普通', pairs: 6, cols: 'grid-cols-4' },
+    { label: '困难', pairs: 8, cols: 'grid-cols-4' },
+  ] as const
+  const [difficultyIdx, setDifficultyIdx] = useState(1)
+  const PAIR_COUNT = DIFFICULTY_LEVELS[difficultyIdx].pairs
+  const gridCols = DIFFICULTY_LEVELS[difficultyIdx].cols
   const [cards, setCards] = useState<Card[]>([])
   const [flippedIds, setFlippedIds] = useState<Set<string>>(new Set())
   const [matchedKeys, setMatchedKeys] = useState<Set<string>>(new Set())
@@ -76,7 +83,7 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
     setStartTime(Date.now())
     setElapsed(0)
     setGameState('playing')
-  }, [events])
+  }, [events, PAIR_COUNT])
 
   useEffect(() => {
     if (open) setupGame()
@@ -154,7 +161,13 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-border/50">
           <h2 className="text-sm font-bold text-foreground">历史连连看</h2>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* 难度选择 */}
+            <div className="flex items-center gap-1 mr-2">
+              {DIFFICULTY_LEVELS.map((d, i) => (
+                <button key={d.label} onClick={() => { setDifficultyIdx(i); }} className={`px-2 py-0.5 rounded text-[10px] font-medium transition-colors ${i === difficultyIdx ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}>{d.label}</button>
+              ))}
+            </div>
             <span className="text-[11px] text-muted-foreground flex items-center gap-1">
               <Clock size={12} /> {formatTime(elapsed)}
             </span>
@@ -202,7 +215,7 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-4 gap-2.5">
+            <div className={`grid ${gridCols} gap-2.5`}>
               {cards.map(card => {
                 const isFlipped = flippedIds.has(card.id) || matchedKeys.has(card.matchKey)
                 const isMatched = matchedKeys.has(card.matchKey)
