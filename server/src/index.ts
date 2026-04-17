@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import fs from 'fs'
@@ -5,6 +6,7 @@ import path from 'path'
 import type Database from 'better-sqlite3'
 import { fileURLToPath } from 'url'
 import { getDB, closeDB } from './db.js'
+import { streamAIResponse } from './ai.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const CLIENT_DIST_PATH = path.resolve(__dirname, '../../app/dist')
@@ -346,6 +348,35 @@ app.get('/api/stats', (_req, res) => {
   const yearRange = db.prepare('SELECT MIN(year) as min, MAX(year) as max FROM events').get()
 
   res.json({ total, coreTotal, byCategory, byRegion, bySignificance, yearRange })
+})
+
+// ── AI 问答 SSE 端点 ──
+app.post('/api/ai/chat', async (req, res) => {
+  const { message } = req.body as { message?: string }
+  if (!message?.trim()) {
+    res.status(400).json({ error: 'message is required' })
+    return
+  }
+
+  // SSE 头
+  res.setHeader('Content-Type', 'text/event-stream')
+  res.setHeader('Cache-Control', 'no-cache')
+  res.setHeader('Connection', 'keep-alive')
+  res.setHeader('X-Accel-Buffering', 'no')
+  res.flushHeaders()
+
+  const db = getDB()
+
+  try {
+    for await (const chunk of streamAIResponse(db, message.trim())) {
+      res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`)
+    }
+    res.write(`data: ${JSON.stringify({ done: true })}\n\n`)
+  } catch (err) {
+    res.write(`data: ${JSON.stringify({ error: String(err) })}\n\n`)
+  } finally {
+    res.end()
+  }
 })
 
 app.get('/health', (_req, res) => {

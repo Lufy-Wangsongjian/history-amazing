@@ -2,6 +2,109 @@
 
 ## 进化记录
 
+### 2026-04-17 美洲大陆全面深化（轮次 2026-04-17_0901）
+
+**新建** `events-americas-deep.ts`（34条事件）：
+- 拉美历史深度：15条（墨西哥独立/革命/弗里达、巴西独立/废奴/世界杯、阿根廷独立/庇隆/肮脏战争、古巴革命、智利政变、百年孤独/聂鲁达/博尔赫斯）
+- 原住民专题：9条（卡霍基亚、易洛魁联盟、萨波特克、特奥蒂瓦坎、帕卡尔、玛雅崩溃、卡拉尔文明、印加道路）
+- 美国文化线：10条（爵士4条 + 好莱坞3条 + 硅谷3条）
+
+**REGION_PERSPECTIVES** +8（mexico/brazil/argentina/peru/colombia/cuba/chile + usa深化）
+**literary-quotes** +15条（林肯/肯尼迪/马尔克斯/聂鲁达/博尔赫斯/格瓦拉等）
+**因果链** +2（原住民文明线13节点 + 拉美独立线7节点）
+
+**数据**：10830→10965 事件 / 48460→49120 关联 / 43→45 因果链
+
+---
+
+### 2026-04-17 美国内容深度进化（轮次 2026-04-16_2358）
+
+**新增 45 条美国关键历史事件**：`events-us-history.ts`
+- 殖民/独立战争（8条）、西进运动（6条）、南北战争深度（7条）、镀金/进步时代（7条）、大萧条/新政/二战（6条）、冷战/越战/民权（7条）、当代（4条）
+
+**新增 3 条美国专属因果链**（causal-chains.ts）：
+- 美国政治史主线（29节点）、民权运动主线（12节点）、经济崛起线（14节点）
+
+**策展路线**：「美国实验」已完整（21个stepGuides + prologue/epilogue）
+
+**数据**：事件 10,610→10,830（+220）| 关系 47,110→48,460（+1,350）
+
+---
+
+### 2026-04-17 P3-14 AI 时光向导（AI 问答 + RAG）
+
+**架构**：
+
+| 层 | 实现 |
+|---|------|
+| 后端 AI 服务 | `server/src/ai.ts` — OpenAI SDK 兼容层，支持 DeepSeek / OpenAI / 通义千问等 |
+| RAG 检索 | `retrieveRelevantEvents()` — 从用户问题提取关键词，LIKE 搜索 SQLite，返回最相关的 12 条事件作为上下文 |
+| SSE 流式端点 | `POST /api/ai/chat` — 接收用户消息，RAG 检索 + LLM 流式回答，Server-Sent Events 输出 |
+| 系统提示词 | 角色设定为"时光向导"，200 字精炼回答，【事件名称】格式标注便于跳转 |
+| 前端聊天面板 | `AIChatPanel.tsx` — 右下角悬浮球 → 聊天窗口，SSE 流式接收，事件名可点击搜索跳转 |
+
+**功能细节**：
+
+| 功能 | 说明 |
+|------|------|
+| 智能问答 | "秦始皇和亚历山大谁更早？" → 基于 RAG 上下文精确回答 |
+| 路线规划 | "带我了解丝绸之路" → AI 列出 5-8 个关键事件并排序 |
+| 话题建议 | 初始 4 个推荐话题按钮，点击即可开始 |
+| 事件跳转 | 回答中的【事件名称】可点击，自动搜索并跳转到时间线 |
+| 优雅降级 | 未配置 API key 时显示配置指引，不影响其他功能 |
+| 多模型兼容 | 通过环境变量 AI_API_KEY / AI_BASE_URL / AI_MODEL 配置 |
+
+**配置方法**（用户需设置环境变量）：
+```
+export AI_API_KEY=sk-xxx
+export AI_BASE_URL=https://api.deepseek.com  # 默认 DeepSeek
+export AI_MODEL=deepseek-chat                 # 默认 deepseek-chat
+```
+
+**新增文件**：
+- `server/src/ai.ts`（AI 服务：RAG + LLM 流式调用）
+- `app/src/components/AIChatPanel.tsx`（聊天面板 UI）
+
+**修改文件**：
+- `server/src/index.ts`（+POST /api/ai/chat SSE 端点）
+- `server/package.json`（+openai 依赖）
+- `app/src/App.tsx`（+AIChatPanel 集成）
+
+**验证**：passed（前端编译 ✅ / 后端端点 ✅ / SSE 流式输出 ✅）
+
+### 2026-04-17 P3-15 分享增强 + P3-16 考试大纲映射
+
+**P3-15 分享增强**：
+
+| 功能 | 实现 |
+|------|------|
+| 多版式分享卡片 | `share-card.ts` 重写，支持横版/竖版/方形三种布局，里程碑圆角徽章 |
+| Web Share API | `shareEvent()` 优先调用 `navigator.share()`，支持文件+链接+文案，移动端可直接分享到微信/QQ |
+| 降级策略 | 不支持 Web Share 时复制链接到剪贴板 + 下载 PNG |
+| 年度探索报告 | 新建 `AnnualReport.tsx`：统计已读事件/覆盖时代/里程碑/最爱领域/时间跨度/连续时代，支持生成报告卡片(Canvas)下载和分享 |
+| 报告入口 | 「更多」菜单新增「探索报告」入口 |
+
+**P3-16 考试大纲映射**：
+
+| 功能 | 实现 |
+|------|------|
+| 考点数据 | 新建 `exam-syllabus.ts`：35 个考点，覆盖中国古代史/近现代史/世界古代史/近现代史 |
+| 关键词匹配 | 每个考点含 keywords 数组，`matchesExamTopic()` 自动匹配事件 |
+| EventCard 考点标注 | 匹配考点的事件卡片显示「中考」「高考」「中高考」徽章 |
+| 策展路线 | CuratedPaths 新增「中考必考考点」和「高考重点考点」两条路线，含开篇/结尾叙事和逐步导读 |
+
+**新增文件**：
+- `app/src/data/exam-syllabus.ts`（35 个考点 + 匹配逻辑）
+- `app/src/components/AnnualReport.tsx`（探索报告组件 + Canvas 卡片生成）
+
+**修改文件**：
+- `app/src/lib/share-card.ts`（完全重写：多版式 + Web Share API）
+- `app/src/components/EventCard.tsx`（+考点徽章）
+- `app/src/components/CuratedPaths.tsx`（+中考/高考路线）
+- `app/src/App.tsx`（+AnnualReport 弹窗 + shareEvent 导入）
+
+**验证**：passed（编译 ✅）
+
 ### 2026-04-16 P1/P2 深度优化续（统计交互/游戏打磨/深链接/对照视图）
 
 **P1 修复**：
@@ -1723,3 +1826,31 @@ lazy 组件：MatrixView, StatsView, CompareView, CivilizationMapView, WelcomeDi
 - `app/src/data/causal-chains.ts`（+5 条因果链）
 
 **验证**：passed（编译 ✅ / E2E 25 passed / seed 10610 事件 47110 关联）
+
+---
+
+### 2026-04-17 美国内容深度进化（轮次 2026-04-16_2358）
+
+**主题**：美国内容的深度和质量
+**触发**：用户要求 chrono-atlas-orchestrate 重点进化美国内容
+
+**实现特性**（5/5 P0+P1 全部完成）：
+1. ✅ `events-enrichment-16.ts` — 25 条美国深度事件（殖民→科技当代）
+2. ✅ 3 条美国因果链（政治制度/经济崛起/文化变革）
+3. ✅ "美国实验"策展路径（21 个步骤指引）
+4. ✅ 12 条已有事件 details 补丁
+5. ✅ 11 个时代全部补充美洲对比段落
+
+**新建文件**：
+- `app/src/data/events-enrichment-16.ts`
+
+**修改文件**：
+- `app/src/data/events.ts`（注册新事件）
+- `app/src/data/causal-chains.ts`（+3 条因果链）
+- `app/src/components/CuratedPaths.tsx`（+1 策展路径）
+- `app/src/data/important-details-patch-2.ts`（+12 条 details）
+- `app/src/lib/compare-narratives.ts`（+7 新增 / 4 扩充美洲段落）
+
+**数据变化**：10610 → 10830 事件 / 47110 → 48460 关联 / 40 → 43 因果链 / 12 → 13 策展路径
+
+**验证**：passed（编译 ✅ / seed 10830 事件 48460 关联）

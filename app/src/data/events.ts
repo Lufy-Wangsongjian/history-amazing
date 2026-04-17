@@ -55,6 +55,10 @@ import { songMingQingDeepEvents } from './events-song-mingqing-deep'
 import { vikingNordicEvents } from './events-viking-nordic'
 // Round 14: 荷兰/西班牙/东欧专题
 import { netherlandsEvents, spainEvents, easternEuropeEvents } from './events-enrichment-15'
+// Round 15: 美国历史深度专题（45条）
+import { usColonialRevolutionEvents, usWestwardExpansionEvents, usCivilWarDeepEvents, usGildedProgressiveEvents, usDepressionWWIIEvents, usColdWarCivilRightsEvents, usContemporaryEvents } from './events-us-history'
+// Round 16: 美洲深度扩充 — 拉美 + 原住民 + 美国文化线
+import { latinAmericaDeepEvents, nativeAmericasEvents, usaCultureDeepEvents } from './events-americas-deep'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -201,6 +205,18 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...netherlandsEvents,
   ...spainEvents,
   ...easternEuropeEvents,
+  // Round 15: 美国历史深度（45条）
+  ...usColonialRevolutionEvents,
+  ...usWestwardExpansionEvents,
+  ...usCivilWarDeepEvents,
+  ...usGildedProgressiveEvents,
+  ...usDepressionWWIIEvents,
+  ...usColdWarCivilRightsEvents,
+  ...usContemporaryEvents,
+  // Round 16: 美洲深度（拉美15 + 原住民9 + 美国文化10 = 34条）
+  ...latinAmericaDeepEvents,
+  ...nativeAmericasEvents,
+  ...usaCultureDeepEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER

@@ -1,9 +1,10 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear, getEra } from '@/data/types'
 import { buildEventDetailPreview } from '@/lib/event-detail'
+import { getExamTopicsForEvent } from '@/data/exam-syllabus'
 import { cn } from '@/lib/utils'
-import { ChevronDown, Clock, MapPin, User, Star, Tag, PanelRightOpen, Zap, Heart, Link2 } from 'lucide-react'
+import { ChevronDown, Clock, MapPin, User, Star, Tag, PanelRightOpen, Zap, Heart, Link2, GraduationCap } from 'lucide-react'
 import { CategoryIcon } from './CategoryIcon'
 import { RegionFlag } from './RegionFlag'
 
@@ -32,6 +33,7 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
   const isTurningPoint = event.significance === 2
   const eventEra = isMilestone ? getEra(event.year) : undefined
   const thumbnailUrl = event.image
+  const examTopics = useMemo(() => getExamTopicsForEvent(event), [event])
 
   useEffect(() => {
     setIsThumbError(false)
@@ -193,6 +195,17 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
                 >
                   {catCfg.label}
                 </span>
+              </div>
+            )}
+            {/* 考点标注 */}
+            {examTopics.length > 0 && (
+              <div className="flex items-center gap-1 mb-1.5 flex-wrap">
+                {examTopics.slice(0, 2).map(topic => (
+                  <span key={topic.id} className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium ${topic.level === 'gaokao' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : topic.level === 'zhongkao' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' : 'bg-orange-500/10 text-orange-500 border border-orange-500/20'}`}>
+                    <GraduationCap size={8} />
+                    {topic.level === 'gaokao' ? '高考' : topic.level === 'zhongkao' ? '中考' : '中高考'}
+                  </span>
+                ))}
               </div>
             )}
             <span className={cn(

@@ -119,6 +119,26 @@ const QUOTES_BY_ID: Record<string, LiteraryQuote[]> = {
   e056: [{ text: '兵者，国之大事，死生之地，存亡之道，不可不察也。', source: '《孙子兵法》' }],
   // ═══ 经济 ═══
   e065: [{ text: 'It is not from the benevolence of the butcher, the brewer, or the baker that we expect our dinner.', source: 'Adam Smith', translation: '我们的晚餐并非来自屠夫、酿酒师或面包师的恩惠。' }],
+  // ═══ 美国历史演说 ═══
+  us005: [{ text: 'The shot heard round the world.', source: 'Ralph Waldo Emerson, "Concord Hymn"', translation: '响彻世界的一枪。' }],
+  us007: [{ text: 'We the People of the United States, in Order to form a more perfect Union...', source: 'U.S. Constitution, Preamble', translation: '我们合众国人民，为建设一个更完善的联邦...' }],
+  us020: [{ text: 'And so, my fellow Americans: ask not what your country can do for you — ask what you can do for your country.', source: 'John F. Kennedy, Inaugural Address, 1961', translation: '不要问你的国家能为你做什么——问你能为你的国家做什么。' }],
+  us018: [{ text: '...that this nation, under God, shall have a new birth of freedom — and that government of the people, by the people, for the people, shall not perish from the earth.', source: 'Abraham Lincoln, Gettysburg Address, 1863', translation: '......这个国家在上帝的护佑下，将获得自由的新生——而那民有、民治、民享的政府，永远不会从地球上消失。' }],
+  // ═══ 美国文学 ═══
+  us015: [{ text: 'So we beat on, boats against the current, borne back ceaselessly into the past.', source: 'F. Scott Fitzgerald, The Great Gatsby', translation: '于是我们奋力前行，逆水行舟，不断被浪潮推回到过去。' }],
+  us022: [{ text: 'The report of my death was an exaggeration.', source: 'Mark Twain', translation: '关于我的死亡的报道过于夸张了。' },
+    { text: 'Whenever you find yourself on the side of the majority, it is time to pause and reflect.', source: 'Mark Twain', translation: '每当你发现自己站在多数人那一边时，就该停下来反思了。' }],
+  // ═══ 拉美文学 ═══
+  la013: [
+    { text: 'Muchos años después, frente al pelotón de fusilamiento, el coronel Aureliano Buendía había de recordar aquella tarde remota en que su padre lo llevó a conocer el hielo.', source: 'Gabriel García Márquez, Cien años de soledad', translation: '多年以后，面对行刑队，奥雷里亚诺·布恩迪亚上校将会回想起父亲带他去见识冰块的那个遥远的下午。' },
+    { text: 'La vida no es la que uno vivió, sino la que uno recuerda y cómo la recuerda para contarla.', source: 'Gabriel García Márquez', translation: '生活不是我们活过的日子，而是我们记住的日子，以及我们为了讲述它而记住它的方式。' },
+  ],
+  la014: [
+    { text: 'Puedo escribir los versos más tristes esta noche.', source: 'Pablo Neruda, Veinte poemas de amor', translation: '今夜我可以写下最悲伤的诗句。' },
+    { text: 'You can cut all the flowers but you cannot keep Spring from coming.', source: 'Pablo Neruda', translation: '你可以摘掉所有的花，但你无法阻止春天的到来。' },
+  ],
+  la015: [{ text: 'I have always imagined that Paradise will be a kind of library.', source: 'Jorge Luis Borges', translation: '我一直想象天堂应该是某种图书馆的样子。' }],
+  la011: [{ text: 'Hasta la victoria siempre.', source: 'Ernesto "Che" Guevara', translation: '直到胜利，永远。' }],
 }
 
 /** 按标题关键词模糊匹配的引用（当 ID 精确匹配失败时使用） */
@@ -309,6 +329,20 @@ const QUOTES_BY_KEYWORD: Array<{ keywords: string[]; quotes: LiteraryQuote[] }> 
     quotes: [{ text: 'We shall fight on the beaches, we shall fight on the landing grounds, we shall never surrender.', source: 'Winston Churchill (1940)', translation: '我们将在海滩上战斗，我们将在登陆场上战斗，我们永不投降。' }],
   },
   // ═══ 技术与发明 ═══
+  {
+    keywords: ['马克·吐温', 'Mark Twain', '哈克贝利', '汤姆·索亚'],
+    quotes: [
+      { text: 'All modern American literature comes from one book by Mark Twain called Huckleberry Finn.', source: 'Ernest Hemingway', translation: '所有现代美国文学都来自马克·吐温的一本书，叫《哈克贝利·费恩历险记》。' },
+      { text: 'The secret of getting ahead is getting started.', source: 'Mark Twain', translation: '领先的秘诀是开始行动。' },
+    ],
+  },
+  {
+    keywords: ['狄金森', 'Dickinson', '艾米莉'],
+    quotes: [
+      { text: 'Because I could not stop for Death —\nHe kindly stopped for me —', source: 'Emily Dickinson', translation: '因为我无法为死亡停步——\n他便善意地为我停留——' },
+      { text: 'I dwell in Possibility —\nA fairer House than Prose —', source: 'Emily Dickinson', translation: '我住在可能性里——\n一栋比散文更美的房子——' },
+    ],
+  },
   {
     keywords: ['蒸汽机', '瓦特'],
     quotes: [{ text: 'I can think of nothing else but this machine.', source: 'James Watt', translation: '我满脑子想的都是这台机器。' }],

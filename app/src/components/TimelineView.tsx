@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect, useState, useCallback } from 'react'
+import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { formatYear, getEra, CATEGORY_CONFIG } from '@/data/types'
 import { EventCard } from './EventCard'
@@ -186,14 +186,7 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
     if (bookmarkYear !== null) scrollToYear(bookmarkYear)
   }, [bookmarkYear, scrollToYear])
 
-  // 滚动状态
-  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    const el = e.currentTarget
-    const maxScroll = Math.max(el.scrollHeight - el.clientHeight, 0)
-    setScrollProgress(maxScroll === 0 ? 0 : el.scrollTop / maxScroll)
-    setShowBackToTop(el.scrollTop > 720)
-  }, [])
-
+  // 滚动按钮控制
   const scrollTo = useCallback((direction: 'up' | 'down') => {
     scrollRef.current?.scrollBy({ top: direction === 'up' ? -600 : 600, behavior: 'smooth' })
   }, [])
@@ -372,7 +365,9 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
 
   return (
     <div className="flex-1 min-h-0 flex flex-col">
-      <TimelineDensityMap events={events} onSelectYear={handleDensitySelectYear} />
+      <div className="flex-shrink-0">
+        <TimelineDensityMap events={events} onSelectYear={handleDensitySelectYear} />
+      </div>
       <div className={`flex-1 min-h-0 relative era-atmosphere ${relatedIdSet ? 'timeline-has-selection' : ''}`} data-era-mood={eraMood}>
         <DanmakuOverlay events={events} enabled={danmakuEnabled} onToggle={toggleDanmaku} />
         <EraSidebar events={events} activeEra={activeEra} onSelectEra={scrollToYear} />
@@ -416,23 +411,29 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
           ref={virtuosoRef}
           totalCount={flatItems.length}
           itemContent={renderItem}
-          scrollerRef={(ref) => { scrollRef.current = ref as HTMLDivElement }}
+          scrollerRef={(ref) => {
+            scrollRef.current = ref as HTMLDivElement
+            // 将滚动监听直接绑到 Virtuoso 管理的 scroller 元素上
+            if (ref) {
+              const el = ref as HTMLDivElement
+              el.addEventListener('scroll', () => {
+                const maxScroll = Math.max(el.scrollHeight - el.clientHeight, 0)
+                setScrollProgress(maxScroll === 0 ? 0 : el.scrollTop / maxScroll)
+                setShowBackToTop(el.scrollTop > 720)
+              }, { passive: true })
+            }
+          }}
           rangeChanged={setVisibleRange}
           overscan={600}
-          className="h-full relative z-[1]"
-          style={{ height: '100%' }}
+          style={{ height: '100%', position: 'absolute', inset: 0 }}
+          className="px-4 md:px-6"
           components={{
-            Scroller: ({ style, children, ...props }) => (
-              <div {...props} style={style} onScroll={handleScroll as unknown as React.UIEventHandler} className="h-full overflow-y-auto px-4 md:px-6 scroll-smooth relative z-[1]">
-                {children}
-              </div>
-            ),
-            List: ({ style, children, ...props }) => (
-              <div {...props} style={style} className="max-w-3xl mx-auto relative pt-16 pb-8">
+            List: React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ style, children, ...props }, ref) => (
+              <div ref={ref} {...props} style={style} className="max-w-3xl mx-auto relative pt-16 pb-8">
                 <div className="absolute left-[100px] md:left-[140px] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
                 {children}
               </div>
-            ),
+            )),
           }}
         />
       </div>

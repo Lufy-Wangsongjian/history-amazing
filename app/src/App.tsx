@@ -13,12 +13,13 @@ import { useFavorites } from '@/hooks/useFavorites'
 import { useReadProgress, useAchievements } from '@/hooks/useProgress'
 import { useExplorerMissions, type ExplorerMission } from '@/hooks/useExplorerMissions'
 import { useRandomFact } from '@/lib/fun-facts'
-import { downloadShareCard } from '@/lib/share-card'
+import { shareEvent } from '@/lib/share-card'
 import { ALL_REGIONS, getVisibleSelectedRegions } from '@/data/regions'
 import { CATEGORY_CONFIG, REGION_CONFIG, ERAS, formatYear } from '@/data/types'
 import type { HistoricalEvent, Category } from '@/data/types'
 import { MilestoneTicker } from '@/components/MilestoneTicker'
-import { Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard, Target, Swords, Puzzle, HelpCircle, ArrowUpDown, Grid3X3 } from 'lucide-react'
+import { AIChatPanel } from '@/components/AIChatPanel'
+import { Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard, Target, Swords, Puzzle, HelpCircle, ArrowUpDown, Grid3X3, BarChart3 } from 'lucide-react'
 import { useState, useCallback, useRef, useEffect, useMemo, lazy, Suspense } from 'react'
 import './App.css'
 
@@ -42,6 +43,7 @@ const MemoryMatch = lazy(() => import('@/components/MemoryMatch').then(m => ({ d
 const HistoryRiddle = lazy(() => import('@/components/HistoryRiddle').then(m => ({ default: m.HistoryRiddle })))
 const TimelineSorter = lazy(() => import('@/components/TimelineSorter').then(m => ({ default: m.TimelineSorter })))
 const ProgressHeatmap = lazy(() => import('@/components/ProgressHeatmap').then(m => ({ default: m.ProgressHeatmap })))
+const AnnualReport = lazy(() => import('@/components/AnnualReport').then(m => ({ default: m.AnnualReport })))
 
 const WELCOME_STORAGE_KEY = 'chrono-atlas-welcome-dismissed'
 
@@ -95,6 +97,7 @@ function App() {
   const [showHistoryRiddle, setShowHistoryRiddle] = useState(false)
   const [showTimelineSorter, setShowTimelineSorter] = useState(false)
   const [showProgressHeatmap, setShowProgressHeatmap] = useState(false)
+  const [showAnnualReport, setShowAnnualReport] = useState(false)
 
   // ── P0 弹窗单例策略：打开新弹窗时关闭所有其他弹窗 ──
   const closeAllModals = useCallback(() => {
@@ -111,6 +114,7 @@ function App() {
     setShowHistoryRiddle(false)
     setShowTimelineSorter(false)
     setShowProgressHeatmap(false)
+    setShowAnnualReport(false)
   }, [])
   const openModal = useCallback((setter: (v: boolean) => void) => {
     closeAllModals()
@@ -346,6 +350,7 @@ function App() {
               { icon: <Clapperboard size={14} />, label: '连续漫游', onClick: () => openModal(setShowAutoExplore) },
               { icon: <Trophy size={14} />, label: `成就${achievements.unlockedCount > 0 ? ` (${achievements.unlockedCount})` : ''}`, onClick: () => openModal(setShowAchievements) },
               { icon: <Grid3X3 size={14} />, label: '探索热力图', onClick: () => openModal(setShowProgressHeatmap) },
+              { icon: <BarChart3 size={14} />, label: '探索报告', onClick: () => openModal(setShowAnnualReport) },
             ]}
           />
 
@@ -487,7 +492,7 @@ function App() {
         onNavigate={(event) => state.setSelectedEvent(event)}
         isFavorite={state.selectedEvent ? favs.isFavorite(state.selectedEvent.id) : false}
         onToggleFavorite={state.selectedEvent ? () => favs.toggleFavorite(state.selectedEvent!.id) : undefined}
-        onShare={state.selectedEvent ? () => downloadShareCard(state.selectedEvent!) : undefined}
+        onShare={state.selectedEvent ? () => shareEvent(state.selectedEvent!) : undefined}
         readIds={progress.readIds}
       />
 
@@ -641,7 +646,24 @@ function App() {
         events={state.filteredEvents}
         readIds={progress.readIds}
       />
+
+      <AnnualReport
+        open={showAnnualReport}
+        onClose={() => setShowAnnualReport(false)}
+        events={state.filteredEvents}
+        readIds={progress.readIds}
+        unlockedAchievements={achievements.unlockedCount}
+        totalAchievements={achievements.total}
+      />
       </Suspense>
+
+      {/* AI 时光向导 */}
+      <AIChatPanel
+        onNavigateToEvent={(query) => {
+          state.setSearchQuery(query)
+          state.setViewMode('timeline')
+        }}
+      />
     </div>
   )
 }
