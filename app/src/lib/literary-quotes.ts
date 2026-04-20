@@ -1527,6 +1527,586 @@ const QUOTES_BY_KEYWORD: Array<{ keywords: string[]; quotes: LiteraryQuote[] }> 
     keywords: ['赤壁', '三国'],
     quotes: [{ text: '大江东去，浪淘尽，千古风流人物。', source: '苏轼《念奴娇·赤壁怀古》' }],
   },
+  // ═══ 澳大利亚/大洋洲引文 ═══
+  {
+    keywords: ['梦幻时期', 'Dreamtime', '原住民', 'Aboriginal'],
+    quotes: [{ text: 'We are all visitors to this time, this place. We are just passing through. Our purpose here is to observe, to learn, to grow, to love… and then we return home.', source: '澳大利亚原住民谚语', translation: '我们都是这个时代、这个地方的过客。我们只是路过。我们来这里的目的是观察、学习、成长、去爱……然后回家。' }],
+  },
+  {
+    keywords: ['库克船长', 'Cook', '太平洋探险'],
+    quotes: [{ text: 'I had ambition not only to go farther than anyone had been before, but as far as it was possible for man to go.', source: '詹姆斯·库克船长', translation: '我的志向不仅是比任何人走得更远，而是走到人类所能到达的极限。' }],
+  },
+  {
+    keywords: ['第一舰队', '1788', '殖民', '流放'],
+    quotes: [{ text: 'The land belongs to no one. Terra nullius.', source: '英国殖民者宣言，1788年——这一法律虚构统治了澳大利亚204年', translation: '这片土地不属于任何人。无主之地。' }],
+  },
+  {
+    keywords: ['道歉', 'Sorry', '被偷走的一代'],
+    quotes: [{ text: 'We apologise for the laws and policies of successive Parliaments and governments that have inflicted profound grief, suffering and loss on these our fellow Australians.', source: '陆克文总理道歉演讲，2008年2月13日', translation: '我们为历届议会和政府制定的法律和政策道歉——这些法律和政策给我们的澳大利亚同胞造成了深重的悲痛、苦难和损失。' }],
+  },
+  {
+    keywords: ['马博', 'Mabo', '无主之地', 'terra nullius'],
+    quotes: [{ text: 'The common law of this country would perpetuate injustice if it were to continue to embrace the enlarged notion of terra nullius.', source: '澳大利亚高等法院马博判决书，1992年', translation: '如果本国普通法继续拥抱扩大化的"无主之地"概念，它将使不公正永久化。' }],
+  },
+  {
+    keywords: ['怀唐伊', 'Waitangi', '毛利'],
+    quotes: [{ text: 'Ko te tuatahi, ko te mana o te whenua; ko te tuarua, ko te mana o te tangata.', source: '毛利谚语', translation: '第一是土地的威严；第二是人的威严。' }],
+  },
+  {
+    keywords: ['女性投票权', '1893', '新西兰'],
+    quotes: [{ text: 'All that separates, whether of race, class, creed, or sex, is inhuman, and must be overcome.', source: 'Kate Sheppard，新西兰女性投票权运动领袖', translation: '一切制造分离的东西——无论是种族、阶级、信仰还是性别——都是不人道的，必须被克服。' }],
+  },
+  {
+    keywords: ['希拉里', 'Hillary', '珠峰', 'Everest'],
+    quotes: [{ text: 'Well, we knocked the bastard off.', source: '埃德蒙·希拉里爵士，1953年5月29日登顶珠峰后', translation: '好吧，我们把那个该死的山峰给征服了。' }],
+  },
+  // ═══ 东南亚引文 ═══
+  {
+    keywords: ['苏加诺', '印尼独立', '万隆'],
+    quotes: [{ text: 'This is the first intercontinental conference of coloured peoples in the history of mankind!', source: '苏加诺，1955年万隆会议开幕演讲', translation: '这是人类历史上第一次有色人种的洲际会议！' }],
+  },
+  {
+    keywords: ['李光耀', '新加坡', 'Singapore'],
+    quotes: [{ text: 'We are a small country with no natural resources. Our only resource is our people.', source: '李光耀', translation: '我们是一个没有自然资源的小国。我们唯一的资源是我们的人民。' }],
+  },
+  {
+    keywords: ['胡志明', '越南', '奠边府'],
+    quotes: [{ text: 'Nothing is more precious than independence and freedom.', source: '胡志明', translation: '没有什么比独立和自由更珍贵。' }],
+  },
+  {
+    keywords: ['红色高棉', '波尔布特', 'S-21', '柬埔寨大屠杀'],
+    quotes: [{ text: 'To keep you is no benefit. To destroy you is no loss.', source: '红色高棉标语（S-21审讯中心墙上）', translation: '留你没有用，杀你没有损失。' }],
+  },
+  {
+    keywords: ['昂山素季', '缅甸', 'Myanmar'],
+    quotes: [{ text: 'The only real prison is fear, and the only real freedom is freedom from fear.', source: '昂山素季', translation: '唯一真正的牢笼是恐惧，唯一真正的自由是免于恐惧的自由。' }],
+  },
+  {
+    keywords: ['吴哥', 'Angkor', '高棉帝国'],
+    quotes: [{ text: 'At the sight of this temple, the mind is struck with amazement, and one marvels that such a work could have been accomplished by the hand of man.', source: '周达观《真腊风土记》，1296年', translation: '见此庙宇，心灵为之震撼，不禁惊叹人力竟能成就如此伟业。' }],
+  },
+  {
+    keywords: ['人民力量', 'EDSA', '菲律宾革命'],
+    quotes: [{ text: 'The Filipino is worth dying for.', source: '尼诺·阿基诺（被暗杀的菲律宾反对派领袖），1983年', translation: '菲律宾人民值得为之献身。' }],
+  },
+  {
+    keywords: ['东盟', 'ASEAN'],
+    quotes: [{ text: 'Unity in diversity.', source: '东盟格言（源自印尼国家格言 Bhinneka Tunggal Ika）', translation: '多样性中的统一。' }],
+  },
+  // ═══ 印度引文 ═══
+  {
+    keywords: ['奥义书', 'Upanishad', '梵我'],
+    quotes: [{ text: 'Tat tvam asi.', source: '《歌者奥义书》', translation: '你即是那（个体灵魂与宇宙精神本质上是同一的）。' }],
+  },
+  {
+    keywords: ['阿育王', 'Ashoka', '羯陵伽'],
+    quotes: [{ text: '凡战胜之处，必有悲伤。即使胜利者也不能不为此感到懊悔。', source: '阿育王第十三号岩石法敕', translation: '' }],
+  },
+  {
+    keywords: ['食盐进军', '甘地', 'Gandhi', '非暴力'],
+    quotes: [{ text: 'First they ignore you, then they laugh at you, then they fight you, then you win.', source: '常被归于甘地（实际来源有争议）', translation: '起初他们无视你，然后嘲笑你，然后与你战斗，最后你赢了。' }],
+  },
+  {
+    keywords: ['印巴分治', '1947', '独立'],
+    quotes: [{ text: 'At the stroke of the midnight hour, when the world sleeps, India will awake to life and freedom.', source: '尼赫鲁，1947年8月14日午夜', translation: '当午夜的钟声响起，当世界沉睡之时，印度将醒来，迎接生命和自由。' }],
+  },
+  {
+    keywords: ['泰姬陵', 'Taj Mahal'],
+    quotes: [{ text: 'A teardrop on the cheek of eternity.', source: '泰戈尔论泰姬陵', translation: '永恒面颊上的一滴眼泪。' }],
+  },
+  {
+    keywords: ['玄奘', '那烂陀', '西行'],
+    quotes: [{ text: '宁可就西而死，岂归东而生！', source: '玄奘，《大慈恩寺三藏法师传》', translation: '' }],
+  },
+  // ═══ 中东引文 ═══
+  {
+    keywords: ['智慧宫', 'Bayt al-Hikma', '巴格达', '翻译'],
+    quotes: [{ text: 'Seek knowledge even unto China.', source: '圣训（hadith），常被引用于伊斯兰学术传统', translation: '求知，哪怕远至中国。' }],
+  },
+  {
+    keywords: ['伊本西那', '阿维森纳', 'Avicenna', '医典'],
+    quotes: [{ text: 'Medicine is the science by which we learn the various states of the human body, in health and when not in health.', source: '伊本·西那《医典》', translation: '医学是我们借以了解人体在健康与非健康状态下各种情况的科学。' }],
+  },
+  {
+    keywords: ['赛克斯', 'Sykes', '皮科', 'Picot', '瓜分中东'],
+    quotes: [{ text: 'I should like to draw a line from the "e" in Acre to the last "k" in Kirkuk.', source: '马克·赛克斯爵士，1916年', translation: '我想从阿克港的"e"画一条线到基尔库克的最后一个"k"。' }],
+  },
+  {
+    keywords: ['阿拉伯之春', '布瓦吉吉', '突尼斯'],
+    quotes: [{ text: 'The people want to bring down the regime.', source: '阿拉伯之春最广泛传播的口号（ash-shaʻb yurīd isqāṭ an-niẓām）', translation: '人民要推翻这个政权。' }],
+  },
+  // ═══ 南亚/中亚引文 ═══
+  {
+    keywords: ['哈拉帕', '摩亨佐', '印度河'],
+    quotes: [{ text: 'A civilization that left no monuments to kings, no records of wars — only the world\'s most advanced plumbing.', source: '考古学家对印度河文明的评价', translation: '一个没有为国王建造纪念碑、没有留下战争记录的文明——只有世界上最先进的排水系统。' }],
+  },
+  {
+    keywords: ['巴基斯坦', '真纳', '分治'],
+    quotes: [{ text: 'You are free. You are free to go to your temples. You are free to go to your mosques. You may belong to any religion, caste or creed — that has nothing to do with the business of the State.', source: '穆罕默德·阿里·真纳，巴基斯坦建国演讲，1947年8月11日', translation: '你们是自由的。你们可以自由地去你们的寺庙，自由地去你们的清真寺。你们可以属于任何宗教、种姓或信条——这与国家事务无关。' }],
+  },
+  {
+    keywords: ['斯里兰卡', '锡兰', '佛牙'],
+    quotes: [{ text: 'Three things cannot be long hidden: the sun, the moon, and the truth.', source: '佛陀（常被引用于斯里兰卡上座部传统）', translation: '三件事无法长久隐藏：太阳、月亮和真理。' }],
+  },
+  {
+    keywords: ['不丹', '幸福', 'GNH'],
+    quotes: [{ text: 'Gross National Happiness is more important than Gross National Product.', source: '不丹第四代国王吉格梅·辛格·旺楚克', translation: '国民幸福总值比国民生产总值更重要。' }],
+  },
+  {
+    keywords: ['帖木儿', '撒马尔罕', 'Timur'],
+    quotes: [{ text: 'If you would know our power, look at our buildings.', source: '帖木儿', translation: '如果你想知道我们的力量，看看我们的建筑。' }],
+  },
+  {
+    keywords: ['怛罗斯', '造纸', '751'],
+    quotes: [{ text: '一场战败意外地加速了文明进程——俘虏的造纸工匠比十万大军更深刻地改变了世界。', source: '关于怛罗斯之战的历史评价', translation: '' }],
+  },
+  {
+    keywords: ['阿富汗', '帝国坟场', 'Great Game'],
+    quotes: [{ text: 'Afghanistan: where empires go to die.', source: '西方谚语', translation: '阿富汗：帝国的坟场。' }],
+  },
+  {
+    keywords: ['孟加拉', '独立', '1971'],
+    quotes: [{ text: 'Joy Bangla! (Victory to Bengal!)', source: '穆吉布·拉赫曼，1971年3月7日历史性演讲', translation: '孟加拉万岁！' }],
+  },
+  // ═══ 以色列/巴勒斯坦/印巴引文 ═══
+  {
+    keywords: ['巴比伦之囚', '圣殿', '流放'],
+    quotes: [{ text: 'By the rivers of Babylon, there we sat down, yea, we wept, when we remembered Zion.', source: '《圣经·诗篇》第137篇', translation: '我们曾在巴比伦的河边坐下，一追想锡安就哭了。' }],
+  },
+  {
+    keywords: ['贝尔福', 'Balfour', '犹太民族家园'],
+    quotes: [{ text: "His Majesty's Government view with favour the establishment in Palestine of a national home for the Jewish people.", source: '贝尔福宣言，1917年11月2日', translation: '陛下政府赞成在巴勒斯坦为犹太民族建立一个民族家园。' }],
+  },
+  {
+    keywords: ['因提法达', 'Intifada', '巴勒斯坦起义'],
+    quotes: [{ text: 'We will not accept any alternative to our homeland.', source: '巴勒斯坦因提法达时期口号', translation: '我们不会接受家园的任何替代品。' }],
+  },
+  {
+    keywords: ['奥斯陆', '拉宾', '和平'],
+    quotes: [{ text: 'Enough of blood and tears. Enough.', source: '伊扎克·拉宾，奥斯陆协议签署仪式，1993年', translation: '够了，血和泪。够了。' }],
+  },
+  {
+    keywords: ['阿姆利则', '贾利安瓦拉', '屠杀'],
+    quotes: [{ text: 'The impossible has happened.', source: '泰戈尔退回爵士头衔时的信', translation: '不可能的事情发生了。' }],
+  },
+  {
+    keywords: ['安贝德卡尔', '宪法', '达利特', '种姓'],
+    quotes: [{ text: 'I measure the progress of a community by the degree of progress which women have achieved.', source: '安贝德卡尔', translation: '我用女性取得的进步程度来衡量一个社会的进步。' }],
+  },
+  {
+    keywords: ['克什米尔', 'Kashmir', '印巴'],
+    quotes: [{ text: 'Kashmir is the jugular vein of Pakistan.', source: '穆罕默德·阿里·真纳', translation: '克什米尔是巴基斯坦的咽喉命脉。' }],
+  },
+  // ═══ 近现代引文 ═══
+  {
+    keywords: ['沃斯通克拉夫特', '女权辩护', 'Wollstonecraft'],
+    quotes: [{ text: 'I do not wish them to have power over men, but over themselves.', source: '玛丽·沃斯通克拉夫特《女权辩护》', translation: '我不希望女性凌驾于男性之上，我希望她们掌控自己。' }],
+  },
+  {
+    keywords: ['波伏瓦', '第二性', 'Beauvoir'],
+    quotes: [{ text: 'One is not born, but rather becomes, a woman.', source: '西蒙娜·德·波伏瓦《第二性》', translation: '女人不是天生的，而是后天造成的。' }],
+  },
+  {
+    keywords: ['曼德拉', 'Mandela', '种族隔离', 'apartheid'],
+    quotes: [{ text: 'No one is born hating another person because of the colour of his skin. People must learn to hate, and if they can learn to hate, they can be taught to love.', source: '纳尔逊·曼德拉《漫漫自由路》', translation: '没有人生来就因为肤色而仇恨他人。仇恨是后天学来的，如果人们能学会仇恨，他们也能被教会去爱。' }],
+  },
+  {
+    keywords: ['人权宣言', 'Universal Declaration', '1948'],
+    quotes: [{ text: 'All human beings are born free and equal in dignity and rights.', source: '《世界人权宣言》第一条，1948年', translation: '人人生而自由，在尊严和权利上一律平等。' }],
+  },
+  {
+    keywords: ['天花', 'smallpox', '根除'],
+    quotes: [{ text: 'The world and all its peoples have won freedom from smallpox.', source: 'WHO天花根除宣言，1980年', translation: '世界和世界上所有人民赢得了免于天花的自由。' }],
+  },
+  {
+    keywords: ['西班牙内战', '格尔尼卡', '国际纵队'],
+    quotes: [{ text: 'No pasaran! (They shall not pass!)', source: '西班牙共和派在马德里保卫战中的口号，1936年', translation: '他们休想通过！' }],
+  },
+  {
+    keywords: ['朝鲜战争', 'Korean War', '三八线'],
+    quotes: [{ text: 'In war there is no substitute for victory.', source: '麦克阿瑟（后被杜鲁门解职）', translation: '在战争中，胜利没有替代品。' }],
+  },
+  // ═══ 中国古典文学引文 ═══
+  {
+    keywords: ['诗经', '国风', '关雎'],
+    quotes: [{ text: '关关雎鸠，在河之洲。窈窕淑女，君子好逑。', source: '《诗经·关雎》——中国文学的第一声', translation: '' }],
+  },
+  {
+    keywords: ['诗经', '蒹葭', '秋水'],
+    quotes: [{ text: '蒹葭苍苍，白露为霜。所谓伊人，在水一方。', source: '《诗经·蒹葭》', translation: '' }],
+  },
+  {
+    keywords: ['曹操', '短歌行', '建安'],
+    quotes: [{ text: '对酒当歌，人生几何！譬如朝露，去日苦多。', source: '曹操《短歌行》', translation: '' }],
+  },
+  {
+    keywords: ['曹植', '洛神赋', '七步诗'],
+    quotes: [{ text: '翩若惊鸿，婉若游龙。', source: '曹植《洛神赋》', translation: '' }],
+  },
+  {
+    keywords: ['陶渊明', '桃花源', '田园'],
+    quotes: [{ text: '采菊东篱下，悠然见南山。', source: '陶渊明《饮酒·其五》', translation: '' }],
+  },
+  {
+    keywords: ['陈子昂', '幽州台'],
+    quotes: [{ text: '前不见古人，后不见来者。念天地之悠悠，独怆然而涕下。', source: '陈子昂《登幽州台歌》——唐诗精神的宣言', translation: '' }],
+  },
+  {
+    keywords: ['孟浩然', '春晓'],
+    quotes: [{ text: '春眠不觉晓，处处闻啼鸟。夜来风雨声，花落知多少。', source: '孟浩然《春晓》——每个中国孩子最早背诵的诗', translation: '' }],
+  },
+  {
+    keywords: ['王昌龄', '出塞', '边塞'],
+    quotes: [{ text: '但使龙城飞将在，不教胡马度阴山。', source: '王昌龄《出塞》', translation: '' }],
+  },
+  {
+    keywords: ['岑参', '白雪歌', '边塞'],
+    quotes: [{ text: '忽如一夜春风来，千树万树梨花开。', source: '岑参《白雪歌送武判官归京》', translation: '' }],
+  },
+  {
+    keywords: ['李商隐', '锦瑟', '无题'],
+    quotes: [{ text: '锦瑟无端五十弦，一弦一柱思华年。庄生晓梦迷蝴蝶，望帝春心托杜鹃。', source: '李商隐《锦瑟》——中国诗歌最著名的难解之诗', translation: '' }],
+  },
+  {
+    keywords: ['李商隐', '无题', '灵犀'],
+    quotes: [{ text: '身无彩凤双飞翼，心有灵犀一点通。', source: '李商隐《无题》', translation: '' }],
+  },
+  {
+    keywords: ['杜牧', '泊秦淮', '清明'],
+    quotes: [{ text: '商女不知亡国恨，隔江犹唱后庭花。', source: '杜牧《泊秦淮》', translation: '' }],
+  },
+  {
+    keywords: ['范仲淹', '岳阳楼', '忧乐'],
+    quotes: [{ text: '先天下之忧而忧，后天下之乐而乐。', source: '范仲淹《岳阳楼记》——中国士大夫精神的最高表达', translation: '' }],
+  },
+  {
+    keywords: ['晏殊', '浣溪沙'],
+    quotes: [{ text: '无可奈何花落去，似曾相识燕归来。', source: '晏殊《浣溪沙》', translation: '' }],
+  },
+  {
+    keywords: ['秦观', '鹊桥仙', '七夕'],
+    quotes: [{ text: '两情若是久长时，又岂在朝朝暮暮。', source: '秦观《鹊桥仙》', translation: '' }],
+  },
+  {
+    keywords: ['欧阳修', '醉翁亭', '蝶恋花'],
+    quotes: [{ text: '醉翁之意不在酒，在乎山水之间也。', source: '欧阳修《醉翁亭记》', translation: '' }],
+  },
+  {
+    keywords: ['关汉卿', '铜豌豆', '不伏老'],
+    quotes: [{ text: '我是个蒸不烂、煮不熟、捶不扁、炒不爆、响当当一粒铜豌豆。', source: '关汉卿《南吕·一枝花·不伏老》——中国文学史上最张狂的自我宣言', translation: '' }],
+  },
+  {
+    keywords: ['白朴', '梧桐雨'],
+    quotes: [{ text: '一声声更苦。', source: '白朴《梧桐雨》——秋雨打梧桐的永恒意象', translation: '' }],
+  },
+  {
+    keywords: ['元散曲', '张养浩', '潼关怀古'],
+    quotes: [{ text: '兴，百姓苦；亡，百姓苦。', source: '张养浩《山坡羊·潼关怀古》——中国诗歌中最深刻的历史感慨', translation: '' }],
+  },
+  // ═══ 明清文学引文 ═══
+  {
+    keywords: ['三国演义', '罗贯中', '天下大势'],
+    quotes: [{ text: '话说天下大势，分久必合，合久必分。', source: '罗贯中《三国演义》开篇', translation: '' }],
+  },
+  {
+    keywords: ['水浒传', '施耐庵', '逼上梁山'],
+    quotes: [{ text: '万卷经书曾读过，平生机巧心灵。六韬三略究来精。胸中藏战将，腹内隐雄兵。', source: '《水浒传》吴用出场词', translation: '' }],
+  },
+  {
+    keywords: ['西游记', '吴承恩', '孙悟空', '大闹天宫'],
+    quotes: [{ text: '皇帝轮流做，明年到我家。', source: '吴承恩《西游记》——孙悟空大闹天宫', translation: '' }],
+  },
+  {
+    keywords: ['红楼梦', '曹雪芹', '贾宝玉', '林黛玉'],
+    quotes: [{ text: '满纸荒唐言，一把辛酸泪。都云作者痴，谁解其中味？', source: '曹雪芹《红楼梦》开卷诗', translation: '' }],
+  },
+  {
+    keywords: ['牡丹亭', '汤显祖', '杜丽娘'],
+    quotes: [{ text: '情不知所起，一往而深。生者可以死，死可以生。', source: '汤显祖《牡丹亭》题词', translation: '' }],
+  },
+  {
+    keywords: ['纳兰', '饮水词', '初见'],
+    quotes: [{ text: '人生若只如初见，何事秋风悲画扇。', source: '纳兰性德《木兰花·拟古决绝词柬友》', translation: '' }],
+  },
+  {
+    keywords: ['纳兰', '饮水词', '悼亡'],
+    quotes: [{ text: '被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常。', source: '纳兰性德《浣溪沙》——悼念亡妻', translation: '' }],
+  },
+  {
+    keywords: ['龚自珍', '己亥杂诗', '风雷'],
+    quotes: [{ text: '九州生气恃风雷，万马齐喑究可哀。我劝天公重抖擞，不拘一格降人才。', source: '龚自珍《己亥杂诗》', translation: '' }],
+  },
+  {
+    keywords: ['儒林外史', '范进', '吴敬梓'],
+    quotes: [{ text: '功名富贵无凭据，费尽心情，总把流光误。浊酒三杯沉醉去，水流花谢知何处。', source: '吴敬梓《儒林外史》开篇词', translation: '' }],
+  },
+  // ═══ 中国现代文学引文 ═══
+  {
+    keywords: ['鲁迅', '狂人日记', '吃人'],
+    quotes: [{ text: '我翻开历史一查，每页上都写着仁义道德，仔细看了半夜，才从字缝里看出字来，满本都写着两个字是"吃人"。', source: '鲁迅《狂人日记》', translation: '' }],
+  },
+  {
+    keywords: ['鲁迅', '呐喊', '希望'],
+    quotes: [{ text: '希望本是无所谓有，无所谓无的。这正如地上的路；其实地上本没有路，走的人多了，也便成了路。', source: '鲁迅《故乡》', translation: '' }],
+  },
+  {
+    keywords: ['徐志摩', '再别康桥'],
+    quotes: [{ text: '轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。', source: '徐志摩《再别康桥》', translation: '' }],
+  },
+  {
+    keywords: ['沈从文', '边城', '翠翠'],
+    quotes: [{ text: '这个人也许永远不回来了，也许明天回来。', source: '沈从文《边城》结尾', translation: '' }],
+  },
+  {
+    keywords: ['张爱玲', '金锁记', '半生缘'],
+    quotes: [{ text: '生命是一袭华美的袍，爬满了蚤子。', source: '张爱玲《天才梦》', translation: '' }],
+  },
+  {
+    keywords: ['莫言', '诺贝尔', '红高粱'],
+    quotes: [{ text: '文学和科学相比较，的确是没有什么用处，但文学最大的用处，也许就是它没有用处。', source: '莫言，诺贝尔文学奖演讲', translation: '' }],
+  },
+  // ═══ 中国书法/绘画引文 ═══
+  {
+    keywords: ['兰亭', '王羲之', '天下第一行书'],
+    quotes: [{ text: '每览昔人兴感之由，若合一契，未尝不临文嗟悼，不能喻之于怀。', source: '王羲之《兰亭集序》', translation: '' }],
+  },
+  {
+    keywords: ['颜真卿', '祭侄', '安史之乱'],
+    quotes: [{ text: '贼臣不救，孤城围逼，父陷子死，巢倾卵覆。', source: '颜真卿《祭侄文稿》——天下第二行书', translation: '' }],
+  },
+  {
+    keywords: ['怀素', '草书', '自叙帖'],
+    quotes: [{ text: '忽然绝叫三五声，满壁纵横千万字。', source: '怀素《自叙帖》引他人评价', translation: '' }],
+  },
+  {
+    keywords: ['齐白石', '似与不似', '虾'],
+    quotes: [{ text: '作画妙在似与不似之间，太似为媚俗，不似为欺世。', source: '齐白石——中国画最精辟的美学纲领', translation: '' }],
+  },
+  {
+    keywords: ['郑板桥', '竹', '难得糊涂'],
+    quotes: [{ text: '难得糊涂。', source: '郑板桥', translation: '' }],
+  },
+  {
+    keywords: ['顾恺之', '传神', '以形写神'],
+    quotes: [{ text: '传神写照，正在阿堵中。', source: '顾恺之——中国画论的奠基之语（"阿堵"指眼睛）', translation: '' }],
+  },
+  {
+    keywords: ['清明上河图', '张择端', '汴京'],
+    quotes: [{ text: '画尽汴京繁华事，一卷千年说太平。', source: '后人评价《清明上河图》', translation: '' }],
+  },
+  // ═══ 三大一神教引文 ═══
+  {
+    keywords: ['摩西', '出埃及', '十诫'],
+    quotes: [{ text: 'Let my people go.', source: '《出埃及记》5:1——摩西对法老说', translation: '让我的百姓走。' }],
+  },
+  {
+    keywords: ['诗篇', '耶路撒冷', '巴比伦之囚'],
+    quotes: [{ text: 'If I forget thee, O Jerusalem, let my right hand forget her cunning.', source: '《圣经·诗篇》137:5', translation: '耶路撒冷啊，我若忘记你，情愿我的右手忘记技巧。' }],
+  },
+  {
+    keywords: ['塔木德', 'Talmud', '犹太律法'],
+    quotes: [{ text: 'Who saves a single life, saves the entire world.', source: '《塔木德·密西拿·桑赫德林》4:5', translation: '拯救一个生命，就是拯救整个世界。' }],
+  },
+  {
+    keywords: ['保罗', '哥林多', '爱的颂歌'],
+    quotes: [{ text: 'And now these three remain: faith, hope and love. But the greatest of these is love.', source: '保罗《哥林多前书》13:13', translation: '如今常存的有信、有望、有爱，这三样，其中最大的是爱。' }],
+  },
+  {
+    keywords: ['方济各', 'Francis', '太阳颂'],
+    quotes: [{ text: 'Lord, make me an instrument of Your peace.', source: '常被归于阿西西的方济各（实际来源有争议）', translation: '主啊，使我成为你和平的工具。' }],
+  },
+  {
+    keywords: ['路德', 'Luther', '宗教改革', '九十五条'],
+    quotes: [{ text: 'Here I stand, I can do no other.', source: '马丁·路德，沃尔姆斯帝国议会，1521年', translation: '这是我的立场，我无法做出其他选择。' }],
+  },
+  {
+    keywords: ['鲁米', 'Rumi', '苏菲', '旋转舞'],
+    quotes: [{ text: 'You are not a drop in the ocean. You are the entire ocean in a drop.', source: '鲁米', translation: '你不是海洋中的一滴水，你是一滴水中的整个海洋。' }],
+  },
+  {
+    keywords: ['鲁米', 'Rumi', '爱'],
+    quotes: [{ text: 'The wound is the place where the Light enters you.', source: '鲁米', translation: '伤口是光进入你的地方。' }],
+  },
+  {
+    keywords: ['古兰经', 'Quran', '第一次启示'],
+    quotes: [{ text: 'Read! In the name of your Lord who created.', source: '《古兰经》96:1——穆罕默德接受的第一次启示', translation: '你应当以创造了你的主的名义宣读。' }],
+  },
+  {
+    keywords: ['侯赛因', 'Husayn', '卡尔巴拉', '什叶'],
+    quotes: [{ text: 'Every day is Ashura, every land is Karbala.', source: '什叶派谚语', translation: '每天都是阿舒拉，每个地方都是卡尔巴拉。' }],
+  },
+  {
+    keywords: ['安萨里', 'Ghazali', '迷途指津'],
+    quotes: [{ text: 'Knowledge without action is insanity, and action without knowledge is vanity.', source: '安萨里（加扎利）', translation: '没有行动的知识是疯狂，没有知识的行动是虚妄。' }],
+  },
+  // ═══ 佛教/印度教/道教/儒家引文 ═══
+  {
+    keywords: ['佛陀', '释迦', '四谛', '涅槃'],
+    quotes: [{ text: 'Three things cannot be long hidden: the sun, the moon, and the truth.', source: '释迦牟尼', translation: '三件事无法长久隐藏：太阳、月亮和真理。' }],
+  },
+  {
+    keywords: ['龙树', '空性', '中观', '大乘'],
+    quotes: [{ text: '色不异空，空不异色。色即是空，空即是色。', source: '《般若波罗蜜多心经》——大乘佛教最精炼的哲学表述', translation: '' }],
+  },
+  {
+    keywords: ['禅宗', '达摩', '公案', 'Zen'],
+    quotes: [{ text: '不立文字，教外别传，直指人心，见性成佛。', source: '禅宗四句偈——菩提达摩', translation: '' }],
+  },
+  {
+    keywords: ['薄伽梵歌', 'Bhagavad Gita', '克里希纳'],
+    quotes: [{ text: 'Now I am become Death, the destroyer of worlds.', source: '《薄伽梵歌》——奥本海默在原子弹爆炸后引用', translation: '我成了死神，世界的毁灭者。' }],
+  },
+  {
+    keywords: ['商羯罗', '不二论', 'Advaita'],
+    quotes: [{ text: 'Brahman is real, the world is illusion, the self is nothing but Brahman.', source: '商羯罗', translation: '梵是真实的，世界是幻象，自我不过是梵。' }],
+  },
+  {
+    keywords: ['庄子', '庄周梦蝶', '逍遥'],
+    quotes: [{ text: '昔者庄周梦为胡蝶，栩栩然胡蝶也。不知周之梦为胡蝶与，胡蝶之梦为周与？', source: '庄子《齐物论》', translation: '' }],
+  },
+  {
+    keywords: ['道德经', '老子', '道可道'],
+    quotes: [{ text: '道可道，非常道。名可名，非常名。', source: '老子《道德经》开篇——中国哲学最著名的悖论', translation: '' }],
+  },
+  {
+    keywords: ['孟子', '性善', '民贵君轻'],
+    quotes: [{ text: '民为贵，社稷次之，君为轻。', source: '孟子《尽心下》', translation: '' }],
+  },
+  {
+    keywords: ['王阳明', '心学', '知行合一', '龙场'],
+    quotes: [{ text: '你未看此花时，此花与汝同归于寂。你来看此花时，则此花颜色一时明白起来。', source: '王阳明', translation: '' }],
+  },
+  {
+    keywords: ['朱熹', '理学', '格物'],
+    quotes: [{ text: '问渠那得清如许？为有源头活水来。', source: '朱熹《观书有感》', translation: '' }],
+  },
+  {
+    keywords: ['维韦卡南达', '芝加哥', '宗教议会'],
+    quotes: [{ text: 'As different streams having their sources in different places all mingle their water in the sea, so the different paths which men take all lead to God.', source: '维韦卡南达，1893年芝加哥世界宗教议会', translation: '正如不同的河流源自不同的地方但最终汇入大海，人们走的不同道路也通往同一个上帝。' }],
+  },
+  {
+    keywords: ['梵二', '梵蒂冈', '大公会议'],
+    quotes: [{ text: 'The Church rejects nothing of what is true and holy in other religions.', source: '梵蒂冈第二次大公会议《教会对非基督宗教态度宣言》', translation: '教会不拒绝其他宗教中真实和神圣的东西。' }],
+  },
+  // ═══ 印度教/道教丰富引文 ═══
+  {
+    keywords: ['摩诃婆罗多', 'Mahabharata', '俱卢之战'],
+    quotes: [{ text: '摩诃婆罗多中有的，世界上都有；摩诃婆罗多中没有的，世界上也没有。', source: '印度谚语', translation: '' }],
+  },
+  {
+    keywords: ['罗摩衍那', 'Ramayana', '罗摩', '悉多'],
+    quotes: [{ text: '我的罗摩不只是历史人物，他是永恒的理想。', source: '甘地论《罗摩衍那》', translation: '' }],
+  },
+  {
+    keywords: ['种姓', 'caste', '达利特', '不可接触'],
+    quotes: [{ text: 'I like your Christ, I do not like your Christians. Your Christians are so unlike your Christ.', source: '甘地（谈种姓与宗教虚伪）', translation: '我喜欢你们的基督，但不喜欢你们的基督徒。你们的基督徒太不像你们的基督了。' }],
+  },
+  {
+    keywords: ['瑜伽', 'yoga', '帕坦伽利'],
+    quotes: [{ text: 'Yoga is the cessation of the fluctuations of the mind.', source: '帕坦伽利《瑜伽经》1.2', translation: '瑜伽是心念波动的止息。' }],
+  },
+  {
+    keywords: ['老子', '道德经', '无为', '水'],
+    quotes: [{ text: '上善若水。水善利万物而不争，处众人之所恶，故几于道。', source: '老子《道德经》第八章', translation: '' }],
+  },
+  {
+    keywords: ['易经', '周易', '太极', '阴阳'],
+    quotes: [{ text: '天行健，君子以自强不息。地势坤，君子以厚德载物。', source: '《易经》乾卦/坤卦——清华大学校训的来源', translation: '' }],
+  },
+  {
+    keywords: ['黄巾', '太平道', '张角'],
+    quotes: [{ text: '苍天已死，黄天当立。岁在甲子，天下大吉。', source: '张角·黄巾起义口号', translation: '' }],
+  },
+  {
+    keywords: ['武当', '太极拳', '张三丰'],
+    quotes: [{ text: '天下之至柔，驰骋天下之至坚。', source: '老子《道德经》第四十三章——太极拳的哲学根基', translation: '' }],
+  },
+  {
+    keywords: ['李约瑟', '道教', '科技'],
+    quotes: [{ text: 'Taoism was the most important root of Chinese science and technology.', source: '约瑟夫·李约瑟《中国科学技术史》', translation: '道教是中国传统科学和技术发展中最重要的思想根基。' }],
+  },
+  // ═══ 舞台艺术引文 ═══
+  {
+    keywords: ['威尔第', 'Verdi', '茶花女', '阿依达'],
+    quotes: [{ text: 'You may have the universe if I may have Italy.', source: '威尔第', translation: '你可以拥有全世界，只要让我拥有意大利。' }],
+  },
+  {
+    keywords: ['瓦格纳', 'Wagner', '指环', '尼伯龙根'],
+    quotes: [{ text: 'Imagination creates reality.', source: '理查德·瓦格纳', translation: '想象创造现实。' }],
+  },
+  {
+    keywords: ['卡门', 'Carmen', '比才'],
+    quotes: [{ text: "L'amour est un oiseau rebelle que nul ne peut apprivoiser.", source: '比才《卡门》哈巴涅拉', translation: '爱情是一只叛逆的鸟，谁也无法驯服。' }],
+  },
+  {
+    keywords: ['普契尼', 'Puccini', '蝴蝶夫人', '图兰朵'],
+    quotes: [{ text: "Nessun dorma! All'alba vincerò!", source: '普契尼《图兰朵》——今夜无人入睡', translation: '谁都不许睡！黎明时我将获胜！' }],
+  },
+  {
+    keywords: ['天鹅湖', '芭蕾', '柴可夫斯基'],
+    quotes: [{ text: 'Where words leave off, music begins.', source: '海涅（常被用于描述芭蕾的无言之美）', translation: '言语止处，音乐始。' }],
+  },
+  {
+    keywords: ['等待戈多', 'Godot', '贝克特', '荒诞'],
+    quotes: [{ text: 'Nothing happens. Nobody comes, nobody goes. It is terrible.', source: '贝克特《等待戈多》', translation: '什么都没发生。没有人来，没有人走。太可怕了。' }],
+  },
+  {
+    keywords: ['推销员之死', '威利·洛曼', '阿瑟·米勒'],
+    quotes: [{ text: 'Attention, attention must be finally paid to such a person.', source: '阿瑟·米勒《推销员之死》', translation: '必须关注这样一个人，终于必须关注了。' }],
+  },
+  {
+    keywords: ['布莱希特', 'Brecht', '三分钱', '间离'],
+    quotes: [{ text: 'Erst kommt das Fressen, dann kommt die Moral.', source: '布莱希特《三分钱歌剧》', translation: '先有面包，后有道德。' }],
+  },
+  {
+    keywords: ['曹禺', '雷雨', '话剧'],
+    quotes: [{ text: '我觉得宇宙间许多残忍的事都是出自好心的人。', source: '曹禺《雷雨》', translation: '' }],
+  },
+  {
+    keywords: ['汉密尔顿', 'Hamilton', '米兰达'],
+    quotes: [{ text: "I am not throwing away my shot.", source: '林-曼努尔·米兰达《汉密尔顿》', translation: '我不会浪费我的机会。' }],
+  },
+  {
+    keywords: ['悲惨世界', 'Les Mis', '人民歌唱'],
+    quotes: [{ text: 'Do you hear the people sing, singing the song of angry men?', source: '《悲惨世界》——从虚构的巴黎街垒到真实的全球抗议', translation: '你听到人民在歌唱吗？那是愤怒者的歌声。' }],
+  },
+  {
+    keywords: ['契诃夫', 'Chekhov', '樱桃园', '海鸥'],
+    quotes: [{ text: 'Any idiot can face a crisis; it is day-to-day living that wears you out.', source: '契诃夫', translation: '任何白痴都能面对危机；真正把你磨垮的是日复一日的生活。' }],
+  },
+  // ═══ 科技引文 ═══
+  {
+    keywords: ['普朗克', 'Planck', '量子'],
+    quotes: [{ text: 'Science advances one funeral at a time.', source: '普朗克', translation: '科学每次只前进一个葬礼的距离。' }],
+  },
+  {
+    keywords: ['玻尔', 'Bohr', '量子', '原子'],
+    quotes: [{ text: 'Anyone who is not shocked by quantum theory has not understood it.', source: '尼尔斯·玻尔', translation: '任何没有被量子理论震惊的人都没有理解它。' }],
+  },
+  {
+    keywords: ['海森堡', '测不准', '不确定'],
+    quotes: [{ text: 'Not only does God play dice, but He sometimes throws them where they cannot be seen.', source: '霍金（回应爱因斯坦）', translation: '上帝不仅掷骰子，有时还把它们扔到看不见的地方。' }],
+  },
+  {
+    keywords: ['费曼', 'Feynman', 'QED'],
+    quotes: [{ text: 'If you think you understand quantum mechanics, you do not understand quantum mechanics.', source: '费曼', translation: '如果你觉得你理解了量子力学，那你就没有理解量子力学。' }],
+  },
+  {
+    keywords: ['切尔诺贝利', 'Chernobyl', '核事故'],
+    quotes: [{ text: 'The real danger is not radiation itself, but lies told about radiation.', source: '切尔诺贝利幸存者', translation: '真正的危险不是辐射本身，而是关于辐射的谎言。' }],
+  },
+  {
+    keywords: ['邓稼先', '两弹', '原子弹'],
+    quotes: [{ text: '我不爱武器，我爱和平。但为了和平，我愿做这件事。', source: '邓稼先', translation: '' }],
+  },
+  {
+    keywords: ['5G', '通信', '万物互联'],
+    quotes: [{ text: 'The best way to predict the future is to invent it.', source: '艾伦·凯', translation: '预测未来最好的方式就是发明它。' }],
+  },
+  {
+    keywords: ['光纤', '海底电缆', '互联网基础设施'],
+    quotes: [{ text: '99% of international data traffic travels through undersea cables, not satellites.', source: 'TeleGeography', translation: '99%的国际数据流量通过海底电缆传输，而不是卫星。' }],
+  },
 ]
 
 /**

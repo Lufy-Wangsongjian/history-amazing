@@ -59,6 +59,37 @@ import { netherlandsEvents, spainEvents, easternEuropeEvents } from './events-en
 import { usColonialRevolutionEvents, usWestwardExpansionEvents, usCivilWarDeepEvents, usGildedProgressiveEvents, usDepressionWWIIEvents, usColdWarCivilRightsEvents, usContemporaryEvents } from './events-us-history'
 // Round 16: 美洲深度扩充 — 拉美 + 原住民 + 美国文化线
 import { latinAmericaDeepEvents, nativeAmericasEvents, usaCultureDeepEvents } from './events-americas-deep'
+import { australiaDeepEvents, pacificEvents, newZealandDeepEvents, australiaTechEvents, pacificEnvironmentEvents } from './events-australia-deep'
+import { southeastAsiaDeepEvents, seaReligionEvents } from './events-southeast-asia-deep'
+import { indiaSubcontinentDeepEvents, middleEastDeepEvents } from './events-india-middleeast-deep'
+import { southAsiaDeepEvents, centralAsiaDeepEvents } from './events-southasia-centralasia-deep'
+import { israelPalestineDeepEvents, indiaSupplementEvents, pakistanSupplementEvents } from './events-israel-india-pakistan-deep'
+import { modernFeminismEvents, modernHumanRightsEvents, modernLaborEvents, modernColdWarProxyEvents, modernHealthEvents } from './events-modern-deep'
+import { weakRegionPatchEvents } from './events-weak-region-patch'
+import { weakRegionPatch2Events } from './events-weak-region-patch-2'
+import { shijingDeepEvents, weiJinLitEvents, tangPoetrySupplementEvents, songCiSupplementEvents, yuanQuSupplementEvents } from './events-chinese-literature-deep'
+import { mingQingLitEvents, modernChineseLitEvents } from './events-chinese-literature-deep-2'
+import { chineseCalligraphyEvents, chinesePaintingEvents } from './events-chinese-art-deep'
+import { judaismDeepEvents, christianityDeepEvents, islamDeepEvents } from './events-abrahamic-religions-deep'
+import { buddhismDeepEvents, hinduismDeepEvents, taoismDeepEvents, confucianismDeepEvents, interFaithEvents } from './events-eastern-religions-deep'
+import { hinduismEnrichEvents, taoismEnrichEvents } from './events-hinduism-taoism-enrich'
+import { operaDeepEvents, balletDeepEvents, musicalEnrichEvents, dramaEnrichEvents } from './events-stage-arts-deep'
+import { broadwayEnrichEvents, westEndEnrichEvents } from './events-broadway-westend-enrich'
+import { europeanMusicalEvents, australiaMusicalEvents } from './events-europe-australia-musical'
+import { popMusicMilestonesEvents } from './events-pop-music-milestones'
+import { popMusic21stEvents } from './events-pop-music-21st'
+import { cantopopEvents, taiwanPopEvents, jpopEvents, kpopDeepEvents, mainlandPopEvents } from './events-asian-pop-music'
+import { asianNewGenPopEvents } from './events-asian-newgen-pop'
+import { europeanLitEvents, modernWorldLitEvents } from './events-world-literature'
+import { chineseNovelEnrichEvents } from './events-chinese-novel-enrich'
+import { medicineMilestonesEvents } from './events-medicine-milestones'
+import { architectureMilestonesEvents, westernPhilosophyEvents } from './events-architecture-philosophy'
+import { prehistoryDeepEvents, twentyFirstCenturyEvents } from './events-prehistory-21stcentury'
+import { quantumPhysicsEvents, chinaTechEvents, energyRevolutionEvents, communicationRevolutionEvents } from './events-science-tech-enrich'
+import { aiMilestonesEvents } from './events-ai-milestones'
+import { economicHistoryEvents, sportsHistoryEvents, explorationEvents } from './events-economy-sports-exploration'
+import { cinemaDeepEvents, mathHistoryEvents, environmentalHistoryEvents } from './events-cinema-math-environment'
+import { medicinePatchEvents, musicPatchEvents } from './events-category-patch'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -217,6 +248,83 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...latinAmericaDeepEvents,
   ...nativeAmericasEvents,
   ...usaCultureDeepEvents,
+  ...australiaDeepEvents,
+  ...pacificEvents,
+  ...newZealandDeepEvents,
+  ...australiaTechEvents,
+  ...pacificEnvironmentEvents,
+  ...southeastAsiaDeepEvents,
+  ...seaReligionEvents,
+  ...indiaSubcontinentDeepEvents,
+  ...middleEastDeepEvents,
+  ...southAsiaDeepEvents,
+  ...centralAsiaDeepEvents,
+  ...israelPalestineDeepEvents,
+  ...indiaSupplementEvents,
+  ...pakistanSupplementEvents,
+  ...modernFeminismEvents,
+  ...modernHumanRightsEvents,
+  ...modernLaborEvents,
+  ...modernColdWarProxyEvents,
+  ...modernHealthEvents,
+  ...weakRegionPatchEvents,
+  ...weakRegionPatch2Events,
+  ...medicinePatchEvents,
+  ...musicPatchEvents,
+  ...shijingDeepEvents,
+  ...weiJinLitEvents,
+  ...tangPoetrySupplementEvents,
+  ...songCiSupplementEvents,
+  ...yuanQuSupplementEvents,
+  ...mingQingLitEvents,
+  ...modernChineseLitEvents,
+  ...chineseCalligraphyEvents,
+  ...chinesePaintingEvents,
+  ...judaismDeepEvents,
+  ...christianityDeepEvents,
+  ...islamDeepEvents,
+  ...buddhismDeepEvents,
+  ...hinduismDeepEvents,
+  ...taoismDeepEvents,
+  ...confucianismDeepEvents,
+  ...interFaithEvents,
+  ...hinduismEnrichEvents,
+  ...taoismEnrichEvents,
+  ...operaDeepEvents,
+  ...balletDeepEvents,
+  ...musicalEnrichEvents,
+  ...dramaEnrichEvents,
+  ...broadwayEnrichEvents,
+  ...westEndEnrichEvents,
+  ...europeanMusicalEvents,
+  ...australiaMusicalEvents,
+  ...popMusicMilestonesEvents,
+  ...popMusic21stEvents,
+  ...cantopopEvents,
+  ...taiwanPopEvents,
+  ...jpopEvents,
+  ...kpopDeepEvents,
+  ...mainlandPopEvents,
+  ...asianNewGenPopEvents,
+  ...europeanLitEvents,
+  ...modernWorldLitEvents,
+  ...chineseNovelEnrichEvents,
+  ...medicineMilestonesEvents,
+  ...architectureMilestonesEvents,
+  ...westernPhilosophyEvents,
+  ...prehistoryDeepEvents,
+  ...twentyFirstCenturyEvents,
+  ...quantumPhysicsEvents,
+  ...chinaTechEvents,
+  ...energyRevolutionEvents,
+  ...communicationRevolutionEvents,
+  ...aiMilestonesEvents,
+  ...economicHistoryEvents,
+  ...sportsHistoryEvents,
+  ...explorationEvents,
+  ...cinemaDeepEvents,
+  ...mathHistoryEvents,
+  ...environmentalHistoryEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER

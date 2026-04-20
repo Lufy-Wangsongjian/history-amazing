@@ -52,7 +52,7 @@ export const CIVILIZATION_CIRCLES: CivilizationCircle[] = [
     bgColor: 'rgba(0,108,53,0.06)',
     borderColor: 'rgba(0,108,53,0.15)',
     regions: new Set<Region>([
-      'iran', 'iraq', 'turkey', 'israel', 'lebanon', 'jordan', 'saudi-arabia', 'syria',
+      'iran', 'iraq', 'turkey', 'israel', 'palestine', 'lebanon', 'jordan', 'saudi-arabia', 'syria',
       'afghanistan', 'egypt', 'morocco', 'algeria',
     ]),
     description: '两河流域、波斯和伊斯兰文明的交汇之地',
@@ -120,6 +120,18 @@ export const CIVILIZATION_CIRCLES: CivilizationCircle[] = [
       'kazakhstan', 'uzbekistan',
     ]),
     description: '丝绸之路的十字路口，游牧与定居文化的交汇',
+  },
+  {
+    id: 'oceania',
+    label: '大洋洲文明',
+    shortLabel: '大洋洲',
+    color: '#00008B',
+    bgColor: 'rgba(0,0,139,0.06)',
+    borderColor: 'rgba(0,0,139,0.15)',
+    regions: new Set<Region>([
+      'australia', 'new-zealand',
+    ]),
+    description: '6万年原住民文化与太平洋航海者的南方大陆，拥有人类最古老的持续性文明',
   },
 ]
 

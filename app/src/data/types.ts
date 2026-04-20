@@ -46,6 +46,7 @@ export type Region =
   | 'iraq'            // 伊拉克
   | 'turkey'          // 土耳其
   | 'israel'          // 以色列
+  | 'palestine'       // 巴勒斯坦
   | 'lebanon'         // 黎巴嫩
   | 'jordan'          // 约旦
   | 'saudi-arabia'    // 沙特阿拉伯
@@ -178,6 +179,7 @@ export const REGION_CONFIG: Record<Region, { label: string; flag: string; color:
   'iraq':          { label: '伊拉克',     flag: '🇮🇶', color: '#007A3D' },
   'turkey':        { label: '土耳其',     flag: '🇹🇷', color: '#E30A17' },
   'israel':        { label: '以色列',     flag: '🇮🇱', color: '#0038B8' },
+  'palestine':     { label: '巴勒斯坦',   flag: '🇵🇸', color: '#007A3D' },
   'lebanon':       { label: '黎巴嫩',     flag: '🇱🇧', color: '#ED1C24' },
   'jordan':        { label: '约旦',       flag: '🇯🇴', color: '#007A3D' },
   'saudi-arabia':  { label: '沙特阿拉伯', flag: '🇸🇦', color: '#006C35' },
