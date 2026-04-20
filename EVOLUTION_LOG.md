@@ -2,6 +2,92 @@
 
 ## 进化记录
 
+### 2026-04-20 全球探索与地理发现被忽视里程碑（轮次 2026-04-20_2110）
+
+**新建** `events-global-exploration.ts`（22 条事件）：
+- 非欧洲远洋 5 条：腓尼基环非洲、希帕洛斯季风、法显西行、曼萨·穆萨、郑和
+- 大航海与土著抗争 4 条：拉普拉普击麦哲伦、德雷克、库克、路易斯克拉克
+- 极地深海 6 条：南森、皮尔里/汉森、阿蒙森、丹增、皮卡尔、卡梅隆
+- 太空 4 条：阿波罗 11、哈勃、嫦娥四号、韦伯望远镜
+- 考古 3 条：马丘比丘、兵马俑、露西化石
+
+**因果链** +6（非欧洲远洋 / 大航海启蒙 / 极地深海 / 太空 / 考古 / 21 世纪前沿）
+**引文** +11（郑和碑记 / 阿姆斯特朗 / 阿蒙森 / 法显 / 宾汉 等中英双语）
+**数据**：基础 2911→2933 / 总 13555→13660 / 关联 59090→59710 / 因果链 108→114
+
+**背景**：诊断显示 exploration 是 12 个 category 中最薄弱的（89 条）。
+本轮修正大航海叙事的"欧洲中心"视角，把土著抵抗、非洲/中国/南亚远航、极地深空探险置于同等权重。
+
+### 2026-04-20 移动端体验系统性优化（13 项）
+
+基于移动端评估报告（6/10 → 目标 9/10），系统性修复 P0/P1/P2 问题。
+
+**P0 — 可用性修复**：
+
+| 项 | 修复 |
+|---|------|
+| Header 拥挤溢出 | 移动端简化为 logo + 3 个 icon（今天/收藏/主题），其他功能移至汉堡抽屉底部 |
+| MobileQuickActions | 新建组件：汉堡抽屉底部 3 列网格，12 个功能按钮（探索/游戏/数据三组）|
+| CompareView 列宽过窄 | 移动端默认 2 个文明圈（最多 3 个），时代洞察单列布局 |
+| 滑动手势缺失 | EventDetail 左右滑切换事件，顶部下拉关闭（触控起点 < 120px）|
+
+**P1 — 体验提升**：
+
+| 项 | 修复 |
+|---|------|
+| EventDetail Header 过密 | 5 按钮移动端全部 icon-only（40×40px），副标题隐藏 |
+| TimelineView 右侧悬浮按钮 | 移动端隐藏上下箭头，保留"回到顶部"|
+| TimelineView 年份列 | 移动端从 100px 缩至 72px，腾出 28px 卡片空间 |
+| 全局最小字号保护 | CSS 媒体查询：移动端 `text-[8px]/[9px]` → 11px，`text-[10px]/[11px]` → 12px（SVG 不受影响）|
+| 输入框字号 | `input/textarea/select` 强制 16px，防 iOS Safari 自动缩放 |
+| Dialog 移动端 padding | `p-6 → p-4`，`max-w-[calc(100%-2rem)] → calc(100%-1.5rem)`|
+| CuratedPaths 内边距 | 移动端外层 `p-4 → p-2`，抽屉最大高度 `88vh → 92vh`|
+
+**P2 — 细节打磨**：
+
+| 项 | 修复 |
+|---|------|
+| AIChatPanel 移动端改造 | 底部半屏抽屉（80vh）+ 抓手 + 遮罩，桌面端保持右下角浮窗 |
+| MobileTabBar 升级 | 字号 9px → 11px，icon 18px → 20px，每项高度 52px，底部安全区 `env(safe-area-inset-bottom)`|
+| PWA 支持 | `manifest.webmanifest` + `apple-mobile-web-app-*` meta + `theme-color`|
+| iOS 安全区域 | `viewport-fit=cover` + `.pt-safe / .pb-safe` 工具类 |
+
+**新增文件**：
+- `app/src/components/MobileQuickActions.tsx`（移动端快捷入口组件）
+- `app/public/manifest.webmanifest`（PWA manifest）
+- `Chrono_Atlas_移动端优化清单.md`（优化追踪文档）
+
+**修改文件**：
+- `app/index.html`（PWA meta + 安全区域）
+- `app/src/App.tsx`（Header 重构 + MobileQuickActions 集成）
+- `app/src/App.css`（移动端字号保护 + 安全区域工具类）
+- `app/src/components/FilterPanel.tsx`（+mobileExtra slot）
+- `app/src/components/CompareView.tsx`（移动端 2 圈默认 + 单列洞察）
+- `app/src/components/TimelineView.tsx`（右侧按钮隐藏 + 年份列压缩）
+- `app/src/components/EventDetail.tsx`（Header 精简 + 触控手势）
+- `app/src/components/EventCard.tsx`（提示文案更新）
+- `app/src/components/AIChatPanel.tsx`（移动端底部抽屉）
+- `app/src/components/MobileTabBar.tsx`（字号/尺寸/安全区）
+- `app/src/components/ui/dialog.tsx`（移动端 padding）
+- `app/src/components/CuratedPaths.tsx`（外层 padding）
+
+**验证**：passed（编译 ✅ / Lint 干净 ✅）
+
+### 2026-04-20 全球医学与公共卫生里程碑（轮次 2026-04-20_1955）
+
+**新建** `events-global-medicine.ts`（18 条事件）：
+- 古典/中世纪医学 4 条：张仲景《伤寒论》/拉齐论天花/阿拉伯医院 Bimaristan/苏鲁塔鼻整形
+- 近代流行病学 2 条：塞麦尔维斯（产褥热）/斯诺（宽街水泵）
+- 细菌学与化疗 2 条：柯赫（结核杆菌）/埃尔利希（萨尔瓦散）
+- 20 世纪公共卫生 6 条：班廷（胰岛素）/居里 X 光车/索尔克（脊灰）/WHO 成立/天花根除/屠呦呦（青蒿素）
+- 非西方与 21 世纪 4 条：南非艾滋防控/尼日利亚拉沙热/古巴白袍大军/mRNA 疫苗
+
+**因果链** +3（全球医学进化链 13 节点/疫苗根除链 8 节点/20 世纪公共卫生链 7 节点）
+**引文** +8 组（塞麦尔维斯/索尔克/屠呦呦/张仲景/希波克拉底/天花根除/居里夫人/拉齐）
+**数据**：2893→2911 基础 / 12705→12795 总 / 58510→59090 关联 / 医学类目（x5 后）约 290→380
+
+---
+
 ### 2026-04-19 六方向全面进化：经济/体育/探险/电影/数学/环保（轮次 2026-04-19_2326）
 
 **新建 2 个文件**（34条事件）：

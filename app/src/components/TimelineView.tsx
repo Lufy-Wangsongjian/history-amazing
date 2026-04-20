@@ -226,7 +226,7 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
     if (item.type === 'era-header') {
       return (
         <div className="flex items-center gap-3 mb-6 mt-10 first:mt-0" data-era={item.era}>
-          <div className="w-[100px] md:w-[140px] text-right pr-4">
+          <div className="w-[72px] md:w-[140px] text-right pr-4">
             <span className="text-xs font-bold uppercase tracking-widest" style={{ color: item.color }}>{item.era}</span>
             <div className="text-[9px] text-muted-foreground mt-0.5">{item.total} 事件 · {item.milestones} 里程碑</div>
           </div>
@@ -247,7 +247,7 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
 
     if (item.type === 'era-spectrum') {
       return (
-        <div className="ml-[116px] md:ml-[156px] mr-4 mb-4 flex items-center gap-2">
+        <div className="ml-[84px] md:ml-[156px] mr-4 mb-4 flex items-center gap-2">
           <div className="flex-1 h-1 rounded-full overflow-hidden flex" title="类目分布色谱">
             {item.catCounts.map(([cat, count]) => {
               const cfg = CATEGORY_CONFIG[cat as keyof typeof CATEGORY_CONFIG]
@@ -263,7 +263,7 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
       const ov = ERA_OVERVIEWS[item.era]
       if (!ov) return null
       return (
-        <details className="ml-[116px] md:ml-[156px] mr-4 mb-4 group rounded-lg border border-border/40 bg-muted/20">
+        <details className="ml-[84px] md:ml-[156px] mr-4 mb-4 group rounded-lg border border-border/40 bg-muted/20">
           <summary className="flex items-center gap-2 px-3 py-2 cursor-pointer text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-lg transition-colors">
             <BookOpen size={12} />时代概览：{item.era}
             <ChevronDown size={11} className="ml-auto transition-transform group-open:rotate-180" />
@@ -295,7 +295,7 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
       const hasMilestone = yearGroup.events.some(e => e.significance === 3)
       return (
         <div className="flex gap-3 mb-4 group">
-          <div className="w-[100px] md:w-[140px] text-right pr-4 pt-3 flex-shrink-0">
+          <div className="w-[72px] md:w-[140px] text-right pr-4 pt-3 flex-shrink-0">
             <span className={`font-mono text-muted-foreground group-hover:text-foreground transition-colors ${hasMilestone ? 'text-xs font-semibold' : 'text-[10px] md:text-xs'}`}>
               {formatYear(yearGroup.year)}
             </span>
@@ -341,7 +341,7 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
     if (item.type === 'end-marker') {
       return (
         <div className="flex items-center gap-3 mt-8 mb-16">
-          <div className="w-[100px] md:w-[140px]" />
+          <div className="w-[72px] md:w-[140px]" />
           <div className="w-3 h-3 rounded-full bg-primary/50" />
           <span className="text-xs text-muted-foreground">时间线尽头 · 历史仍在书写...</span>
         </div>
@@ -381,15 +381,15 @@ export function TimelineView({ events, selectedEvent, onSelectEvent, focusYear, 
           </div>
         )}
 
-        {/* 右侧滚动控制 */}
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-2 md:right-4">
-          <div className="hidden md:flex h-28 w-2 rounded-full bg-card/75 border border-border/40 overflow-hidden shadow-sm">
+        {/* 右侧滚动控制（移动端只显示回到顶部） */}
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-2 md:right-4 pointer-events-none">
+          <div className="hidden md:flex h-28 w-2 rounded-full bg-card/75 border border-border/40 overflow-hidden shadow-sm pointer-events-auto">
             <div className="w-full self-end rounded-full bg-primary transition-[height] duration-200" style={{ height: `${Math.max(scrollProgress * 100, 8)}%` }} />
           </div>
-          <button onClick={() => scrollTo('up')} className="p-2 rounded-full bg-card/85 backdrop-blur-sm border border-border/50 shadow-md hover:bg-accent transition-colors" aria-label="向上滚动"><ChevronUp size={16} /></button>
-          <button onClick={() => scrollTo('down')} className="p-2 rounded-full bg-card/85 backdrop-blur-sm border border-border/50 shadow-md hover:bg-accent transition-colors" aria-label="向下滚动"><ChevronDown size={16} /></button>
+          <button onClick={() => scrollTo('up')} className="hidden md:block p-2 rounded-full bg-card/85 backdrop-blur-sm border border-border/50 shadow-md hover:bg-accent transition-colors pointer-events-auto" aria-label="向上滚动"><ChevronUp size={16} /></button>
+          <button onClick={() => scrollTo('down')} className="hidden md:block p-2 rounded-full bg-card/85 backdrop-blur-sm border border-border/50 shadow-md hover:bg-accent transition-colors pointer-events-auto" aria-label="向下滚动"><ChevronDown size={16} /></button>
           {showBackToTop && (
-            <button onClick={scrollToTop} className="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-2 text-[11px] font-medium text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5">
+            <button onClick={scrollToTop} className="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-2 text-[11px] font-medium text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5 pointer-events-auto">
               <ArrowUpToLine size={13} /><span className="hidden md:inline">回到顶部</span>
             </button>
           )}

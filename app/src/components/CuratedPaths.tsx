@@ -622,9 +622,9 @@ export function CuratedPaths({ open, onClose, events, onSelectEvent }: CuratedPa
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative flex max-h-[min(88vh,900px)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border/50 bg-card shadow-2xl">
+      <div className="relative flex max-h-[min(92vh,900px)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border/50 bg-card shadow-2xl">
         {/* Header */}
         <div className="border-b border-border/50 px-5 py-4 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
@@ -719,11 +719,11 @@ export function CuratedPaths({ open, onClose, events, onSelectEvent }: CuratedPa
                 </div>
               )}
 
-              {/* 事件列表 — 带连线 */}
-              <div className="relative pl-6">
+              {/* 事件列表 — 带连线（pl-12 为左侧序号预留 48px 空间） */}
+              <div className="relative pl-12">
                 {/* 连线 */}
                 <div
-                  className="absolute left-[11px] top-2 bottom-2 w-0.5 rounded-full"
+                  className="absolute left-[29px] top-2 bottom-2 w-0.5 rounded-full"
                   style={{ backgroundColor: `${currentPath?.color}30` }}
                 />
                 <div className="space-y-3">

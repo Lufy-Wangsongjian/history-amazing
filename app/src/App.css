@@ -746,3 +746,30 @@
 .ticker-scroll:hover {
   animation-play-state: paused;
 }
+
+/* ─── 移动端无障碍字号保护 ─── */
+/* 只作用于普通 HTML 元素，不影响 SVG text */
+@media (max-width: 767px) {
+  body :is(div, span, p, button, a, label, h1, h2, h3, h4, h5, h6, li, td, th).text-[8px],
+  body :is(div, span, p, button, a, label, h1, h2, h3, h4, h5, h6, li, td, th).text-[9px] {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+  body :is(div, span, p, button, a, label, h1, h2, h3, h4, h5, h6, li, td, th).text-[10px],
+  body :is(div, span, p, button, a, label, h1, h2, h3, h4, h5, h6, li, td, th).text-[11px] {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* ─── iOS 安全区域适配 ─── */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0);
+}

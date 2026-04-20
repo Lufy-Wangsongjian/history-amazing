@@ -1,0 +1,20 @@
+{
+  "name": "Chrono Atlas — 文明时间线",
+  "short_name": "Chrono Atlas",
+  "description": "探索两万年人类文明时间线的交互式知识产品",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a14",
+  "theme_color": "#0a0a14",
+  "lang": "zh-CN",
+  "categories": ["education", "reference", "books"],
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

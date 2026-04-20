@@ -32,7 +32,7 @@ import {
   Zap,
   Landmark,
 } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { RegionFlag } from './RegionFlag'
 import { CausalNetworkGraph } from './CausalNetworkGraph'
 import {
@@ -160,6 +160,35 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [event, previousEvent, nextEvent, handleNavigate])
 
+  // 触控手势：左右滑动切换事件，下拉关闭
+  const touchStartRef = useRef<{ x: number; y: number; t: number } | null>(null)
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const t = e.touches[0]
+    touchStartRef.current = { x: t.clientX, y: t.clientY, t: Date.now() }
+  }, [])
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    const start = touchStartRef.current
+    if (!start) return
+    const end = e.changedTouches[0]
+    const dx = end.clientX - start.x
+    const dy = end.clientY - start.y
+    const dt = Date.now() - start.t
+    touchStartRef.current = null
+    // 短时间 + 足够距离 = 滑动
+    if (dt > 500) return
+    const absX = Math.abs(dx)
+    const absY = Math.abs(dy)
+    // 横向滑动：切换事件
+    if (absX > 80 && absX > absY * 1.5) {
+      if (dx > 0 && previousEvent) handleNavigate(previousEvent)
+      else if (dx < 0 && nextEvent) handleNavigate(nextEvent)
+    }
+    // 下拉：关闭（仅当起点在顶部 120px 内）
+    else if (dy > 120 && absY > absX * 1.5 && start.y < 120) {
+      onClose()
+    }
+  }, [previousEvent, nextEvent, handleNavigate, onClose])
+
   if (!event || !catCfg || !regionCfg) {
     return null
   }
@@ -177,7 +206,11 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
         <DialogTitle className="sr-only">{event.title}</DialogTitle>
         <DialogDescription className="sr-only">{event.description}</DialogDescription>
 
-        <div className="flex h-full min-h-0 flex-col bg-background">
+        <div
+          className="flex h-full min-h-0 flex-col bg-background"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="h-1.5 w-full flex-shrink-0" style={{ backgroundColor: catCfg.color }} />
 
           <div className="border-b border-border/50 bg-card/70 px-4 py-3 backdrop-blur-sm">
@@ -187,61 +220,65 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                   <PanelRightOpen size={12} className="text-primary" />
                   详情抽屉
                 </div>
-                <h2 className="mt-1 line-clamp-2 text-lg font-semibold text-foreground">{event.title}</h2>
-                <p className="mt-1 text-xs text-muted-foreground">
+                <h2 className="mt-1 line-clamp-2 text-base md:text-lg font-semibold text-foreground">{event.title}</h2>
+                <p className="mt-1 text-xs text-muted-foreground hidden md:block">
                   保持右侧阅读，左侧时间线仍可作为上下文参考。
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-1 md:gap-2 shrink-0">
                 {onToggleFavorite && (
                   <button
                     onClick={onToggleFavorite}
-                    className={`inline-flex min-h-10 items-center gap-1 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${
+                    className={`inline-flex min-h-10 min-w-10 items-center justify-center gap-1 rounded-lg border p-2 md:px-3 md:py-2 text-xs font-medium transition-all ${
                       isFavorite
                         ? 'border-rose-500/30 bg-rose-500/10 text-rose-500 hover:bg-rose-500/20'
                         : 'border-border/60 text-muted-foreground hover:bg-accent hover:text-rose-500'
                     }`}
                     title={isFavorite ? '取消收藏' : '收藏此事件'}
+                    aria-label={isFavorite ? '取消收藏' : '收藏此事件'}
                   >
-                    <Heart size={14} fill={isFavorite ? 'currentColor' : 'none'} />
-                    <span className="hidden sm:inline">{isFavorite ? '已收藏' : '收藏'}</span>
+                    <Heart size={16} fill={isFavorite ? 'currentColor' : 'none'} />
+                    <span className="hidden md:inline">{isFavorite ? '已收藏' : '收藏'}</span>
                   </button>
                 )}
                 {onShare && (
                   <button
                     onClick={onShare}
-                    className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-border/60 px-3 py-2 text-xs text-muted-foreground font-medium transition-all hover:bg-accent hover:text-foreground"
+                    className="inline-flex min-h-10 min-w-10 items-center justify-center gap-1 rounded-lg border border-border/60 p-2 md:px-3 md:py-2 text-xs text-muted-foreground font-medium transition-all hover:bg-accent hover:text-foreground"
                     title="生成分享卡片"
+                    aria-label="生成分享卡片"
                   >
-                    <Share2 size={14} />
-                    <span className="hidden sm:inline">分享</span>
+                    <Share2 size={16} />
+                    <span className="hidden md:inline">分享</span>
                   </button>
                 )}
                 <button
                   onClick={() => previousEvent && handleNavigate(previousEvent)}
                   disabled={!previousEvent}
-                  className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-border/60 px-3 py-2 text-xs text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex min-h-10 min-w-10 items-center justify-center gap-1 rounded-lg border border-border/60 p-2 md:px-3 md:py-2 text-xs text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
                   title="上一条 (←)"
+                  aria-label="上一条事件"
                 >
-                  <ChevronLeft size={14} />
-                  <span className="hidden sm:inline">上一条</span>
+                  <ChevronLeft size={16} />
+                  <span className="hidden md:inline">上一条</span>
                 </button>
                 <button
                   onClick={() => nextEvent && handleNavigate(nextEvent)}
                   disabled={!nextEvent}
-                  className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-border/60 px-3 py-2 text-xs text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex min-h-10 min-w-10 items-center justify-center gap-1 rounded-lg border border-border/60 p-2 md:px-3 md:py-2 text-xs text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
                   title="下一条 (→)"
+                  aria-label="下一条事件"
                 >
-                  <span className="hidden sm:inline">下一条</span>
-                  <ChevronRight size={14} />
+                  <span className="hidden md:inline">下一条</span>
+                  <ChevronRight size={16} />
                 </button>
                 <button
                   onClick={onClose}
-                  className="rounded-lg border border-border/60 p-2.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg border border-border/60 p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   aria-label="关闭详情抽屉"
                 >
-                  <X size={16} />
+                  <X size={18} />
                 </button>
               </div>
             </div>

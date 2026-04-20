@@ -5,6 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { RegionFlag } from './RegionFlag'
 import { CIVILIZATION_CIRCLES, type CivilizationCircle } from '@/data/civilizations'
 import { getMultiCivEraInsight, buildMultiCivResonanceNarrative } from '@/lib/compare-narratives'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { ChevronDown, ChevronUp, Sparkles, Eye, EyeOff } from 'lucide-react'
 
 interface CompareViewProps {
@@ -26,9 +27,14 @@ interface MultiCivRow {
 }
 
 export function CompareView({ events, onSelectEvent }: CompareViewProps) {
-  const [visibleCivIds, setVisibleCivIds] = useState<Set<string>>(() =>
-    new Set(CIVILIZATION_CIRCLES.map(c => c.id))
-  )
+  const isMobile = useIsMobile()
+  const [visibleCivIds, setVisibleCivIds] = useState<Set<string>>(() => {
+    // 移动端默认只显示前 2 个文明圈，避免列宽过窄
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      return new Set(CIVILIZATION_CIRCLES.slice(0, 2).map(c => c.id))
+    }
+    return new Set(CIVILIZATION_CIRCLES.map(c => c.id))
+  })
   const [expandedResonances, setExpandedResonances] = useState<Set<number>>(new Set())
   const [expandedInsights, setExpandedInsights] = useState<Set<string>>(new Set())
   const [showCivPicker, setShowCivPicker] = useState(false)
@@ -45,6 +51,8 @@ export function CompareView({ events, onSelectEvent }: CompareViewProps) {
         if (next.size <= 2) return prev
         next.delete(civId)
       } else {
+        // 移动端限制最多 3 个文明圈
+        if (isMobile && next.size >= 3) return prev
         next.add(civId)
       }
       return next
@@ -279,7 +287,7 @@ export function CompareView({ events, onSelectEvent }: CompareViewProps) {
                     >
                       <div
                         className="grid gap-2"
-                        style={{ gridTemplateColumns: `repeat(${Math.min(visibleCivs.length, 4)}, 1fr)` }}
+                        style={{ gridTemplateColumns: isMobile ? '1fr' : `repeat(${Math.min(visibleCivs.length, 4)}, 1fr)` }}
                       >
                         {insight.insights
                           .filter(ins => visibleCivIds.has(ins.civId))

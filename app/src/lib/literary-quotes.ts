@@ -2107,6 +2107,79 @@ const QUOTES_BY_KEYWORD: Array<{ keywords: string[]; quotes: LiteraryQuote[] }> 
     keywords: ['光纤', '海底电缆', '互联网基础设施'],
     quotes: [{ text: '99% of international data traffic travels through undersea cables, not satellites.', source: 'TeleGeography', translation: '99%的国际数据流量通过海底电缆传输，而不是卫星。' }],
   },
+  // ═══ 全球医学与公共卫生（2026-04-20 自进化追加）═══
+  {
+    keywords: ['塞麦尔维斯', '产褥热', '洗手'],
+    quotes: [{ text: 'Nothing but mindless prejudice can refuse to recognize this truth.', source: '塞麦尔维斯《产褥热的病因》1861', translation: '除了盲目的偏见，没有什么能拒绝承认这个真理。' }],
+  },
+  {
+    keywords: ['索尔克', '脊髓灰质炎', '脊灰疫苗', '小儿麻痹'],
+    quotes: [{ text: 'Could you patent the sun?', source: '乔纳斯·索尔克 1955', translation: '你能给太阳申请专利吗？' }],
+  },
+  {
+    keywords: ['屠呦呦', '青蒿素', '疟疾'],
+    quotes: [{ text: '青蒿素是传统中医药献给世界的一份礼物。', source: '屠呦呦诺贝尔奖演讲 2015', translation: 'Artemisinin is a gift to the world from traditional Chinese medicine.' }],
+  },
+  {
+    keywords: ['张仲景', '伤寒论'],
+    quotes: [{ text: '勤求古训，博采众方。', source: '张仲景《伤寒论序》', translation: '刻苦探求古人的教诲，广泛地吸取众家的良方。' }],
+  },
+  {
+    keywords: ['希波克拉底', '医学之父', '希波克拉底誓言'],
+    quotes: [{ text: 'Primum non nocere.', source: '希波克拉底誓言', translation: '首先，不要伤害。' }],
+  },
+  {
+    keywords: ['天花', 'smallpox', '根除'],
+    quotes: [{ text: 'The world and all its peoples have won freedom from smallpox.', source: 'WHO 第 33 届大会决议 1980', translation: '全世界和全体人民已经从天花中获得解放。' }],
+  },
+  {
+    keywords: ['居里夫人', '玛丽·居里', 'X 光车'],
+    quotes: [{ text: 'Nothing in life is to be feared, it is only to be understood.', source: '玛丽·居里', translation: '生命中没有什么值得恐惧，只有值得理解的东西。' }],
+  },
+  {
+    keywords: ['拉齐', 'Al-Razi', '波斯医学', '阿拉伯医学'],
+    quotes: [{ text: 'The physician who heals with his tongue is better than the one who heals with his scalpel.', source: '拉齐', translation: '用语言治疗的医生胜过用手术刀治疗的医生。' }],
+  },
+  {
+    keywords: ['郑和', '下西洋', '宝船'],
+    quotes: [{ text: '观夫海洋，洪涛接天，巨浪如山，殊域遐方，天各一隅……而我舟师上下，乘风破浪，昼夜星驰，涉彼狂澜，若履通衢。', source: '《天妃灵应碑记》郑和立', translation: '在郑和第七次下西洋前刻于福建长乐南山的碑文，记录七下西洋盛况。' }],
+  },
+  {
+    keywords: ['阿蒙森', '南极点', '极地探险'],
+    quotes: [{ text: 'Victory awaits him who has everything in order — luck, people call it.', source: '罗阿尔·阿蒙森', translation: '胜利只眷顾那些万事俱备的人——人们把它叫作运气。' }],
+  },
+  {
+    keywords: ['阿姆斯特朗', '登月', '月球'],
+    quotes: [{ text: 'That\u0027s one small step for a man, one giant leap for mankind.', source: '尼尔·阿姆斯特朗 1969', translation: '这是一个人的一小步，却是人类的一大步。' }],
+  },
+  {
+    keywords: ['库克', '库克船长', '太平洋'],
+    quotes: [{ text: 'I had ambition not only to go farther than any man had ever been before, but as far as it was possible for a man to go.', source: '詹姆斯·库克', translation: '我的抱负不只是走得比任何人更远，而是走到人类可能到达的极限。' }],
+  },
+  {
+    keywords: ['法显', '佛国记', '西行'],
+    quotes: [{ text: '顾寻所经，不觉心动汗流。', source: '法显《佛国记》', translation: '回顾所经历的险境，不觉心跳冷汗交加——记录跨越葱岭沙漠的感受。' }],
+  },
+  {
+    keywords: ['马丘比丘', '印加', '失落之城'],
+    quotes: [{ text: 'Few romances can ever surpass that of the granite citadel on top of the beetling precipices of Machu Picchu.', source: '海勒姆·宾汉 1913', translation: '很少有传奇能超过马丘比丘悬崖之巅花岗岩城堡的故事。' }],
+  },
+  {
+    keywords: ['兵马俑', '秦始皇陵', '世界第八大奇迹'],
+    quotes: [{ text: '世界的奇迹，民族的骄傲。', source: '法国前总统希拉克 1978 参观后', translation: '兵马俑被他誉为\u201C世界第八大奇迹\u201D之后这一称号流传至今。' }],
+  },
+  {
+    keywords: ['露西', 'Lucy', '南方古猿', '人类起源'],
+    quotes: [{ text: 'When she died, this small person changed our understanding of who we are.', source: '唐纳德·约翰逊', translation: '她死去的那一刻，这个小小的人改变了我们对自身的理解。' }],
+  },
+  {
+    keywords: ['哈勃望远镜', 'Hubble', '深空'],
+    quotes: [{ text: 'Equipped with his five senses, man explores the universe around him and calls the adventure Science.', source: '爱德温·哈勃', translation: '凭借五种感官，人类探索周围的宇宙，并把这场冒险称为科学。' }],
+  },
+  {
+    keywords: ['韦伯望远镜', 'JWST', 'James Webb'],
+    quotes: [{ text: 'We are going to show humanity the deepest image of our universe that has ever been taken.', source: 'NASA 局长 Bill Nelson 2022', translation: '我们将向人类展示迄今为止宇宙最深邃的画面。' }],
+  },
 ]
 
 /**

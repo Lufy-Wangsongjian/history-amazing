@@ -90,6 +90,9 @@ import { aiMilestonesEvents } from './events-ai-milestones'
 import { economicHistoryEvents, sportsHistoryEvents, explorationEvents } from './events-economy-sports-exploration'
 import { cinemaDeepEvents, mathHistoryEvents, environmentalHistoryEvents } from './events-cinema-math-environment'
 import { medicinePatchEvents, musicPatchEvents } from './events-category-patch'
+// Round 30: 全球医学与公共卫生里程碑（18 条：阿拉伯/中医/印度/近代流行病学/20世纪公共卫生/21世纪）
+import { globalMedicineEvents } from './events-global-medicine'
+import { globalExplorationEvents } from './events-global-exploration'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -310,6 +313,8 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...modernWorldLitEvents,
   ...chineseNovelEnrichEvents,
   ...medicineMilestonesEvents,
+  ...globalMedicineEvents,
+  ...globalExplorationEvents,
   ...architectureMilestonesEvents,
   ...westernPhilosophyEvents,
   ...prehistoryDeepEvents,

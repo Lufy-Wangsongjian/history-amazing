@@ -64,6 +64,8 @@ interface FilterPanelProps {
   coreOnly: boolean
   setCoreOnly: (v: boolean) => void
   onMobileClose?: () => void
+  /** 移动端抽屉底部额外内容（快捷入口） */
+  mobileExtra?: React.ReactNode
   /** 用于搜索联想的已加载事件列表 */
   events: HistoricalEvent[]
   /** 选中联想结果事件的回调 */
@@ -84,6 +86,7 @@ export function FilterPanel({
   filteredCount, totalCount,
   coreOnly, setCoreOnly,
   onMobileClose,
+  mobileExtra,
   events, onSelectEvent,
 }: FilterPanelProps) {
   const [collapsed, setCollapsed] = useState(false)
@@ -457,6 +460,9 @@ export function FilterPanel({
             </div>
           </div>
         </div>
+
+        {/* 移动端抽屉底部快捷入口 */}
+        {mobileExtra}
       </div>
     </div>
   )

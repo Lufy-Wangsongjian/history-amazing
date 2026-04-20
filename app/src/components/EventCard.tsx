@@ -43,11 +43,17 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
   const eraDecorPattern = isMilestone && eventEra ? getEraDecorSvg(eventEra.name, catCfg.color) : null
 
   const handleCardClick = useCallback(() => {
+    // 点击卡片任意区域：直接打开完整详情抽屉
+    onClick(event)
+  }, [event, onClick])
+
+  // 「展开内嵌详情」按钮（小箭头）专用：只切换展开状态，不打开抽屉
+  const handleToggleExpand = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
     if (layout === 'compact') {
       onClick(event)
       return
     }
-
     setExpanded(prev => !prev)
   }, [event, layout, onClick])
 
@@ -238,10 +244,17 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
               <RegionFlag region={event.region} size={16} />
               <span className="hidden sm:inline text-[10px]">{regionCfg.label}</span>
             </span>
-            <ChevronDown
-              size={14}
-              className={cn('mt-0.5 text-muted-foreground transition-transform duration-300', expanded && 'rotate-180')}
-            />
+            <button
+              onClick={handleToggleExpand}
+              className="ml-0.5 p-1 -m-1 rounded-md hover:bg-accent/60 transition-colors"
+              aria-label={expanded ? '收起快速预览' : '展开快速预览'}
+              title={expanded ? '收起快速预览' : '展开快速预览'}
+            >
+              <ChevronDown
+                size={14}
+                className={cn('text-muted-foreground transition-transform duration-300', expanded && 'rotate-180')}
+              />
+            </button>
           </div>
           </div>
         </div>
@@ -364,7 +377,7 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
           <div className="mt-3 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-[10px] text-muted-foreground">
-                点击卡片可展开 / 收起摘要
+                点击卡片打开完整详情
               </span>
               {onToggleFavorite && (
                 <button

@@ -163,7 +163,19 @@ export function AIChatPanel({ onNavigateToEvent }: AIChatPanelProps) {
   }
 
   return (
-    <div className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-6rem)] rounded-2xl border border-border/60 bg-card shadow-2xl flex flex-col overflow-hidden">
+    <>
+      {/* 移动端遮罩 */}
+      <div className="fixed inset-0 bg-black/30 z-40 md:hidden" onClick={() => setOpen(false)} />
+      <div className="fixed z-50 flex flex-col overflow-hidden border border-border/60 bg-card shadow-2xl
+        inset-x-0 bottom-0 h-[80vh] rounded-t-2xl rounded-b-none
+        md:inset-auto md:bottom-6 md:right-6 md:w-[360px] md:h-[520px] md:max-h-[calc(100vh-6rem)] md:rounded-2xl">
+      {/* 移动端抓手 */}
+      <div
+        className="md:hidden flex-shrink-0 flex justify-center py-2 cursor-pointer"
+        onClick={() => setOpen(false)}
+      >
+        <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />
+      </div>
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-violet-600 to-purple-600 text-white px-4 py-3 flex-shrink-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.1),transparent_50%)]" />
@@ -257,5 +269,6 @@ export function AIChatPanel({ onNavigateToEvent }: AIChatPanelProps) {
         </div>
       </div>
     </div>
+    </>
   )
 }

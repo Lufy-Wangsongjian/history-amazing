@@ -19,6 +19,7 @@ import { CATEGORY_CONFIG, REGION_CONFIG, ERAS, formatYear } from '@/data/types'
 import type { HistoricalEvent, Category } from '@/data/types'
 import { MilestoneTicker } from '@/components/MilestoneTicker'
 import { AIChatPanel } from '@/components/AIChatPanel'
+import { MobileQuickActions } from '@/components/MobileQuickActions'
 import { Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard, Target, Swords, Puzzle, HelpCircle, ArrowUpDown, Grid3X3, BarChart3 } from 'lucide-react'
 import { useState, useCallback, useRef, useEffect, useMemo, lazy, Suspense } from 'react'
 import './App.css'
@@ -304,6 +305,36 @@ function App() {
         </div>
 
         <div className="flex items-center gap-1.5 md:gap-2">
+          {/* ── 移动端：只保留主题切换 + 汉堡菜单（其他功能在汉堡抽屉/底部 Tab 里） ── */}
+          {isMobile ? (
+            <>
+              <button
+                onClick={() => openModal(setShowTodayInHistory)}
+                className="p-2 rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                title="历史上的今天"
+                aria-label="历史上的今天"
+              >
+                <CalendarDays size={18} />
+              </button>
+              <button
+                onClick={() => openModal(setShowFavorites)}
+                className="relative p-2 rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                title="我的收藏"
+                aria-label="我的收藏"
+              >
+                <Heart size={18} />
+                {favs.count > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[14px] h-[14px] rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center px-1">
+                    {favs.count > 99 ? '99+' : favs.count}
+                  </span>
+                )}
+              </button>
+              <button onClick={toggleTheme} className="p-2 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground" title={theme === 'dark' ? '亮色' : '暗色'} aria-label="主题切换">
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+            </>
+          ) : (
+            <>
           {/* ── 一级入口：今天 / 路线 / 穿越 / 收藏 ── */}
           <button onClick={() => openModal(setShowTodayInHistory)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 hover:from-amber-500/20 hover:to-orange-500/20 transition-all duration-200 hover:shadow-sm" title="历史上的今天">
             <CalendarDays size={14} /><span className="hidden sm:inline">今天</span>
@@ -375,6 +406,8 @@ function App() {
           <button onClick={toggleTheme} className="p-2 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground" title={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'} aria-label={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}>
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
+            </>
+          )}
         </div>
       </header>
 
@@ -412,6 +445,24 @@ function App() {
             coreOnly={state.coreOnly}
             setCoreOnly={state.setCoreOnly}
             onMobileClose={isMobile ? () => setMobileMenuOpen(false) : undefined}
+            mobileExtra={isMobile ? (
+              <MobileQuickActions
+                unlockedAchievements={achievements.unlockedCount}
+                onPath={() => { setMobileMenuOpen(false); openModal(setShowCuratedPaths) }}
+                onRandom={() => { setMobileMenuOpen(false); handleRandomExplore() }}
+                onQuiz={() => { setMobileMenuOpen(false); openModal(setShowQuiz) }}
+                onMemory={() => { setMobileMenuOpen(false); openModal(setShowMemoryMatch) }}
+                onRiddle={() => { setMobileMenuOpen(false); openModal(setShowHistoryRiddle) }}
+                onSorter={() => { setMobileMenuOpen(false); openModal(setShowTimelineSorter) }}
+                onMissions={() => { setMobileMenuOpen(false); openModal(setShowMissions) }}
+                onChallenge={() => { setMobileMenuOpen(false); openModal(setShowTimelineChallenge) }}
+                onFigures={() => { setMobileMenuOpen(false); openModal(setShowFigureGallery) }}
+                onAutoExplore={() => { setMobileMenuOpen(false); openModal(setShowAutoExplore) }}
+                onAchievements={() => { setMobileMenuOpen(false); openModal(setShowAchievements) }}
+                onProgressHeatmap={() => { setMobileMenuOpen(false); openModal(setShowProgressHeatmap) }}
+                onAnnualReport={() => { setMobileMenuOpen(false); openModal(setShowAnnualReport) }}
+              />
+            ) : undefined}
             events={state.filteredEvents}
             onSelectEvent={state.setSelectedEvent}
           />
