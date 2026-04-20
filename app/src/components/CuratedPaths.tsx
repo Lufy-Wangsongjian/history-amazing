@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, formatYear } from '@/data/types'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Flame, Map as MapIcon, Swords, Lightbulb, Dna, X, ChevronRight, BookOpen, Music, Feather, Theater, ScrollText, Landmark, GraduationCap, Globe } from 'lucide-react'
 import { RegionFlag } from './RegionFlag'
 import { EXAM_TOPICS } from '@/data/exam-syllabus'
@@ -654,7 +653,7 @@ export function CuratedPaths({ open, onClose, events, onSelectEvent }: CuratedPa
           </div>
         </div>
 
-        <ScrollArea className="min-h-0 flex-1" type="hover">
+        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
           {!activePath ? (
             /* 路线选择列表 */
             <div className="p-5 space-y-3">
@@ -807,7 +806,7 @@ export function CuratedPaths({ open, onClose, events, onSelectEvent }: CuratedPa
               )}
             </div>
           )}
-        </ScrollArea>
+        </div>
       </div>
     </div>
   )

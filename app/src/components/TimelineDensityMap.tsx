@@ -8,7 +8,7 @@ interface TimelineDensityMapProps {
 }
 
 const BUCKET_WIDTH_YEARS = 50
-const MIN_YEAR = -4000
+const MIN_YEAR = -20000
 const MAX_YEAR = 2030
 
 interface Bucket {

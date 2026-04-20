@@ -208,7 +208,7 @@ export function StatsView({ events, onSelectEvent, onSearch, onDrillDown }: Stat
                   <button
                     key={cat.key}
                     className="flex items-center gap-3 group w-full"
-                    onClick={() => onDrillDown?.([-4000, 2030], cat.key)}
+                    onClick={() => onDrillDown?.([-20000, 2030], cat.key)}
                     title={`点击查看 ${cat.label} 类事件`}
                   >
                     <span className="text-[10px] font-medium w-12 text-right flex-shrink-0 group-hover:underline" style={{ color: cat.color }}>

@@ -250,7 +250,7 @@ export function generateDidYouKnow(event: HistoricalEvent): DidYouKnow[] {
   if (yearsAgo > 100) {
     facts.push({
       emoji: '⏰',
-      text: `这件事发生在距今约 ${yearsAgo.toLocaleString()} 年前。如果把人类文明 6000 年压缩成一天 24 小时，它大约发生在${getTimeOfDay(event.year)}。`,
+      text: `这件事发生在距今约 ${yearsAgo.toLocaleString()} 年前。如果把人类文明 22000 年压缩成一天 24 小时，它大约发生在${getTimeOfDay(event.year)}。`,
     })
   }
 
@@ -522,8 +522,8 @@ export function generateDidYouKnow(event: HistoricalEvent): DidYouKnow[] {
 }
 
 function getTimeOfDay(year: number): string {
-  // 把 -4000 到 2030 映射到 0-24 小时
-  const pct = (year + 4000) / 6030
+  // 把 -20000 到 2030 映射到 0-24 小时
+  const pct = Math.max(0, Math.min(1, (year + 20000) / 22030))
   const hour = Math.floor(pct * 24)
   if (hour < 6) return '凌晨（文明的最初萌芽期）'
   if (hour < 9) return '清晨（古典文明绽放的时刻）'

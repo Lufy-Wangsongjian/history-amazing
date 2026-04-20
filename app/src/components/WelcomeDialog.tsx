@@ -223,7 +223,7 @@ export function WelcomeDialog({
       <DialogContent className="max-w-3xl p-0 overflow-hidden gap-0 border-0" showCloseButton={false}>
         <DialogTitle className="sr-only">欢迎来到 Chrono Atlas</DialogTitle>
         <DialogDescription className="sr-only">
-          这是一个用于探索 6000 年人类文明时间线的交互式知识产品。
+          这是一个用于探索两万年人类文明时间线的交互式知识产品。
         </DialogDescription>
 
         <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-50 min-h-[480px]">
@@ -267,7 +267,7 @@ export function WelcomeDialog({
                 transform: animPhase !== 'scatter' || prefersReducedMotion ? 'translateY(0)' : 'translateY(20px)',
               }}
             >
-              <span className="gradient-text">6000 年</span>
+              <span className="gradient-text">两万年</span>
               <span className="text-white"> · 一个屏幕</span>
             </h2>
             <p
@@ -277,7 +277,7 @@ export function WelcomeDialog({
                 transform: animPhase !== 'scatter' || prefersReducedMotion ? 'translateY(0)' : 'translateY(15px)',
               }}
             >
-              文明的每一次突破，都像暗夜中点燃的一簇火光。Chrono Atlas 是一束穿越 6000 年的光线，帮助你看见时间的纹理。
+              文明的每一次突破，都像暗夜中点燃的一簇火光。Chrono Atlas 是一束穿越两万年的光线，帮助你看见时间的纹理。
             </p>
 
             {/* 时代光带 — phase 2: 汇聚阶段出现 */}
@@ -308,7 +308,7 @@ export function WelcomeDialog({
                 ))}
               </div>
               <div className="flex justify-between mt-1.5">
-                <span className="text-[9px] text-slate-500">公元前 4000 年</span>
+                <span className="text-[9px] text-slate-500">公元前 2 万年</span>
                 <span className="text-[9px] text-slate-500">公元 2030 年</span>
               </div>
             </div>

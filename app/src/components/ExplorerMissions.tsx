@@ -36,7 +36,7 @@ export function ExplorerMissions({ open, onClose, missions, onApplyMission }: Ex
                   </div>
                   <div>
                     <h2 className="text-sm font-bold">今日文明挑战</h2>
-                    <p className="text-[11px] text-amber-100/70 mt-0.5">把 6000 年文明时间线玩成一张可以闯关的地图</p>
+                    <p className="text-[11px] text-amber-100/70 mt-0.5">把两万年文明时间线玩成一张可以闯关的地图</p>
                   </div>
                 </div>
                 <button

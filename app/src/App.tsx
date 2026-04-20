@@ -285,7 +285,7 @@ function App() {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-background text-foreground overflow-hidden">
-      <header className="h-14 flex-shrink-0 border-b border-border/50 bg-card/50 backdrop-blur-md flex items-center justify-between px-4 md:px-5">
+      <header className="h-14 flex-shrink-0 border-b border-border/50 bg-card/50 backdrop-blur-md flex items-center justify-between px-4 md:px-5 relative z-40">
         <div className="flex items-center gap-2 md:gap-3 min-w-0">
           {isMobile && (
             <button
@@ -702,7 +702,7 @@ function NavDropdown({ icon, label, gradientFrom, gradientTo, borderColor, textC
         <svg className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-1 z-50 min-w-[160px] rounded-lg border border-border/60 bg-popover shadow-xl overflow-hidden">
+        <div className="absolute right-0 top-full mt-1 z-[100] min-w-[160px] rounded-lg border border-border/60 bg-popover shadow-xl overflow-hidden">
           {items.map((item, i) => (
             <button
               key={i}

@@ -774,9 +774,9 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
   )
 }
 
-/** 迷你时间线位置指示器 — 展示事件在 6000 年文明进程中的位置 */
+/** 迷你时间线位置指示器 — 展示事件在两万年文明进程中的位置 */
 function TimelinePositionIndicator({ year, eraColor }: { year: number; eraColor?: string }) {
-  const MIN_YEAR = -4000
+  const MIN_YEAR = -20000
   const MAX_YEAR = 2030
   const totalSpan = MAX_YEAR - MIN_YEAR
   const clampedYear = Math.max(MIN_YEAR, Math.min(MAX_YEAR, year))
@@ -809,7 +809,7 @@ function TimelinePositionIndicator({ year, eraColor }: { year: number; eraColor?
         />
       </div>
       <div className="flex items-center justify-between mt-1.5 text-[9px] text-muted-foreground/60">
-        <span>公元前 4000 年</span>
+        <span>公元前 2 万年</span>
         <span>公元 2030 年</span>
       </div>
     </div>

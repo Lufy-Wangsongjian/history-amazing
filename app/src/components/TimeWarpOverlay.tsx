@@ -19,7 +19,7 @@ interface TimeWarpOverlayProps {
 /** 穿越动画阶段 */
 type WarpPhase = 'idle' | 'tunnel' | 'arrive' | 'reveal' | 'fadeout'
 
-/** 根据年份计算在 6000 年时间线中的百分比 */
+/** 根据年份计算在 22000 年时间线中的百分比 */
 function getTimelinePercent(year: number): number {
   const MIN_YEAR = -20000
   const MAX_YEAR = 2030
@@ -369,7 +369,7 @@ export function TimeWarpOverlay({ active, targetEvent, allEvents, onComplete }: 
               />
             </div>
             <div className="flex justify-between mt-1">
-              <span className="text-[9px] text-slate-600">公元前 4000</span>
+              <span className="text-[9px] text-slate-600">公元前 2 万年</span>
               <span className="text-[9px] text-slate-600">公元 2030</span>
             </div>
           </div>

@@ -108,7 +108,7 @@ export function EraPulse({ events, onDrillDown }: EraPulseProps) {
         )}
 
         {/* X-axis labels */}
-        {[-4000, -2000, 0, 1000, 2000].map(yr => {
+        {[-20000, -10000, -4000, 0, 1000, 2000].map(yr => {
           const idx = buckets.findIndex(b => b.startYear >= yr)
           if (idx < 0) return null
           const x = points[idx]?.x || 0

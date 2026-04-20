@@ -141,7 +141,7 @@ export function generateShareCard(event: HistoricalEvent, layout: CardLayout = '
   // 右下角二维码提示
   ctx.font = '400 9px -apple-system, BlinkMacSystemFont, sans-serif'
   ctx.fillStyle = 'rgba(255,255,255,0.25)'
-  ctx.fillText('Chrono Atlas · 探索六千年文明', W - 185, bottomY + 6)
+  ctx.fillText('Chrono Atlas · 探索两万年文明', W - 185, bottomY + 6)
 
   return canvas.toDataURL('image/png')
 }

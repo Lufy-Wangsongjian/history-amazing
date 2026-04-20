@@ -200,7 +200,7 @@ function generateReportCard(stats: ReportStats): string {
   ctx.font = '400 9px -apple-system, BlinkMacSystemFont, sans-serif'
   ctx.fillStyle = 'rgba(255,255,255,0.2)'
   ctx.textAlign = 'center'
-  ctx.fillText('Chrono Atlas · 探索六千年文明', W / 2, H - 16)
+  ctx.fillText('Chrono Atlas · 探索两万年文明', W / 2, H - 16)
 
   return canvas.toDataURL('image/png')
 }
