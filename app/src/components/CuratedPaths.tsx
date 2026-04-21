@@ -732,7 +732,8 @@ export function CuratedPaths({ open, onClose, events, onSelectEvent }: CuratedPa
                     const stepNarrative = currentPath ? getStepNarrative(currentPath, event, idx, currentEvents.length) : null
                     return (
                       <div key={event.id} className="relative">
-                        {/* 节点 */}
+                        {/* 节点（父容器已 pl-12 为负偏移预留 48px） */}
+                        {/* layout-lint-ignore-next-line negative-offset-clipping-risk */}
                         <div
                           className="absolute -left-6 top-3 w-3 h-3 rounded-full border-2"
                           style={{
@@ -740,7 +741,8 @@ export function CuratedPaths({ open, onClose, events, onSelectEvent }: CuratedPa
                             backgroundColor: event.significance === 3 ? currentPath?.color : 'transparent',
                           }}
                         />
-                        {/* 序号 */}
+                        {/* 序号（父容器已 pl-12 预留空间） */}
+                        {/* layout-lint-ignore-next-line negative-offset-clipping-risk */}
                         <span
                           className="absolute -left-[46px] top-2.5 text-[9px] font-mono font-bold"
                           style={{ color: currentPath?.color }}

@@ -32,6 +32,12 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    // 移动端审计专用 project — 只跑 layout-audit 和 visual-regression
+    {
+      name: 'mobile-audit',
+      testMatch: /(layout-audit|visual-regression)\.spec\.ts/,
+      use: { ...devices['iPhone 12'] },
+    },
   ],
 
   /* 自动启动开发服务器 */

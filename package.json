@@ -12,7 +12,14 @@
     "install:all": "npm --prefix app install && npm --prefix server install",
     "test:e2e": "npx playwright test",
     "test:e2e:headed": "npx playwright test --headed",
-    "test:e2e:report": "npx playwright show-report"
+    "test:e2e:report": "npx playwright show-report",
+    "lint:layout": "node scripts/lint-layout.mjs",
+    "lint:layout:warn": "node scripts/lint-layout.mjs --warn-only",
+    "audit:layout": "npx playwright test layout-audit.spec.ts",
+    "audit:visual": "npx playwright test visual-regression.spec.ts",
+    "audit:visual:update": "npx playwright test visual-regression.spec.ts --update-snapshots",
+    "audit:all": "npm run lint:layout:warn && npm run audit:layout",
+    "precheck": "npm run lint:layout && npm run build"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",

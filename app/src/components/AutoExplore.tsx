@@ -75,7 +75,7 @@ export function AutoExplore({ open, onClose, events, onSelectEvent }: AutoExplor
         <DialogTitle className="sr-only">连续穿越</DialogTitle>
         <DialogDescription className="sr-only">自动浏览随机历史事件</DialogDescription>
 
-        <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white min-h-[420px] flex flex-col">
+        <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white min-h-[420px] max-h-[min(88vh,760px)] flex flex-col">
           {/* 背景光晕 */}
           <div
             className="absolute inset-0 transition-all duration-1000"

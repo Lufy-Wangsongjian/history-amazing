@@ -35,6 +35,7 @@ export function MobileTabBar({ viewMode, setViewMode }: MobileTabBarProps) {
             <div className={`relative ${isActive ? 'scale-110' : ''} transition-transform`}>
               <Icon size={20} className={isActive ? 'text-primary' : ''} />
               {isActive && (
+                // layout-lint-ignore-next-line negative-offset-clipping-risk
                 <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary" />
               )}
             </div>

@@ -143,7 +143,7 @@ export function HistoryRiddle({ open, onClose, events, onSelectEvent }: HistoryR
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose() }}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg max-h-[min(88vh,720px)] flex flex-col overflow-hidden">
         <DialogTitle className="flex items-center gap-2 text-lg font-bold">
           <HelpCircle size={20} className="text-violet-500" />
           历史猜谜

@@ -90,7 +90,7 @@ export function TimelineSorter({ open, onClose, events }: TimelineSorterProps) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose() }}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[min(88vh,720px)] flex flex-col overflow-y-auto">
         <DialogTitle className="flex items-center gap-2 text-lg font-bold">
           <ArrowUpDown size={20} className="text-orange-500" />
           历史排序挑战

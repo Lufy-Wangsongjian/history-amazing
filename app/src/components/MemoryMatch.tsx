@@ -156,10 +156,10 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-lg mx-4 bg-card rounded-2xl shadow-2xl border border-border/50 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-2 sm:p-4">
+      <div className="w-full max-w-lg bg-card rounded-2xl shadow-2xl border border-border/50 overflow-hidden flex flex-col max-h-[min(94vh,760px)]">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3 border-b border-border/50">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-border/50 flex-shrink-0">
           <h2 className="text-sm font-bold text-foreground">历史连连看</h2>
           <div className="flex items-center gap-3 flex-wrap">
             {/* 难度选择 */}
@@ -194,7 +194,7 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
         </div>
 
         {/* Game board */}
-        <div className="p-4">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4">
           {gameState === 'won' ? (
             <div className="text-center py-8">
               <Trophy size={40} className="mx-auto mb-3 text-amber-500" />
@@ -275,7 +275,7 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
           )}
         </div>
 
-        <div className="px-5 py-2.5 border-t border-border/30 text-[10px] text-muted-foreground/60 text-center">
+        <div className="px-5 py-2.5 border-t border-border/30 text-[10px] text-muted-foreground/60 text-center flex-shrink-0">
           翻牌配对：事件名 ↔ 发生年份 · 里程碑事件优先
         </div>
       </div>

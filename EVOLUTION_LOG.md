@@ -2,6 +2,66 @@
 
 ## 进化记录
 
+### 2026-04-21 山地的信仰 · 阿富汗/不丹/尼泊尔/蒙古/约旦五国宗教哲学纵深 25 条（轮次 2026-04-21_2045）
+
+**新建** `events-mountain-faiths.ts`（25 条事件，mf001-mf025）：
+- 阿富汗 7 条：亚历山大翻山(-327) / 犍陀罗艺术(50) / 摩尼教传播(222) / 法显取经(400) / 伊本·西那(1037) / 鲁米长眠(1273) / 巴米扬被毁(2001)
+- 尼泊尔 5 条：佛陀诞生蓝毗尼(-563) / 阿育王传法(-250) / 莲花生入藏(747) / 廓尔喀统一(1768) / 反拉纳革命(1950)
+- 蒙古 5 条：成吉思汗建国(1206) / 灭花剌子模(1219) / 俺答汗皈依藏佛(1578) / 外蒙立宪(1921) / 草原文艺复兴(2020)
+- 不丹 4 条：夏宗建国(1616) / 旺楚克王朝(1893) / GNH 提出(1972) / 立宪(2008)
+- 约旦 4 条：佩特拉成纳巴泰都(106) / 阿拉伯征服(632) / 岩石圆顶清真寺(691) / 独立(1946)
+
+**因果链** +3（喜马拉雅佛教传播链 6 节点 / 蒙古帝国与藏佛 5 节点 / 三小国君主现代化对比 10 节点）
+**引文** +2 组（17 关键词 8 段，含鲁米/法显/伊本·西那/阿育王/旺楚克/成吉思汗/俺答汗/贝尔佐尼）
+**数据**：基础 3274→3299 / 总 15355→15480 / 关联 69345→70025 / 因果链 186→189
+
+**核心意图**：一次性打穿 5 个薄弱 Region（afghanistan/nepal/mongolia/bhutan/jordan 均在最薄弱前 10）+ religion/philosophy 两个薄弱 Category + 覆盖古典到 21 世纪全时段。五个坐落于喜马拉雅、兴都库什、外约旦高原的小国都是宗教文明交汇点，自带\"山地信仰\"的叙事主题。
+
+---
+
+### 2026-04-21 被擦掉的半边天空 · 女性科学家 2000 年纵深 25 条（轮次 2026-04-21_1416）
+
+**新建** `events-women-science.ts`（25 条事件，ws001-ws025）：
+- 古典 3 条：玛利亚·犹太炼金(250/egypt) / 海帕提娅(415/egypt) / 法蒂玛办世界最早大学(859/morocco)
+- 启蒙 5 条：Châtelet 译牛顿(1740/france) / Caroline Herschel(1786/uk) / Lavoisier 夫人(1789/france) / Anning 化石(1811/uk) / Kovalevskaya(1884/russia)
+- 20 世纪上半叶 5 条：Curie(1903/poland) / Leavitt(1912/usa) / Noether(1915/germany) / Meitner(1938/austria) / Lamarr(1942/usa)
+- 20 世纪下半叶 9 条：McClintock(1950) / Franklin DNA 51 号(1952) / 吴健雄(1956) / Hodgkin(1964) / Goodall(1960) / Hamilton 阿波罗(1969) / 屠呦呦(1972) / Rubin 暗物质(1974) / Elion(1988)
+- 21 世纪 3 条：Maathai 和平奖(2004/kenya) / Mirzakhani 菲尔兹(2014/iran) / Doudna CRISPR(2020)
+
+**因果链** +2（古典-启蒙-19 世纪女性接力 11 节点 / 20 世纪现代女性里程碑 13 节点）
+**引文** +1 组（覆盖 46 关键词，含吴健雄/麦克林托克/富兰克林/米尔扎哈尼/迈特纳/Elion/马塔伊/古道尔 9 段）
+**数据**：基础 3204→3274 / 总 15010→15355 / 关联 67335→69345 / 因果链 176→178
+**踩坑**：孤立文件 events-non-western-medicine.ts 使用非法 region 'tibet'/'south-korea' 挡住编译，改为 china/korea 后通过
+
+### 2026-04-21 海上丝路双珠 · 澳门与新加坡 23 条（轮次 2026-04-21_1811）
+
+**新建** `events-port-cities.ts`（23 条事件，pc001-pc023）：
+- 澳门 12 条：欧华利屯门(1513) / 葡人定居(1557) / 利玛窦学汉语(1583) / 大三巴奠基(1602) / 击退荷兰舰队(1622) / 南海贸易三角(1680) / 大三巴火灾(1835) / 合法化赌博(1847) / 中葡条约(1887) / 何鸿燊专营权(1962) / 澳门回归(1999) / 港珠澳大桥(2019)
+- 新加坡 11 条：淡马锡地名(1299) / 莱佛士开埠(1819) / 苏伊士运河(1869) / 沦陷(1942) / PAP 执政(1959) / 建国(1965) / 淡马锡控股(1974) / 樟宜机场(1981) / 巴林银行事件(1995) / 滨海湾金沙(2010) / 李光耀逝世(2015)
+
+**因果链** +4（澳门四百年 8 节点 / 新加坡开埠至金融中心 9 节点 / 亚洲博彩之城并行 3 节点 / 复用探索者链）
+**引文** +2 组（利玛窦西学东渐 / 莱佛士与李光耀）
+**数据**：基础 3251→3274 / 总 15240→15355 / 关联 68535→69165 / macau 4→16（×4）/ singapore 5→16（×3.2）
+
+### 2026-04-21 失落的探索者·非西方航海家 22 条纵深（轮次 2026-04-21_1659）
+
+**新建** `events-lost-explorers.ts`（22 条事件，le001-le022）：
+- 远古-古典 6 条：拉皮塔太平洋扩散(-3000/indonesia) / 普恩特之地(-2500/egypt) / 南岛到马达加斯加(-1000/malaysia) / 尼科法老环航非洲(-600/lebanon) / 皮西亚斯图勒(-325/france) / 印度洋季风手册(100/egypt)
+- 早中世纪 4 条：法显(399/china) / 圣布伦丹(570/ireland) / 夏威夷殖民(800/indonesia) / 纳多德冰岛(861/norway)
+- 中世纪-近代早期 6 条：莱夫·文兰(1000/denmark) / 图德拉拉比(1162/spain) / 伊本·白图泰(1325/morocco) / 加泰罗尼亚地图(1375/spain) / 郑和抵东非(1433/kenya) / 达伽马(1497/portugal)
+- 近代-20世纪 6 条：麦哲伦死麦克坦(1521/philippines) / 波托西银矿(1545/bolivia) / 哥萨克抵太平洋(1608/russia) / 法国地理远征(1738/finland) / 楠森弗拉姆(1893/norway) / 阿蒙森南极(1911/norway)
+
+**因果链** +3（非西方海洋文明扩张链 4 节点 + 欧亚海陆通道 6 节点 + 极地探险三部曲 5 节点）
+**引文** +3 组（阿蒙森极地法则 / 波托西与大交换 / 伊本·白图泰讲故事）
+**数据**：总事件 15135→15240 / 关联 68005→68535 / 基础 3229→3251 / exploration 118→140
+
+**核心价值**：
+- 拉皮塔航海族比腓尼基人入地中海早 2000 年
+- 马达加斯加语与 7500 公里外婆罗洲语 90% 词根重合
+- 明英宗主动焚毁郑和船坞图纸，中国失去环球机会
+- 阿蒙森"成功靠准备，失败靠疏忽"——极地第一法则
+- 波托西一座山撑起半个地球，代价是 400-800 万劳工之命
+
 ### 2026-04-21 被遗忘的她们·女性科学家 25 条纵深（轮次 2026-04-21_1539）
 
 **新建** `events-women-science.ts`（25 条事件，ws001-ws025）：
@@ -250,6 +310,83 @@
 
 **背景**：诊断显示 exploration 是 12 个 category 中最薄弱的（89 条）。
 本轮修正大航海叙事的"欧洲中心"视角，把土著抵抗、非洲/中国/南亚远航、极地深空探险置于同等权重。
+
+### 2026-04-21 布局自动化检测体系建立（三层防护）
+
+**目标**：把类似 button 嵌套、弹窗无 max-h、元素被裁切等 bug 的检测从"人工扫描"自动化为"CI 阻断"。
+
+**架构**：三层检测体系
+
+| 层级 | 工具 | 耗时 | 覆盖面 |
+|------|------|------|--------|
+| **L1 静态 Lint** | `scripts/lint-layout.mjs`（Node + 正则） | ~1s | 7 条规则：button 嵌套、a 嵌套、Dialog 缺 max-h、flex-1 缺 min-h-0、负偏移裁切、小字号、fixed 缺 z-index |
+| **L2 运行时审计** | `e2e/layout-audit.spec.ts`（Playwright） | ~1 分钟 | 横向溢出、元素被父 overflow:hidden 裁切、触控目标过小、z-index 冲突 |
+| **L3 视觉回归** | `e2e/visual-regression.spec.ts`（Playwright） | ~3 分钟 | 4 视口 × 5 视图 = 18 张截图对比，像素差异 > 5% 即 fail |
+
+**集成方式**：
+
+| 入口 | 触发时机 | 执行内容 |
+|------|---------|---------|
+| Git pre-commit hook | 每次 `git commit` 前 | L1（ERROR 阻断） |
+| GitHub Actions | push to main / PR | L1 + L2（fail 阻止合并） |
+| 手动 | 发版前 | `npm run audit:all` + `npm run audit:visual` |
+
+**新增 npm 脚本**：
+- `npm run lint:layout` — 严格模式（ERROR 退出 1）
+- `npm run lint:layout:warn` — 只警告
+- `npm run audit:layout` — Playwright 运行时审计
+- `npm run audit:visual` — 视觉回归对比
+- `npm run audit:visual:update` — 更新截图基准
+- `npm run audit:all` — L1 + L2
+- `npm run precheck` — L1 + build（发布前全检）
+
+**新增文件**：
+- `scripts/lint-layout.mjs`（L1 静态 Lint 脚本）
+- `scripts/install-git-hooks.sh`（一次性 hooks 安装）
+- `.githooks/pre-commit`（pre-commit hook）
+- `e2e/layout-audit.spec.ts`（L2 运行时审计）
+- `e2e/visual-regression.spec.ts`（L3 视觉回归）
+- `.github/workflows/layout-audit.yml`（CI 工作流）
+- `Chrono_Atlas_布局自动化检测.md`（使用文档）
+
+**修改文件**：
+- `playwright.config.ts`（+mobile-audit project）
+- `package.json`（+8 个脚本）
+
+**首次运行结果**：
+- L1：0 ERROR / 240 WARN（240 个都是 `text-[10px]` 等小字号，已有 CSS 媒体查询兜底）
+- L2 首页审计：4 视口全部通过 ✅，捕获 3 个真实触控问题（Header icon 按钮 26-30px < 44）
+- L3：首次建立基准待发版时生成
+
+**验证**：passed（编译 ✅ / L1 ✅ / L2 ✅）
+
+
+
+### 2026-04-21 可视面积与滚动问题系统性扫描修复
+
+对 43 个组件进行全面扫描（嵌套元素/滚动容器/定位元素/溢出裁切/flex 崩溃等 7 类）。
+
+**高风险修复**：
+
+| 组件 | 问题 | 修复 |
+|------|------|------|
+| `EventCard.tsx` | 外层 `<button>` 嵌套内部 ChevronDown `<button>` 导致 React hydration warning | 外层改为 `<div role="button" tabIndex={0}>` + Enter/Space 键盘支持 |
+| `MemoryMatch.tsx` | 弹窗无 max-h 约束，困难难度 16 张卡竖屏会溢出屏幕 | 外层加 `max-h-[min(94vh,760px)] flex flex-col`，game board 改 `flex-1 min-h-0 overflow-y-auto`，Header/Footer 加 `flex-shrink-0` |
+| `HistoryRiddle.tsx` | DialogContent 无 max-h，多轮线索+结果提示会超屏 | `sm:max-w-lg max-h-[min(88vh,720px)] flex flex-col overflow-hidden` |
+| `TimelineSorter.tsx` | DialogContent 无 max-h，5 条长标题+结果串会溢出 | `max-h-[min(88vh,720px)] flex flex-col overflow-y-auto` |
+| `AutoExplore.tsx` | 只有 `min-h-[420px]` 无上限，在小屏会溢出 | 增加 `max-h-[min(88vh,760px)]` |
+| `ProgressHeatmap.tsx` | 自定义 tooltip `absolute bottom-full` 在第一行会被父 overflow 裁切 | 移除自定义 div tooltip，保留 `title` 属性（浏览器原生 tooltip 不受裁切） |
+
+**扫描结论**：
+- button 嵌套：全局仅 EventCard 1 处（已修复）
+- Radix ScrollArea 配合 `absolute` 子元素：仅 CuratedPaths 已处理（之前已修）
+- SearchAutocomplete 下拉 z-30 vs Header z-40：SearchAutocomplete 在 FilterPanel 内（非 Header 内），层级正常
+- MatrixView `overflow-x-auto` + `min-w-[800px]` table：设计如此，移动端横向滚动预期行为
+- EventDetail/FilterPanel/FavoritesPanel/AchievementsPanel 等均已有合理的 `max-h` + `flex-1 min-h-0` 结构
+
+**验证**：passed（编译 ✅ / Lint 干净 ✅）
+
+
 
 ### 2026-04-20 移动端体验系统性优化（13 项）
 

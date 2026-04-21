@@ -347,6 +347,7 @@ function App() {
           </button>
           <button onClick={() => openModal(setShowFavorites)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-rose-500/10 to-red-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 hover:from-rose-500/20 hover:to-red-500/20 transition-all duration-200 hover:shadow-sm relative" title="我的收藏">
             <Heart size={14} /><span className="hidden sm:inline">收藏</span>
+            {/* layout-lint-ignore-next-line negative-offset-clipping-risk */}
             {favs.count > 0 && (<span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center px-1">{favs.count > 99 ? '99+' : favs.count}</span>)}
           </button>
 

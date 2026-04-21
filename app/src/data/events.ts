@@ -110,6 +110,10 @@ import { inlandEmpiresEvents } from './events-inland-empires'
 import { islamicGoldenAgeEvents } from './events-islamic-golden-age'
 // Round 32: 被遗忘的她们——女性科学家纵深（25条）
 import { womenScienceEvents } from './events-women-science'
+import { lostExplorersEvents } from './events-lost-explorers'
+// Round 31: 海上丝路双珠 — 澳门与新加坡（23 条）
+import { portCitiesEvents } from './events-port-cities'
+import { mountainFaithsEvents } from './events-mountain-faiths'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -362,6 +366,10 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...islamicGoldenAgeEvents,
   // Round 32: 被遗忘的她们——女性科学家从 3 世纪到 21 世纪的纵深
   ...womenScienceEvents,
+  // Round 33: 失落的探索者——非西方航海家、商旅、地理发现（22条）
+  ...lostExplorersEvents,
+  ...portCitiesEvents,
+  ...mountainFaithsEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER

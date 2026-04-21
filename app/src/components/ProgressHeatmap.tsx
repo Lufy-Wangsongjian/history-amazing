@@ -87,14 +87,9 @@ export function ProgressHeatmap({ open, onClose, events, readIds }: ProgressHeat
                   return (
                     <div
                       key={`${row.era}-${cell.category}`}
-                      className={`flex-1 aspect-square rounded-sm ${getHeatColor(ratio)} transition-all hover:ring-1 hover:ring-foreground/20 relative group cursor-default`}
-                      title={`${row.era} × ${cell.label}: ${cell.read}/${cell.total}`}
-                    >
-                      {/* Tooltip */}
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 rounded bg-foreground text-background text-[9px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                        {cell.read}/{cell.total} ({cell.total > 0 ? Math.round(ratio * 100) : 0}%)
-                      </div>
-                    </div>
+                      className={`flex-1 aspect-square rounded-sm ${getHeatColor(ratio)} transition-all hover:ring-1 hover:ring-foreground/20 cursor-default`}
+                      title={`${row.era} × ${cell.label}: ${cell.read}/${cell.total} (${cell.total > 0 ? Math.round(ratio * 100) : 0}%)`}
+                    />
                   )
                 })}
               </div>
