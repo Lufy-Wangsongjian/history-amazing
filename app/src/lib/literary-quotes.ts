@@ -144,6 +144,126 @@ const QUOTES_BY_ID: Record<string, LiteraryQuote[]> = {
 /** 按标题关键词模糊匹配的引用（当 ID 精确匹配失败时使用） */
 const QUOTES_BY_KEYWORD: Array<{ keywords: string[]; quotes: LiteraryQuote[] }> = [
   {
+    keywords: ['泥板', 'Edubba', '书吏学校'],
+    quotes: [
+      { text: '我黎明起身便去 Edubba，抄写完泥板便回家吃饭；吃完饭便再回 Edubba。', source: '苏美尔书吏学徒泥板（约前 1800 年）' },
+      { text: '抄写员的职业，从古至今未曾过时。', source: '古埃及智者 Ptahhotep 箴言' },
+    ],
+  },
+  {
+    keywords: ['玛雅文字', '玛雅书吏', '玛雅文明'],
+    quotes: [
+      { text: 'In Lak\u02bcech — 吾即汝，汝即吾。', source: '玛雅问候语', translation: '(You are my other self.)' },
+      { text: '这些书里除了魔鬼的迷信什么都没有——烧掉它们，我们为这些人拯救了灵魂。', source: 'Diego de Landa 主教焚毁玛雅抄本时的说辞（1562 年）' },
+    ],
+  },
+  {
+    keywords: ['线形文字B', 'Ventris', '克诺索斯'],
+    quotes: [
+      { text: '一个业余的破译者胜过一百个被偏见困住的专家。', source: 'Michael Ventris 破译后的演讲（1953 年）' },
+    ],
+  },
+  {
+    keywords: ['奇普', 'Quipu', '结绳'],
+    quotes: [
+      { text: '我们没有文字，我们用结。而结记得的，比纸还要长久。', source: '秘鲁 Tupicocha 村老人口述' },
+    ],
+  },
+  {
+    keywords: ['西奈字母', '腓尼基字母', '原始字母'],
+    quotes: [
+      { text: 'ʾalp — 一头牛成了字母 A；bayt — 一座房子成了字母 B。从此，人类的声音可以被保存。', source: '字母文字谱系学引论' },
+    ],
+  },
+  {
+    keywords: ['阿拉米字母', '阿拉米语', '耶稣母语'],
+    quotes: [
+      { text: 'Talitha koum — 小女孩，起来吧。', source: '《马可福音》5:41（阿拉米语原文）' },
+    ],
+  },
+  {
+    keywords: ['西里尔', '格拉哥里字母', '西里尔字母'],
+    quotes: [
+      { text: '我绝不说希腊语是万民的语言，因为上帝造万民时给每个民族都说自己语言的权利。', source: '圣西里尔在威尼斯与拉丁教士辩论（867 年）' },
+    ],
+  },
+  {
+    keywords: ['Masora', '元音点注', '希伯来语抄写'],
+    quotes: [
+      { text: '一字不多，一字不少；一点不增，一点不减。', source: 'Masora 抄经员守则' },
+    ],
+  },
+  {
+    keywords: ['七十士译本', 'Septuagint', 'LXX'],
+    quotes: [
+      { text: '七十二位智者在七十二间密室，七十二天内译出的文本，一字不差。', source: '伪-亚里斯提亚书信（约前 200 年）' },
+    ],
+  },
+  {
+    keywords: ['智慧之家', '巴格达翻译', '侯奈因', 'Hunayn'],
+    quotes: [
+      { text: '没有哪种知识属于哪个民族——它属于所有愿意寻求它的人。', source: '侯奈因·伊本·伊斯哈格' },
+    ],
+  },
+  {
+    keywords: ['威克里夫', 'Wycliffe', '英译圣经'],
+    quotes: [
+      { text: '神的话应当属于每一个犁田的农夫，而不是只属于念拉丁文的祭司。', source: 'John Wycliffe' },
+      { text: '他们挖出我的骨头也不能烧掉这些书中的真理。', source: 'Wycliffe 临终遗言（传）' },
+    ],
+  },
+  {
+    keywords: ['林纾', '巴黎茶花女', '不懂外文'],
+    quotes: [
+      { text: '可怜一卷茶花女，断尽支那荡子肠。', source: '严复题林纾译《巴黎茶花女遗事》' },
+      { text: '吾不审西文，而欲使吾国之人知西书之可爱；吾友代我口译，吾则以文言收之。', source: '林纾自述' },
+    ],
+  },
+  {
+    keywords: ['毕昇', '泥活字', '活字印刷', '梦溪笔谈'],
+    quotes: [
+      { text: '庆历中，有布衣毕昇，又为活板。其法用胶泥刻字，薄如钱唇，每字为一印，火烧令坚。', source: '沈括《梦溪笔谈》卷十八' },
+    ],
+  },
+  {
+    keywords: ['古登堡', 'Gutenberg', '42 行圣经', '四十二行'],
+    quotes: [
+      { text: '去吧，把神的话传到每一个角落。从今以后，手抄本的时代结束了。', source: '古登堡为 42 行圣经所写的后记（传）' },
+    ],
+  },
+  {
+    keywords: ['直指', '高丽金属活字', '白云和尚'],
+    quotes: [
+      { text: '佛性本来常住，直指人心，见性成佛。', source: '白云景闲《佛祖直指心体要节》序（1377 年）' },
+    ],
+  },
+  {
+    keywords: ['Unicode', 'Emoji', '表情符号'],
+    quotes: [
+      { text: '尼泊尔语不比英语次等，切罗基语不比西班牙语次等——每一个文字都有同样的权利进入编码。', source: 'Unicode 联盟宪章' },
+      { text: '我画那 176 个小图标时，只想让寻呼机多一点人情味。没想到它变成了人类的通用表情。', source: '栗田穰崇（Kurita Shigetaka）' },
+    ],
+  },
+  {
+    keywords: ['布莱叶', 'Braille', '盲文'],
+    quotes: [
+      { text: '不能读书的生活，不是真正的生活。', source: 'Louis Braille（15 岁时写下）' },
+    ],
+  },
+  {
+    keywords: ['手语', '聋人语言', 'sign language'],
+    quotes: [
+      { text: '手语不是模仿口语的手势；它是一门完整的语言，有自己的语法和诗歌。', source: 'William Stokoe《美国手语的结构》（1960 年）' },
+    ],
+  },
+  {
+    keywords: ['濒危语言', 'Endangered Languages', '语言死亡'],
+    quotes: [
+      { text: '每一种语言的死亡，都是一种人类看世界方式的死亡。', source: 'Google Endangered Languages Project 开篇语' },
+      { text: '当最后一位 Eyak 语者 Marie Smith Jones 闭上眼时，一整个用声音描绘世界的方式永远消失了。', source: 'Michael Krauss, 阿拉斯加原住民语言中心（2008 年）' },
+    ],
+  },
+  {
     keywords: ['荷马', '伊利亚特', '奥德赛'],
     quotes: [{ text: 'Sing, O goddess, the anger of Achilles...', source: 'Homer, Iliad', translation: '歌唱吧，女神，阿喀琉斯的愤怒...' }],
   },
@@ -2179,6 +2299,588 @@ const QUOTES_BY_KEYWORD: Array<{ keywords: string[]; quotes: LiteraryQuote[] }> 
   {
     keywords: ['韦伯望远镜', 'JWST', 'James Webb'],
     quotes: [{ text: 'We are going to show humanity the deepest image of our universe that has ever been taken.', source: 'NASA 局长 Bill Nelson 2022', translation: '我们将向人类展示迄今为止宇宙最深邃的画面。' }],
+  },
+  {
+    keywords: ['龙树', '中观', '空', '缘起'],
+    quotes: [{ text: '以有空义故，一切法得成；若无空义者，一切则不成。', source: '龙树《中论·观四谛品》', translation: '正因有"空"，一切法才能成立；若没有"空"，一切都无法建立。' }],
+  },
+  {
+    keywords: ['商羯罗', '吠檀多', '梵我', 'Advaita'],
+    quotes: [{ text: 'Brahma satyaṃ jagan mithyā, jīvo brahmaiva nāparaḥ.', source: '商羯罗', translation: '梵是真实，世界是幻，个体灵魂与梵别无二致。' }],
+  },
+  {
+    keywords: ['道元', '正法眼藏', '身心脱落', '曹洞'],
+    quotes: [{ text: '学佛道者，学自己也。学自己者，忘自己也。忘自己者，为万法所证也。', source: '道元《正法眼藏·现成公案》', translation: '学佛道就是学自己，学自己就是忘自己，忘自己就是被万法所印证。' }],
+  },
+  {
+    keywords: ['李退溪', '李滉', '四端七情', '朝鲜性理学'],
+    quotes: [{ text: '四端，理之发也；七情，气之发也。', source: '李退溪《圣学十图》', translation: '仁义礼智之端源于"理"的发动，喜怒哀惧之情源于"气"的发动。' }],
+  },
+  {
+    keywords: ['宫本武藏', '五轮书', '不动智', '剑道'],
+    quotes: [{ text: '千日之稽古为锻，万日之稽古为炼。', source: '宫本武藏《五轮书·地之卷》', translation: '千日的反复练习叫"锻"，万日的反复练习叫"炼"——兵法之道无捷径。' }],
+  },
+  {
+    keywords: ['铿迪', 'Al-Kindi', '阿拉伯哲学'],
+    quotes: [{ text: 'We ought not to be ashamed of appreciating the truth and of acquiring it wherever it comes from.', source: '铿迪', translation: '无论真理从何处来，我们都不应羞于承认它、获得它。' }],
+  },
+  {
+    keywords: ['加扎利', 'Al-Ghazali', '哲学家的矛盾'],
+    quotes: [{ text: 'Doubt is the beginning of certainty.', source: '加扎利《解脱谬误》', translation: '怀疑是确信的开端——我通过怀疑一切才找到真正的信仰。' }],
+  },
+  {
+    keywords: ['鲁米', 'Rumi', '苏菲', '玛斯纳维'],
+    quotes: [{ text: 'You are not a drop in the ocean. You are the entire ocean in a drop.', source: '鲁米', translation: '你不是海洋中的一滴水，你是一滴水中的整个海洋。' }],
+  },
+  {
+    keywords: ['Ubuntu', '乌班图', '班图人', '图图'],
+    quotes: [{ text: 'Umuntu ngumuntu ngabantu.', source: '祖鲁谚语', translation: '一个人成为人，是通过其他人——我之所以是我，因为我们是我们。' }],
+  },
+  {
+    keywords: ['纳瓦特尔', '阿兹特克哲学', '内萨瓦尔科约特尔'],
+    quotes: [{ text: '我们只在地上一刹那，如花随风而逝；我们的生命只是梦中的梦。', source: '内萨瓦尔科约特尔', translation: '阿兹特克王兼诗人对存在的追问，早于欧洲怀疑论三百年。' }],
+  },
+  {
+    keywords: ['Zera Yacob', '埃塞俄比亚哲学', 'Hatata'],
+    quotes: [{ text: 'All men are equal in the presence of God; all are intelligent, since they are his creatures.', source: 'Zera Yacob《探究之书》1667', translation: '所有人在真主面前都是平等的；所有人都是理性的，因为他们都是他的造物。' }],
+  },
+  {
+    keywords: ['斯宾诺莎', 'Spinoza', '伦理学', 'Deus sive Natura'],
+    quotes: [{ text: 'Deus sive Natura.', source: '斯宾诺莎《伦理学》', translation: '神即自然——这一命题打破了神圣与自然的二元对立。' }],
+  },
+  {
+    keywords: ['萨义德', 'Said', '东方学', 'Orientalism'],
+    quotes: [{ text: 'The Orient was almost a European invention.', source: '萨义德《东方学》开篇', translation: '东方几乎是欧洲的一种发明——它不是地理实体，而是权力话语的产物。' }],
+  },
+  {
+    keywords: ['Ngugi', '去殖民', '心灵的去殖民'],
+    quotes: [{ text: 'The bullet was the means of the physical subjugation. Language was the means of the spiritual subjugation.', source: 'Ngũgĩ wa Thiong\u0027o《心灵的去殖民化》', translation: '子弹是肉体征服的手段，语言是精神征服的手段。' }],
+  },
+  {
+    keywords: ['国民幸福总值', 'GNH', '不丹哲学'],
+    quotes: [{ text: 'Gross National Happiness is more important than Gross National Product.', source: '不丹第四任国王吉格梅·辛格·旺楚克 1979', translation: '国民幸福总值比国民生产总值更重要——这是小国输出全球的治理哲学。' }],
+  },
+  {
+    keywords: ['Dussel', '解放哲学', '拉美哲学'],
+    quotes: [{ text: 'The face of the poor is the epiphany of the absolute.', source: 'Enrique Dussel《解放哲学》', translation: '穷人的面容就是绝对者的显现——真理诞生于与被压迫者的相遇。' }],
+  },
+  {
+    keywords: ['伊本·西那', '阿维森纳', '飞人'],
+    quotes: [
+      { text: 'Whoever acquires knowledge but does not practice it is like one who ploughs but does not sow.', source: 'Ibn Sina', translation: '求知而不实践者，如犁地而不播种。' },
+      { text: '灵魂即使脱离一切感官，仍能说"我在"——这便是自我不可否认的明证。', source: '《治疗论·心灵篇》', translation: '' },
+    ],
+  },
+  {
+    keywords: ['伊本·鲁世德', '阿威罗伊', '双重真理'],
+    quotes: [{ text: 'Truth does not contradict truth; rather, it agrees with it and bears witness to it.', source: 'Ibn Rushd《关键论》', translation: '真理不会与真理冲突——它们彼此印证。哲学与启示讲的是同一真理。' }],
+  },
+  {
+    keywords: ['伊本·赫勒敦', '阿萨比亚', '历史绪论'],
+    quotes: [
+      { text: 'The past resembles the future more than one drop of water resembles another.', source: 'Ibn Khaldun《历史绪论》', translation: '过去与未来的相似，胜过两滴水之相似。' },
+      { text: '文明的寿命如同个人的寿命——它有年少、壮年与衰老。', source: '《历史绪论·论王朝》', translation: '' },
+    ],
+  },
+  {
+    keywords: ['苏赫拉瓦迪', '光照哲学'],
+    quotes: [{ text: '凡存在皆光。真主是众光之光；万物不过是光衰减后的影。', source: 'Suhrawardi《光照智慧》', translation: '光照哲学的核心命题：存在即光的不同强度。' }],
+  },
+  {
+    keywords: ['伊本·阿拉比', '存在一性'],
+    quotes: [
+      { text: 'My heart has become capable of every form: it is a pasture for gazelles and a convent for Christian monks, a temple for idols and the Kaaba of the pilgrim.', source: 'Ibn Arabi《欲望诠释者》', translation: '我的心能承受一切形相——既是羚羊的草原，也是基督徒的修院；既是偶像的神庙，也是朝圣者的卡巴。' },
+    ],
+  },
+  {
+    keywords: ['空海', '弘法大师', '真言'],
+    quotes: [
+      { text: '生まれ生まれ生まれ生まれて生の始めに暗く、死に死に死に死にて死の終わりに冥し。', source: '空海《秘藏宝钥》', translation: '生而又生，生复生，其始茫茫；死而又死，死复死，其终冥冥。' },
+      { text: '即身成佛——此身此心，此时此刻，便是佛。', source: '《即身成佛义》', translation: '' },
+    ],
+  },
+  {
+    keywords: ['亲鸾', '净土真宗', '恶人正机'],
+    quotes: [{ text: '善人なほもて往生をとぐ、いはんや悪人をや。', source: '亲鸾《歎异抄》', translation: '善人尚能往生，何况恶人？——恶人正因自知无力，才真正依赖阿弥陀佛的救度。' }],
+  },
+  {
+    keywords: ['伊藤仁斋', '古义学', '论语'],
+    quotes: [{ text: '《论语》は最上至极宇宙第一の书なり。', source: '伊藤仁斋《论语古义》', translation: '《论语》是宇宙第一书——不在于它有多形而上，而在于它教人如何好好活着。' }],
+  },
+  {
+    keywords: ['本居宣长', '物哀', '古事记'],
+    quotes: [
+      { text: '世の中にさまざまのことを見聞きするにつけて、感ずるをいふなり。これが"物のあはれ"なり。', source: '本居宣长《石上私淑言》', translation: '见闻世间万事，心有所动——这便是"物哀"。' },
+      { text: '日本人の心は、やまとごころ。漢意にまどはされてはならぬ。', source: '《玉胜间》', translation: '日本之心是大和心，勿被汉意所惑。' },
+    ],
+  },
+  {
+    keywords: ['阮廌', '平吴大诰', '越南'],
+    quotes: [{ text: '以大义而胜凶残，以至仁而易强暴。', source: '阮廌《平吴大诰》', translation: '以大义战胜凶残，以至仁取代强暴——越南政治哲学的千年信条。' }],
+  },
+  {
+    keywords: ['易洛魁', '和平大法', 'Haudenosaunee'],
+    quotes: [{ text: 'In our every deliberation, we must consider the impact of our decisions on the next seven generations.', source: '《大和平法》', translation: '我们每作一次决议，都必须考虑它对未来七代人的影响——易洛魁的"七代原则"。' }],
+  },
+  {
+    keywords: ['波波尔·乌', '玛雅', '玉米人'],
+    quotes: [{ text: 'Made of yellow corn and of white corn were the bodies of our first mothers and fathers. Their flesh was made of the food of the corn.', source: '《波波尔·乌》', translation: '我们最初祖先的身体由黄色玉米和白色玉米构成——玛雅人认为生命就是谷物的转化。' }],
+  },
+  {
+    keywords: ['达拉·舒科', '两大洋的交汇'],
+    quotes: [{ text: 'The Upanishads and the Quran speak with one voice—only the languages differ.', source: 'Dara Shikoh《两大洋的交汇》', translation: '《奥义书》与《古兰经》说的是同一种声音——只是语言不同。' }],
+  },
+  {
+    keywords: ['奥罗宾多', '整体瑜伽', 'Aurobindo'],
+    quotes: [{ text: 'All life is yoga.', source: 'Sri Aurobindo《综合瑜伽》', translation: '一切生活都是瑜伽——不必避世闭关，在尘世做事本身就能通向超越。' }],
+  },
+  {
+    keywords: ['摩陀婆', '二元吠檀多', 'Madhva'],
+    quotes: [{ text: '神与我永远不同，正因如此，爱才可能。', source: '摩陀婆《梵经注》要旨', translation: '如果神与我合一，虔敬就只是自娱；惟有差异，使爱成立。' }],
+  },
+  {
+    keywords: ['帕坦伽利', '瑜伽经'],
+    quotes: [{ text: 'Yogah chitta-vritti-nirodhah.', source: '《瑜伽经》1.2', translation: '瑜伽即心识波动的止息——这是整部经文的开篇与核心。' }],
+  },
+  {
+    keywords: ['南丁格尔', '护理札记', '弗洛伦斯·南丁格尔'],
+    quotes: [
+      { text: 'Let whoever is in charge keep this simple question in her head: how can I provide for this right thing to be always done?', source: 'Florence Nightingale, Notes on Nursing, 1859', translation: '凡负责照料之人，心中应常存一问：我如何保证正确之事每次都能做到？——南丁格尔《护理札记》' },
+      { text: '人若想健康，必先获得自然之手——新鲜空气、阳光、温暖、清洁、安静，以及适当饮食。', source: '《护理札记》', translation: '南丁格尔把"环境是康复的主力"作为护理学的开山原则。' },
+    ],
+  },
+  {
+    keywords: ['玛丽·西科尔', 'Seacole', '塞科尔'],
+    quotes: [{ text: 'Unless I am allowed to contribute to their aid, I know that many an English life will be lost that might be saved.', source: 'Mary Seacole, Wonderful Adventures of Mrs. Seacole, 1857', translation: '若不让我来救他们，我知道许多本可得救的英国士兵将命丧战地——西科尔对战争部被拒后的回应。' }],
+  },
+  {
+    keywords: ['皮内尔', 'Pinel', '比塞特', '解放疯子'],
+    quotes: [{ text: 'Ces aliénés ne sont si intraitables que parce qu\'on les prive d\'air et de liberté.', source: 'Philippe Pinel, Traité médico-philosophique, 1801', translation: '这些精神病人之所以难以管束，正是因为他们被剥夺了空气与自由——皮内尔《论精神错乱》。' }],
+  },
+  {
+    keywords: ['多萝西娅·迪克斯', 'Dorothea Dix', '迪克斯'],
+    quotes: [{ text: 'I come to present the strong claims of suffering humanity. I come to place before the Legislature of Massachusetts the condition of the miserable, the desolate, the outcast.', source: 'Memorial to the Legislature of Massachusetts, 1843', translation: '我前来为受苦的人类诉求。我要把这个州里最凄惨、最孤苦、最被遗忘的人的处境，摆在立法者面前——迪克斯备忘录。' }],
+  },
+  {
+    keywords: ['塞麦尔维斯', 'Semmelweis'],
+    quotes: [{ text: 'Ich bin innerlich überzeugt, dass ich Rechthabe.', source: 'Ignaz Semmelweis, 致维也纳医学界', translation: '在我内心我确信我是对的——塞麦尔维斯被全欧洲否定时的回信。他的"确信"被证实时他已死去20年。' }],
+  },
+  {
+    keywords: ['WHO', '世界卫生组织', '阿拉木图', 'WHO 宪章'],
+    quotes: [
+      { text: 'Health is a state of complete physical, mental and social well-being and not merely the absence of disease or infirmity.', source: 'Constitution of WHO, 1946', translation: '健康是身体、精神与社会之完整健康状态，而非仅仅指没有疾病或虚弱——WHO宪章开篇。' },
+      { text: 'The enjoyment of the highest attainable standard of health is one of the fundamental rights of every human being.', source: 'WHO Constitution', translation: '享有可及最高健康标准，是每个人的基本权利。' },
+    ],
+  },
+  {
+    keywords: ['西西里·桑德斯', 'Cicely Saunders', '临终关怀', 'hospice'],
+    quotes: [{ text: 'You matter because you are you, and you matter to the end of your life.', source: 'Dame Cicely Saunders, St Christopher\'s Hospice', translation: '你重要，因为你就是你；你重要，直到生命的最后一刻——桑德斯临终关怀哲学。' }],
+  },
+  {
+    keywords: ['梁思成', '佛光寺', '营造法式', '应县木塔'],
+    quotes: [
+      { text: '我每读一节，都忍不住为祖先的智慧低头。', source: '梁思成《〈营造法式〉注释序》1932', translation: '梁思成翻译李诫《营造法式》时的感叹——这是一本比欧洲第一本建筑规范早500年的中国古籍。' },
+      { text: '中国建筑是一种高度有机的木构。', source: '梁思成《中国建筑的特征》1954', translation: '梁思成一生坚持：中国建筑不是"落后的木屋"，而是一种与石构文明并列的独立文明体系。' },
+    ],
+  },
+  {
+    keywords: ['法隆寺', '圣德太子', '斗拱', '榫卯', '合掌造', '桂离宫'],
+    quotes: [
+      { text: 'この一寸の材の中にも、千年の知恵が宿っている。', source: '西岡常一《木に学べ》', translation: '即使在这一寸的木料中，也寄宿着千年的智慧——西冈常一是法隆寺最后一位宫殿大木匠。' },
+      { text: 'Katsura is an architecture of nothing but what is necessary.', source: 'Bruno Taut "Houses and People of Japan" 1937', translation: '桂离宫是一种只留下必需之物的建筑——德国建筑师布鲁诺·陶特1933年第一次参观桂离宫后的感叹。' },
+    ],
+  },
+  {
+    keywords: ['隈研吾', '安藤忠雄', '负建筑', '木构复兴'],
+    quotes: [
+      { text: '混凝土是暴力的，木头是温柔的——21世纪属于木头。', source: '隈研吾《负建筑》2004', translation: '日本建筑师隈研吾宣告了木构的21世纪复兴：不是战胜自然，而是隐入自然。' },
+      { text: '光、風、水は、建築の最も贅沢な素材である。', source: '安藤忠雄《建築を語る》', translation: '光、风、水，是建筑最奢侈的材料——安藤忠雄对木构之魂的现代诠释。' },
+    ],
+  },
+  {
+    keywords: ['海印寺', '八万大藏经', '侗族', '风雨桥', '纽瓦尔', '虎穴寺'],
+    quotes: [
+      { text: '经板不朽，因为心不朽。', source: '海印寺住持的话（传）', translation: '八万大藏经版在无空调、无除湿的殿中保存700年无一虫蛀——古代被动式气候建筑的终极奇迹。' },
+      { text: '木匠先敬山神，再敬斧头，最后才敬自己。', source: '侗族木匠口诀', translation: '贵州侗族风雨桥的"无钉木构"技艺——21世纪仍在延续河姆渡时代的营造智慧。' },
+    ],
+  },
+  {
+    keywords: ['嫘祖', '蚕桑', '丝绸', '养蚕', '丝路'],
+    quotes: [
+      { text: '西陵氏之女，黄帝元妃，始教民育蚕。', source: '《史记·五帝本纪》', translation: '嫘祖教民养蚕取丝——中华文明最古老的女性发明家。' },
+      { text: 'Seres（赛里斯人）用树上的羊毛织布，比丝绸还细。', source: '老普林尼《博物志》公元 70 年', translation: '罗马人对中国丝绸的第一印象：「丝从树上的羊毛里抽出来」——西方直到六世纪才知道真相。' },
+    ],
+  },
+  {
+    keywords: ['纱丽', 'sari', '印度织造', '梨俱吠陀'],
+    quotes: [
+      { text: '衣料是神的身体——未经剪裁者为净，剪裁者为不净。', source: '《梨俱吠陀》古印度圣典', translation: '印度纱丽「不剪裁」哲学的宗教渊源——与西方「剪裁即工艺」的逻辑截然相反。' },
+    ],
+  },
+  {
+    keywords: ['十二单', '襲色目', '平安时代', '源氏物语', '紫式部'],
+    quotes: [
+      { text: '薄色に紅梅の袿、搔練の表着、桜の細長。', source: '紫式部《源氏物語》「若紫」巻', translation: '淡紫色袿衣配红梅色褂子、白色捣练表着、樱花色细长——紫式部笔下十二单的色彩诗学。' },
+      { text: '色は心なり、心は色なり。', source: '平安时代谚语', translation: '颜色即心境，心境即颜色——日本千年染色美学的浓缩。' },
+    ],
+  },
+  {
+    keywords: ['宋代审美', '褙子', '对襟', '宋代极简', '苏轼'],
+    quotes: [
+      { text: '欲把西湖比西子，淡妆浓抹总相宜。', source: '苏轼《饮湖上初晴后雨》', translation: '苏轼以西施喻西湖——宋代女性审美从浓艳转向淡雅的文化宣言。' },
+      { text: '无极而太极，无形而有神。', source: '周敦颐《太极图说》', translation: '宋代理学家把「少即多」上升为宇宙美学——比包豪斯早七百年的极简哲学。' },
+    ],
+  },
+  {
+    keywords: ['Batik', '蜡染', '爪哇', '滴蜡壶'],
+    quotes: [
+      { text: 'Setiap goresan malam adalah doa.（每一笔蜡都是一次祈祷）', source: '爪哇织工谚语', translation: '印尼 Batik 的蜡线是工匠对祖灵的祷告——工艺本身即是宗教仪式。' },
+    ],
+  },
+  {
+    keywords: ['Kente', '阿散蒂', '加纳织造', 'Adinkra'],
+    quotes: [
+      { text: 'Anansesɛm bɔ wɔn a wɔte ase.（智慧传给听得懂的人）', source: '阿坎谚语', translation: '加纳 Kente 布每一条纹都是一句谚语——穿衣就是阅读家族历史。' },
+    ],
+  },
+  {
+    keywords: ['caftan', '摩洛哥', '柏柏尔', '菲斯', '安达卢斯'],
+    quotes: [
+      { text: '她穿着黄金线绣的 caftan，像非洲晚霞降临地中海。', source: '保罗·鲍尔斯《被遮蔽的天空》1949', translation: '美国作家描写摩洛哥 caftan 之美——北非奢华与安达卢斯技艺的完美融合。' },
+    ],
+  },
+  {
+    keywords: ['中山装', '孙中山', '共和革命', '五权分立'],
+    quotes: [
+      { text: '礼、义、廉、耻，国之四维。', source: '《管子·牧民》', translation: '孙中山将四维写入中山装的四个口袋——一件衣服就是一份政治宣言。' },
+      { text: 'A new nation needs a new costume.', source: '孙中山论中山装（1912年）', translation: '新国家需要新衣冠——孙中山对服饰政治学的现代诠释。' },
+    ],
+  },
+  {
+    keywords: ['旗袍', '上海裁缝', '张爱玲', '花样年华', '长衫'],
+    quotes: [
+      { text: '衣服是一种语言，随身带着的袖珍戏剧。', source: '张爱玲《更衣记》1943', translation: '张爱玲为旗袍写的最优美散文——衣服是女性可以随身携带的自传。' },
+    ],
+  },
+  {
+    keywords: ['包豪斯', 'Anni Albers', 'Gunta Stölzl', '纺织工坊'],
+    quotes: [
+      { text: 'Threads make a language that is universal.', source: 'Anni Albers《On Weaving》1965', translation: '织线构成一种普世语言——Anni Albers 把纺织从手工艺提升为现代艺术。' },
+    ],
+  },
+  {
+    keywords: ['迪奥', 'Dior', 'New Look', '花冠线', 'Corolle'],
+    quotes: [
+      { text: 'This is a new look!', source: 'Carmel Snow, Harper\u2019s Bazaar 1947-02-12', translation: '这是全新的风貌！——一句惊叹定义了战后时尚史。' },
+      { text: '我为给战后的女性带回梦想而设计。', source: 'Christian Dior 自述', translation: '迪奥把自己的使命定为「重燃欧洲的浪漫」——但女权主义者后来指责 New Look 让女性重回束腰时代。' },
+    ],
+  },
+  {
+    keywords: ['三宅一生', 'Issey Miyake', 'A-POC', 'Pleats Please'],
+    quotes: [
+      { text: 'I want to make clothes that cannot be destroyed by war.', source: 'Issey Miyake 2016 BBC 访谈', translation: '我想做战争摧毁不了的衣服——三宅一生对广岛童年记忆的回答。' },
+      { text: '一枚の布（A Piece of Cloth）——服は身体を縛るのではなく、身体と踊るもの。', source: 'Issey Miyake 《Making Things》2000', translation: '一块布——衣服不是束缚身体，而是与身体共舞。' },
+    ],
+  },
+  {
+    keywords: ['川久保玲', 'Rei Kawakubo', 'Comme des Garçons', 'Hiroshima chic', '山本耀司'],
+    quotes: [
+      { text: 'I make clothes for women who are not trying to attract men.', source: 'Rei Kawakubo《Vogue》1995', translation: '我为不想取悦男性的女性做衣服——时装史上最具颠覆性的设计宣言。' },
+      { text: '黒は最も激しい反抗の色。', source: '山本耀司 Yohji Yamamoto 2002', translation: '黑色是最激烈的反抗色——日本设计师颠覆欧洲美学霸权的宣言。' },
+    ],
+  },
+  {
+    keywords: ['韩服', 'Hanbok', 'BTS', '白衣民族'],
+    quotes: [
+      { text: '백의민족은 흰옷에 마음을 담는다.（白衣民族把心寄托在白衣上）', source: '韩国民谣', translation: '朝鲜半岛被称「白衣民族」——白色韩服体现了儒家的素朴美学。' },
+    ],
+  },
+  {
+    keywords: ['快时尚', 'Zara', 'Rana Plaza', 'H&M', 'Fast Fashion'],
+    quotes: [
+      { text: 'Who made my clothes?', source: 'Fashion Revolution 全球运动 2013 起', translation: '是谁做了我身上这件衣服？——Rana Plaza 惨剧后，消费者开始追问供应链真相。' },
+    ],
+  },
+  {
+    keywords: ['可持续时尚', 'Stella McCartney', '有机棉', 'Patagonia', 'Mylo'],
+    quotes: [
+      { text: 'The Earth is the ultimate luxury. Let us act like it.', source: 'Stella McCartney 2021 巴黎时装周', translation: '地球才是终极奢侈品——当代时尚界最深刻的伦理宣言。' },
+    ],
+  },
+  {
+    keywords: ['元宇宙', 'Balenciaga', 'Fortnite', 'NFT 时装', 'Phygital', 'AI 时装'],
+    quotes: [
+      { text: '未来的衣橱一半是实物，一半是数据。', source: 'Demna Gvasalia 2022 访谈', translation: 'Balenciaga 创意总监对 Phygital 时代的预言——虚拟与实物的边界正在消失。' },
+      { text: 'Clothing comes from a body. AI has no body.', source: 'Rei Kawakubo 2024', translation: '衣服源自身体，AI 没有身体——川久保玲对时尚业 AI 化的冷峻回应。' },
+    ],
+  },
+  {
+    keywords: ['非洲时装', 'Lagos 时装周', 'Aso-Oke', 'Kenneth Ize', 'Thebe Magugu'],
+    quotes: [
+      { text: 'Africa will write the next chapter of fashion—in its own voice.', source: 'Omoyemi Akerele Lagos 时装周创办人', translation: '非洲将用自己的声音书写下一章时尚史——12 亿人口的审美觉醒。' },
+    ],
+  },
+  {
+    keywords: ['地图', '制图', '墨卡托', '投影', '测绘', '洪堡', '裴秀', '埃拉托色尼'],
+    quotes: [
+      { text: 'The map is not the territory.', source: 'Alfred Korzybski《Science and Sanity》1933', translation: '地图不是领土——任何对世界的描绘都是简化，都是选择。' },
+      { text: '制图六体：一曰分率，二曰准望，三曰道里，四曰高下，五曰方邪，六曰迂直。', source: '裴秀《禹贡地域图序》（267）', translation: '西晋裴秀提出的六条制图原则，比西方早 1200 年提出地图投影与比例尺概念。' },
+      { text: 'Nature is a living, connected whole; the map of a mountain must show its temperatures, its plants, its magnetism.', source: '亚历山大·冯·洪堡《宇宙》1845', translation: '自然是活的、相联的整体；一张山的地图必须显示它的温度、植物与磁场。' },
+    ],
+  },
+  {
+    keywords: ['郑和', '坤舆万国全图', '利玛窦', '航海图', '牵星术'],
+    quotes: [
+      { text: '皆以过洋牵星图样，开洋入番，画图立桅，以作证验。', source: '《郑和航海图》附注', translation: '郑和船队用牵星板测量恒星高度换算纬度，是地图与天文学第一次在船上结合。' },
+      { text: '地与海本是圆形，而合为一球，居天球之中，诚如鸡子黄在青内。', source: '利玛窦《坤舆万国全图》题识（1602）', translation: '地与海合为一球居天球之中——利玛窦让万历皇帝第一次看见了地球。' },
+    ],
+  },
+  {
+    keywords: ['GPS', '卫星', 'OpenStreetMap', 'CORONA', 'Google Earth'],
+    quotes: [
+      { text: 'GPS is the invisible utility of the 21st century—like electricity, you notice it only when it fails.', source: 'Bradford Parkinson GPS 首席设计师', translation: 'GPS 是 21 世纪的隐形基础设施——和电力一样，只有失灵时才会被注意。' },
+      { text: 'Maps should be free, like Wikipedia. The world is too big for any one company to own.', source: 'Steve Coast OpenStreetMap 创始人 2004', translation: '地图应该像维基一样免费——世界太大，不该由任何一家公司独占。' },
+    ],
+  },
+  {
+    keywords: ['比鲁尼', 'Al-Biruni', '地球半径', '阿富汗'],
+    quotes: [
+      { text: '真主之学的钥匙，是观察、测量与不懈的怀疑。', source: 'Al-Biruni《印度志》（1030）', translation: '波斯博学家比鲁尼仅凭一座阿富汗山顶的水平仪，就算出地球半径精度达 99.8%。' },
+    ],
+  },
+  {
+    keywords: ['加泰罗尼亚地图', '曼萨·穆萨', '大三角测量', '珠穆朗玛'],
+    quotes: [
+      { text: 'Such abundance of gold that the dinar fell in value for twelve years.', source: 'Ibn Khaldun 论曼萨·穆萨 1324 年朝觐撒金', translation: '曼萨·穆萨朝觐路上散金过多，地中海金价连续 12 年下跌——这也让他登上加泰罗尼亚地图。' },
+      { text: 'We have for the first time determined the elevation of the highest mountain on the face of our earth.', source: 'Andrew Waugh 印度测量局 1856 年公告', translation: '我们第一次测得地球表面最高峰的海拔——珠峰因此被命名为埃弗里斯特峰。' },
+    ],
+  },
+  {
+    keywords: ['乌尔纳姆', '汉谟拉比', '以眼还眼', '石柱', '泥板法典'],
+    quotes: [
+      { text: '若人伤人眼，则赔白银四十舍客勒。', source: '《乌尔纳姆法典》残片第 22 条（公元前 2100 年）', translation: '人类已知最早的成文法用货币赔偿替代血腥复仇——比汉谟拉比早三百年。' },
+      { text: 'šumma awīlum īn mār awīlim uḫtappid īnšu uḫappadū.', source: '《汉谟拉比法典》第 196 条（阿卡德语原文）', translation: '若一人毁另一自由人之眼，则毁其眼——著名的「以眼还眼」不是鼓励复仇，而是限制复仇不得超过伤害本身。' },
+      { text: '我使孤儿不落入富人之手，使寡妇不落入强者之手。', source: '乌尔纳姆法典序言', translation: '四千年前的社会正义宣言，至今仍是法律开篇辞的母本。' },
+    ],
+  },
+  {
+    keywords: ['十二铜表', '德拉古', '罗马法', '查士丁尼', '民法大全'],
+    quotes: [
+      { text: 'Salus populi suprema lex esto.', source: '西塞罗《论法律》引罗马共和国格言', translation: '人民的福祉是最高的法——罗马法的心脏。' },
+      { text: 'Iustitia est constans et perpetua voluntas ius suum cuique tribuendi.', source: '《查士丁尼法学阶梯》I.1', translation: '正义是恒常而持久的意志，给予每个人应得之物——整个欧陆法学 1500 年的起点。' },
+      { text: '他的法律不是用墨写的，是用血写的。', source: '普鲁塔克评德拉古法典', translation: '严苛到形容词「draconian」从此进入全世界语言——但「公开成文法」的内核保留了下来。' },
+    ],
+  },
+  {
+    keywords: ['大宪章', 'Magna Carta', '麦地那宪章', '人身保护'],
+    quotes: [
+      { text: 'Nullus liber homo capiatur, vel imprisonetur... nisi per legale judicium parium suorum vel per legem terrae.', source: '《大宪章》1215 年第 39 条', translation: '任何自由人，除非依据平等地位者的合法裁判或王国的法律，否则不得被拘禁——人身保护令的千年源头。' },
+      { text: 'إنهم أمة واحدة من دون الناس.', source: '《麦地那宪章》622 年原文节选', translation: '他们是一个共同体（乌玛）——穆斯林、犹太人、基督徒、多神教徒同列，比大宪章早 600 年的多宗教契约。' },
+    ],
+  },
+  {
+    keywords: ['人权宣言', '拿破仑法典', '启蒙', 'Déclaration'],
+    quotes: [
+      { text: 'Les hommes naissent et demeurent libres et égaux en droits.', source: '《人权与公民权宣言》第 1 条（1789）', translation: '人生而自由，在权利上一律平等——法国大革命最响亮的一句话。' },
+      { text: 'Ma vraie gloire n\u2019est pas d\u2019avoir gagné quarante batailles ; Waterloo effacera le souvenir de tant de victoires. Ce que rien n\u2019effacera, ce qui vivra éternellement, c\u2019est mon Code civil.', source: '拿破仑在圣赫勒拿岛自述', translation: '我真正的光荣不是打赢四十场战役——那些被滑铁卢抹去。永远流传下来的将是我的民法典。' },
+      { text: 'La femme naît libre et demeure égale à l\u2019homme en droits.', source: '奥兰普·德古热《女权与女公民权宣言》1791 年', translation: '女人生而自由，与男人权利平等——写下此话的德古热两年后被送上断头台。' },
+    ],
+  },
+  {
+    keywords: ['世界人权宣言', '儿童权利', '日内瓦公约', '罗斯福', 'Universal Declaration'],
+    quotes: [
+      { text: 'All human beings are born free and equal in dignity and rights.', source: '《世界人权宣言》第 1 条（1948）', translation: '人人生而自由，在尊严和权利上一律平等——起草人张彭春将儒家「仁」的概念融入「良心」一词。' },
+      { text: 'It is a sort of international Magna Carta for all men everywhere.', source: '埃莉诺·罗斯福 1948 年 12 月 9 日联合国演讲', translation: '这是所有人、所有地方共同的国际版大宪章——她领导 18 国起草了人类最重要的伦理文件之一。' },
+      { text: '涉及儿童的一切行动，均应以儿童的最大利益为首要考虑。', source: '《联合国儿童权利公约》第 3 条（1989）', translation: '把儿童从「父母财产」升格为「权利主体」的一句话，被 196 国批准——除美国外。' },
+    ],
+  },
+  {
+    keywords: ['GNH', '国民幸福总值', '不丹', '巴黎气候协定', 'AI 法案'],
+    quotes: [
+      { text: 'Gross National Happiness is more important than Gross National Product.', source: '不丹国王吉格梅·辛格·旺楚克 1972 年接受《金融时报》采访', translation: '国民幸福总值比国民生产总值更重要——36 年后这句话被写入不丹宪法第 9 条。' },
+      { text: 'Holding the increase in the global average temperature to well below 2°C above pre-industrial levels.', source: '《巴黎协定》第 2 条（2015）', translation: '将全球平均气温升幅控制在工业化前水平 2℃ 以内——人类第一次用法律管辖大气层。' },
+      { text: 'The use of AI systems that deploy subliminal techniques beyond a person\u2019s consciousness... shall be prohibited.', source: '欧盟《人工智能法案》第 5 条（2024）', translation: '禁止使用任何潜意识操控技术的 AI 系统——从汉谟拉比到 AI，法律一直在做同一件事：限制强者伤害弱者的能力。' },
+    ],
+  },
+  {
+    keywords: ['小麦驯化', '新月沃地', '农业革命', '马铃薯', '玉米驯化'],
+    quotes: [
+      { text: 'We did not domesticate wheat. It domesticated us.', source: '尤瓦尔·赫拉利《人类简史》（2011）', translation: '不是我们驯化了小麦，是小麦驯化了我们——农业让人类人口爆炸，却也把每个人绑在土地上。' },
+      { text: '神农尝百草，一日而遇七十毒。', source: '《淮南子·修务训》', translation: '传说中神农氏遍尝百草以教民稼穑——中华农业起源的精神图腾。' },
+      { text: 'The potato is the commodity which has had the greatest impact on world population growth.', source: '威廉·麦克尼尔《瘟疫与人》（1976）', translation: '马铃薯是对世界人口增长影响最大的作物——18 世纪欧洲人口翻倍至少一半归功于它。' },
+    ],
+  },
+  {
+    keywords: ['啤酒', '酿酒', 'garum', '鱼酱', '豆腐'],
+    quotes: [
+      { text: 'You are the one who handles the dough, and with a big shovel mixes in a pit, the bappir with sweet aromatics.', source: '苏美尔《宁卡西赞美诗》（约 -1800）', translation: '你揉制面团，用大铲在坑中拌匀带甜香的 bappir——世界最早的啤酒配方，以祭神诗歌形式保存。' },
+      { text: '豆腐之法，始于汉淮南王刘安。', source: '李时珍《本草纲目·谷部》（1578）', translation: '记录豆腐起源的经典文献——淮南王炼丹求仙未果，却让东亚有了两千年的蛋白质来源。' },
+    ],
+  },
+  {
+    keywords: ['番茄', '披萨', '玛格丽特', '辣椒', '川菜'],
+    quotes: [
+      { text: '番椒丛生，白花，子俨秃笔头，味辣色红，可观，亦可食。', source: '高濂《遵生八笺》（1591）', translation: '明代中国第一次记载辣椒——当时仅作观赏，200 年后才成为川黔饮食的灵魂。' },
+      { text: 'Pizza Margherita, named after Queen Margherita of Savoy: red tomato, white mozzarella, green basil.', source: '那不勒斯玛格丽特披萨传说（1889）', translation: '厨师 Raffaele Esposito 用意大利国旗三色为王后做了新披萨——现代披萨由此诞生。' },
+    ],
+  },
+  {
+    keywords: ['糖', '甘蔗', '奴隶贸易', '加勒比', 'sugar'],
+    quotes: [
+      { text: 'Sugar was among the first luxuries to become a proletarian necessity.', source: '西德尼·明茨《甜与权力》（1985）', translation: '糖是第一种从贵族奢侈品变成工人必需品的商品——英国茶中的糖与加勒比种植园是同一枚硬币的两面。' },
+      { text: 'The making of sugar was one of the most brutal forms of forced labor that has ever existed.', source: '埃里克·威廉斯《资本主义与奴隶制》（1944）', translation: '制糖是人类历史上最残酷的强制劳动形式之一——1200 万非洲奴隶被运到美洲种植园。' },
+    ],
+  },
+  {
+    keywords: ['巴斯德', '巴氏消毒', '哈伯', '固氮', '绿色革命', '博尔劳', '培养肉'],
+    quotes: [
+      { text: 'Dans les champs de l\u2019observation, le hasard ne favorise que les esprits préparés.', source: '路易·巴斯德 1854 年里尔大学演讲', translation: '在观察的领域里，机遇只眷顾有准备的头脑——巴斯德从变质葡萄酒研究出发，建立了微生物学和现代食品安全。' },
+      { text: 'Bread from air.', source: '德国《法兰克福报》评 BASF 合成氨工厂（1913）', translation: '从空气造面包——哈伯-博施法让人类第一次摆脱天然氮肥的限制，直接养活了 40 亿人。' },
+      { text: 'You can\u2019t build peace on empty stomachs.', source: '诺曼·博尔劳 1970 年诺贝尔和平奖演说', translation: '你无法在空肚子上建造和平——绿色革命救了 10 亿人免于饿死，他因此成为唯一获和平奖的农学家。' },
+    ],
+  },
+  {
+    keywords: ['米斯特拉尔', '聂鲁达', '智利', '钦乔罗', 'ALMA', '阿塔卡马'],
+    quotes: [
+      { text: 'Besos que da el mar en la noche... besos que saben de días que se fueron...', source: '加夫列拉·米斯特拉尔《海之吻》', translation: '那是大海在夜里给予的吻……那是知道逝去岁月的吻——米斯特拉尔写尽智利北部的寂静海岸，用乡村教师的视角让拉美文学首次登上诺贝尔舞台。' },
+      { text: '我们现在是自由的，不再是西班牙的领地。', source: '贝纳多·奥希金斯 1818 年智利独立宣言', translation: '翻越安第斯山攻其不备——圣马丁与奥希金斯用汉尼拔式行军让查卡布科 24 分钟定胜负。' },
+    ],
+  },
+  {
+    keywords: ['达尔维什', '巴勒斯坦', '耶利哥', '死海古卷', '岩石圆顶'],
+    quotes: [
+      { text: 'On this land, there is that which deserves life.', source: '马哈茂德·达尔维什《在这片土地上》', translation: '在这片土地上，有值得活下去的东西——达尔维什把流亡写成一种根深蒂固的归属。' },
+      { text: '记下来！我是阿拉伯人，我的身份证号是 50000。', source: '马哈茂德·达尔维什《身份证》1964', translation: '22 岁的达尔维什用最朴素的登记簿句式，把一整个民族写进现代诗——以色列政府为此软禁他。' },
+    ],
+  },
+  {
+    keywords: ['蒲甘', '昂山素季', '骠国', '缅甸', '翁山'],
+    quotes: [
+      { text: 'It is not power that corrupts but fear.', source: '昂山素季《免于恐惧的自由》1991', translation: '腐败的不是权力本身，而是恐惧——这篇演讲成为诺贝尔和平奖的最终理由。' },
+      { text: '雍羌之子舒难陀，来献南音奉正朔。', source: '白居易《骠国乐》801', translation: '唐代长安第一次听见缅甸铜鼓与螺号——白居易 120 句长诗把骠国音乐写进华夏礼乐谱系。' },
+    ],
+  },
+  {
+    keywords: ['布朗库西', '无尽之柱', '罗马尼亚', '科马内奇', '齐奥塞斯库'],
+    quotes: [
+      { text: 'Under the shadow of a great tree nothing grows.', source: '康斯坦丁·布朗库西 1908 年辞职罗丹工作室', translation: '在大树阴影下什么都长不起来——布朗库西用这句话开创了极简主义雕塑。' },
+      { text: '当你拿到满分时，世界以为你完美，但完美之后是恐惧。', source: '纳迪娅·科马内奇自传《Letters to a Young Gymnast》', translation: '14 岁的满分 10 分让世界惊叹，却让一个女孩承担了整个国家的期望。' },
+    ],
+  },
+  {
+    keywords: ['桑给巴尔', '弗雷迪·墨丘利', '奥杜威', '坦桑尼亚', '尼雷尔', '基尔瓦'],
+    quotes: [
+      { text: 'I won\u2019t be a rock star. I will be a legend.', source: '弗雷迪·墨丘利 1970 年代接受采访', translation: '我不会是摇滚明星，我会是传奇——出生于桑给巴尔的印度帕西少年，最终用声音证明了这句话。' },
+      { text: 'Uhuru na umoja.', source: '朱利叶斯·尼雷尔 1964 年坦桑尼亚联合宣言', translation: '自由与团结（斯瓦希里语）——尼雷尔把桑给巴尔革命推向非洲统一的愿景。' },
+    ],
+  },
+  {
+    keywords: ['阿努拉德普勒', '斯里兰卡', '锡兰', '大史', '海啸', 'Mahavamsa'],
+    quotes: [
+      { text: '一滴水不入大海未得所用，先让它滋养大地。', source: '帕拉克拉马巴胡一世 1153 年碑铭', translation: '僧伽罗国王对水利工程的哲学——古代世界最先进的"坦克"水库系统由此铸成。' },
+      { text: '海是母亲也是掘墓人，我们从她怀中出生，也将回到她怀中。', source: '科伦坡海啸纪念公园碑文（僧伽罗语）', translation: '2004 印度洋海啸后，35000 名斯里兰卡人罹难，这句诗被铭刻在失去亲人的每个家庭门前。' },
+    ],
+  },
+  {
+    keywords: ['伊博', '贝宁', '尼日利亚', '阿契贝', '非洲文学', '失蜡法', 'Achebe'],
+    quotes: [
+      { text: 'Until the lions have their own historians, the history of the hunt will always glorify the hunter.', source: '奇努阿·阿契贝（Chinua Achebe）', translation: '在狮子拥有自己的历史学家之前，狩猎的故事永远只颂扬猎人——阿契贝用这句伊博谚语解释为什么要有非洲作家书写非洲。' },
+      { text: '我们不是单一故事的国度。', source: '奇玛曼达·阿迪契 TED 演讲《单一故事的危险》', translation: '第二代尼日利亚作家的宣言——从伊博·乌克武青铜到贝宁浮雕，再到 Nollywood 与 Flutterwave，非洲永远是复调。' },
+    ],
+  },
+  {
+    keywords: ['廷巴克图', '马里', '桑海', '曼萨·穆萨', '海达拉', 'Timbuktu', '萨利夫', '凯塔'],
+    quotes: [
+      { text: '廷巴克图的盐等于金子，书比盐和金都贵重。', source: '14 世纪马里谚语（阿拉伯语转写）', translation: '这座撒哈拉南缘绿洲曾同时是盐、黄金、书本的世界中心——艾哈迈德·巴巴图书馆藏书超过当时牛津。' },
+      { text: '我们不是在救书，我们是在救记忆。一个没有记忆的民族，就是一个没有未来的民族。', source: '阿布德尔·卡德·海达拉 2014 年获德意志书业和平奖演讲', translation: '图书管理员用渔船和米袋在圣战者眼皮底下转移 37 万份抄本的道德宣言。' },
+    ],
+  },
+  {
+    keywords: ['波兰', '哥白尼', '五三宪法', '团结工会', '瓦文萨', 'Solidarność', '雅盖隆'],
+    quotes: [
+      { text: 'Jeszcze Polska nie zginęła, kiedy my żyjemy.', source: '波兰国歌《波兰尚未灭亡》（1797 年多姆布罗夫斯基玛祖卡）', translation: '只要我们还活着，波兰就未曾消亡——被瓜分三次的国家靠这首歌保住了语言和记忆。' },
+      { text: '我们不是战胜共产主义，我们是证明了它不可改革。', source: '亚当·米奇尼克（Adam Michnik），团结工会顾问', translation: '1989 年波兰圆桌谈判后，这位反对派思想家对东欧变革的冷峻总结。' },
+    ],
+  },
+  {
+    keywords: ['乌克兰', '基辅罗斯', '莫希拉', 'Holodomor', '大饥荒', '橙色革命', '独立广场'],
+    quotes: [
+      { text: 'Ще не вмерла України і слава, і воля.', source: '乌克兰国歌（1863 年丘宾斯基作词）', translation: '乌克兰的光荣与自由尚未消亡——这首歌 1917 年、1991 年、2022 年三度成为民族重生的号角。' },
+      { text: '让乌克兰变成布尔什维克的堡垒。', source: '斯大林 1933 年 8 月致卡冈诺维奇电报', translation: '历史学家安妮·阿普尔鲍姆把这句话视为大饥荒种族灭绝性质的官方证据——400 万乌克兰人因此饿死。' },
+    ],
+  },
+  {
+    keywords: ['匈牙利', '布达佩斯', '伊什特万', '马扎尔', '特里亚农', '1956', '纳吉', '千年博览会'],
+    quotes: [
+      { text: 'Hazádnak rendületlenül légy híve, oh magyar!', source: '沃罗什马尔蒂·米哈伊《呼唤》（Szózat, 1836）', translation: '匈牙利人啊，无可动摇地忠于你的祖国——特里亚农条约丢失 2/3 领土后，这首准国歌成为匈人精神堡垒。' },
+      { text: '我们被判孤独——因为我们的语言和你们谁都不一样。', source: '阿兰·阿拉尼（Arany János）1855 年', translation: '芬兰-乌戈尔语族的匈人在印欧海洋中自嘲——也是自豪。孤独让他们出了 13 位诺奖、5 位曼哈顿计划核心科学家。' },
+    ],
+  },
+  {
+    keywords: ['花剌子米', '兀鲁伯', '撒马尔罕', '希瓦', '咸海', '帖木儿', 'algebra', 'algorithm'],
+    quotes: [
+      { text: '当你看到一个问题，就应该尝试把它复原（al-jabr）到最简单的形式。', source: '花剌子米《代数学简明之书》820 年', translation: '这个"复原"动作 al-jabr，后来成为英文 algebra（代数）；而他本人的名字 al-Khwārizmī，演化为 algorithm（算法）。' },
+      { text: '宗教消散如雾，王国崩解如尘，但天文学家的著作永垂不朽。', source: '兀鲁伯《兀鲁伯历表》引言（1437）', translation: '这位被亲生儿子斩首的天文王，预言了自己作品的永生——500 年后他的星表仍被哥白尼引用。' },
+    ],
+  },
+  {
+    keywords: ['哈萨克', '斯基泰', '伊塞克金人', '阿拜', '库南巴耶夫', '丝路', 'Qazaq', '玉兹'],
+    quotes: [
+      { text: '不会说自己祖先语言的人不可能是真正的人。', source: '阿拜·库南巴耶夫《黑话》第二篇（1890 年代）', translation: '印在 20000 坚戈纸币上的一句话——哈萨克现代民族意识的精神奠基。' },
+      { text: 'Qazaq — 流浪者、分离者、自由者。', source: '15 世纪突厥语词源（克烈汗与贾尼别克汗部众自称）', translation: '一个动词（qaz- 流浪）变成一整个民族的名字——游牧价值观被永久编码在国名里。' },
+    ],
+  },
+  {
+    keywords: ['花剌子米', '代数', 'algebra', 'algorithm', '智慧宫', '阿拔斯', '翻译运动', '侯奈因', '巴格达'],
+    quotes: [
+      { text: '当我思考人们在计算中所做的事情，我发现这一切都归结于还原（al-jabr）和对消（al-muqabala）。', source: '花剌子米《还原与对消之书》开篇（约 820 年）', translation: '一本书的标题里两个阿拉伯词——al-jabr 与 al-muqabala——后来变成了英语里的 algebra 和整个代数学。' },
+      { text: '凡是用希腊语写成的智慧，我们都有责任把它翻译成阿拉伯语。', source: '哈里发马蒙语（侯奈因传记转述，9 世纪）', translation: '智慧宫运动的纲领性宣言——这是人类历史上第一次由国家出资系统翻译外语典籍。' },
+      { text: '我校勘时，要把手抄本在桌上铺开，像医生对照病人的身体。', source: '侯奈因·伊本·伊沙格《翻译方法书信》（约 850 年）', translation: '现代翻译学校勘法的最早陈述——从逐字对译到意译的方法革命，发生在一个基督教徒为穆斯林哈里发翻译古希腊医书的书房里。' },
+    ],
+  },
+  {
+    keywords: ['伊本·西那', '阿维森纳', '伊本·海赛姆', '海赛姆', 'Alhazen', '医典', '光学之书', '拉齐', '宰赫拉维', '肺循环', '纳菲斯'],
+    quotes: [
+      { text: '从事科学研究的人，其职责是研究前人留下的东西，严格怀疑，攻击每一个薄弱处，保持公正无偏。', source: '伊本·海赛姆《光学之书》（约 1021 年）', translation: '现代科学方法的第一次完整陈述——比培根、笛卡尔早六百年，诞生在开罗的一个软禁中的暗室里。' },
+      { text: '医学是关于人体所处状态——健康或偏离健康——的科学；医学的目的是保持健康，或在失去后恢复它。', source: '伊本·西那《医典》第一卷总论（1025 年）', translation: '欧洲医学院读了六百年的定义——一个中亚人为整个中世纪医学奠定的基础语句。' },
+      { text: '隔膜是实的，没有看得见或看不见的孔。血液不可能从右心室直接到左心室，它必须先经过肺。', source: '伊本·纳菲斯《阿维森纳医典解剖注释》（约 1242 年）', translation: '推翻盖伦千年教条的一句话——人类第一次正确描述肺循环，比塞尔韦特和哈维早三百多年。' },
+    ],
+  },
+  {
+    keywords: ['伊本·赫勒敦', '历史绪论', 'Muqaddimah', 'Asabiyya', '阿萨比亚', '比鲁尼', '乌鲁伯克', '海亚姆', '鲁拜集', '伊德里西'],
+    quotes: [
+      { text: '醒了再饮，哪知还会再醒？斟满杯中物，今宵放怀饮，明朝尚可期。', source: '奥马尔·海亚姆《鲁拜集》第一首（约 12 世纪，郭沫若译本）', translation: '一个用圆锥曲线解三次方程的波斯数学家，同时写下了世界上被翻译次数最多的波斯语诗——爱因斯坦床头放的就是这本书。' },
+      { text: '一个王朝的寿命不超过三代人。第一代由阿萨比亚凝聚而起，第二代享受文明的果实，第三代忘了祖辈如何起家，王朝随之瓦解。', source: '伊本·赫勒敦《历史绪论》第三章（1377 年）', translation: '汤因比说它是"任何时代任何人写过的最伟大的历史哲学著作"——社会学与经济学的真正开端，比孔德早五百年。' },
+      { text: '宗教像雾一样会散，但科学的王国是永恒的。', source: '乌鲁伯克题在撒马尔罕天文台入口（约 1420 年代）', translation: '一个帖木儿家族的孙子在自己建造的世界最大天文台上留下的话——三十年后他被自己儿子派人刺杀。' },
+    ],
+  },
+  {
+    keywords: ['居里', 'Curie', '放射性', '镭', 'Marie Curie'],
+    quotes: [
+      { text: '生活中没有什么可畏惧的，只有需要被理解的。现在是时候多理解一些，以便我们少畏惧一些。', source: 'Marie Curie 致女儿伊雷娜的信（1925 年）', translation: '一个把两次诺贝尔奖金全部捐给实验室、指甲永久溃烂、实验笔记本至今仍强放射性的女人说的话——她知道她写的每一个字都在被放射同位素缓慢"签名"。' },
+      { text: '镭不属于我，它属于全人类。', source: 'Marie Curie 拒绝为镭申请专利时说（1903 年）', translation: '这个决定让她晚年住在破旧公寓、无钱为女儿办婚礼——而专利费在今天值 1000 亿美元。' },
+    ],
+  },
+  {
+    keywords: ['诺特', 'Noether', '对称性', '守恒律', 'Emmy Noether', '抽象代数'],
+    quotes: [
+      { text: '诺特女士是自女性开始接受高等教育以来，最重要的创造性数学天才。', source: '爱因斯坦《纽约时报》诺特讣告（1935 年 5 月 4 日）', translation: '希尔伯特为让她授课对哲学系抗议说："大学议事会又不是澡堂！"——她没有薪水代课了四年。' },
+      { text: '我的方法本质上就是一种新的思维方式。', source: 'Emmy Noether 在哥廷根的讲课笔记（1925 年）', translation: '她把整个代数学从计算重塑为结构研究——20 世纪数学革命从她开始。' },
+    ],
+  },
+  {
+    keywords: ['洛夫莱斯', 'Ada Lovelace', 'Analytical Engine', '分析机', '诗意的科学', '算法'],
+    quotes: [
+      { text: '分析机并不声称能创造任何东西——它能做我们知道怎样命令它做的所有事情。', source: 'Ada Lovelace《Notes on the Analytical Engine》注记 G（1843 年）', translation: '世界上第一段计算机程序（求伯努利数）和世界上第一次"AI 局限"论断，都在这一段里——170 年后所有 AGI 争论还在重复她的话。' },
+      { text: '我认为数学是一种诗意的科学——需要想象力，就像诗歌需要想象力一样。', source: 'Ada Lovelace 致母亲 Anne Noel Byron 夫人的信（1841 年）', translation: '她是拜伦唯一的合法子女，母亲强迫她学数学以"防止她像父亲一样发疯"——结果她变成了计算机之母。' },
+    ],
+  },
+  {
+    keywords: ['屠呦呦', '青蒿素', 'artemisinin', '肘后方', '葛洪', '523 工程'],
+    quotes: [
+      { text: '青蒿一握，以水二升渍，绞取汁，尽服之。', source: '葛洪《肘后备急方·卷三·治寒热诸疟方》（约 340 年）', translation: '这 18 个字让屠呦呦 1971 年顿悟：青蒿素遇热分解，必须冷萃。1600 年前的东晋道士和 21 世纪中国药学家在此相遇，拯救了全球千万疟疾患者。' },
+      { text: '青蒿素是人类征服疟疾进程中的一小步，却是中国传统医学献给世界的一份礼物。', source: '屠呦呦《诺贝尔奖获奖演讲》（2015 年 12 月 7 日，斯德哥尔摩）', translation: '她是 85 岁首位本土中国籍科学诺奖得主——名字"呦呦"出自《诗经》"呦呦鹿鸣，食野之蒿"，冥冥中命运早已标记。' },
+    ],
   },
 ]
 

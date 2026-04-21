@@ -40,6 +40,8 @@ import { psychologyEvents, sociologyEvents, nationalLiberationEvents, maritimeEv
 import { currencyEvents, insuranceEvents, espionageEvents, gamingEvents, comicsEvents, advertisingEvents, museumEvents, conservationEvents, firefightingEvents, judicialEvents, abolitionEvents, agricultureEvents, energyEvents } from './events-enrichment-11'
 // Round 11 扩充包（特性 271-300）
 import { railwayEvents, aviationEvents, automobileEvents, archaeologyEvents, migrationEvents, festivalEvents, foodCultureEvents, spiceTradeEvents, cartographyEvents, measurementEvents } from './events-enrichment-12'
+// Round 30: 地图绘制与地理认知的千年革命
+import { cartographyHistoryEvents } from './events-cartography-history'
 // 非洲文明早期事件补充
 import { africaEarlyEvents } from './events-africa-early'
 // Round 12: 诗歌 + 音乐剧专题
@@ -78,6 +80,7 @@ import { broadwayEnrichEvents, westEndEnrichEvents } from './events-broadway-wes
 import { europeanMusicalEvents, australiaMusicalEvents } from './events-europe-australia-musical'
 import { popMusicMilestonesEvents } from './events-pop-music-milestones'
 import { popMusic21stEvents } from './events-pop-music-21st'
+import { medicineHumanityEvents } from './events-medicine-humanity'
 import { cantopopEvents, taiwanPopEvents, jpopEvents, kpopDeepEvents, mainlandPopEvents } from './events-asian-pop-music'
 import { asianNewGenPopEvents } from './events-asian-newgen-pop'
 import { europeanLitEvents, modernWorldLitEvents } from './events-world-literature'
@@ -93,6 +96,20 @@ import { medicinePatchEvents, musicPatchEvents } from './events-category-patch'
 // Round 30: 全球医学与公共卫生里程碑（18 条：阿拉伯/中医/印度/近代流行病学/20世纪公共卫生/21世纪）
 import { globalMedicineEvents } from './events-global-medicine'
 import { globalExplorationEvents } from './events-global-exploration'
+import { nonWesternPhilosophyEvents } from './events-non-western-philosophy'
+import { worldPhilosophyVoicesEvents } from './events-global-philosophy'
+import { woodArchitectureEvents } from './events-wood-architecture'
+import { fashionDesignEvents } from './events-fashion-design'
+import { worldWritingEvents } from './events-world-writing'
+import { lawJusticeEvents } from './events-law-justice'
+import { foodAgricultureEvents } from './events-food-agriculture'
+// Round 31: 小国的大历史 — Chile/Sri Lanka/Tanzania/Romania/Palestine/Myanmar
+import { smallNationsEvents } from './events-small-nations'
+import { inlandEmpiresEvents } from './events-inland-empires'
+// Round 31: 伊斯兰科学黄金时代（22条）
+import { islamicGoldenAgeEvents } from './events-islamic-golden-age'
+// Round 32: 被遗忘的她们——女性科学家纵深（25条）
+import { womenScienceEvents } from './events-women-science'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -216,6 +233,7 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...foodCultureEvents,
   ...spiceTradeEvents,
   ...cartographyEvents,
+  ...cartographyHistoryEvents,
   ...measurementEvents,
   // 非洲文明早期补充
   ...africaEarlyEvents,
@@ -315,6 +333,7 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...medicineMilestonesEvents,
   ...globalMedicineEvents,
   ...globalExplorationEvents,
+  ...nonWesternPhilosophyEvents,
   ...architectureMilestonesEvents,
   ...westernPhilosophyEvents,
   ...prehistoryDeepEvents,
@@ -330,6 +349,19 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...cinemaDeepEvents,
   ...mathHistoryEvents,
   ...environmentalHistoryEvents,
+  ...worldPhilosophyVoicesEvents,
+  ...medicineHumanityEvents,
+  ...woodArchitectureEvents,
+  ...fashionDesignEvents,
+  ...worldWritingEvents,
+  ...lawJusticeEvents,
+  ...foodAgricultureEvents,
+  ...smallNationsEvents,
+  ...inlandEmpiresEvents,
+  // Round 31: 伊斯兰科学黄金时代（翻译运动/代数/天文/光学/医学/工程）
+  ...islamicGoldenAgeEvents,
+  // Round 32: 被遗忘的她们——女性科学家从 3 世纪到 21 世纪的纵深
+  ...womenScienceEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER

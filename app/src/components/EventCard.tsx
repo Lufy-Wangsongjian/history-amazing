@@ -160,10 +160,13 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
         />
       )}
 
-      <button
+      <div
+        role="button"
+        tabIndex={0}
         onClick={handleCardClick}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCardClick() } }}
         className={cn(
-          'w-full text-left',
+          'w-full text-left cursor-pointer',
           isMilestone ? 'p-4 md:p-5' : isTurningPoint ? 'p-3.5' : 'p-3'
         )}
       >
@@ -321,7 +324,7 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
             </span>
           </div>
         )}
-      </button>
+      </div>
 
       <div
         className={cn(
