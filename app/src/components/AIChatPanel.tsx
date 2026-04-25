@@ -29,6 +29,8 @@ export function AIChatPanel({ onNavigateToEvent, suggestions }: AIChatPanelProps
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const abortRef = useRef<AbortController | null>(null)
+  const messagesRef = useRef<ChatMessage[]>([])
+  messagesRef.current = messages
 
   const displaySuggestions = suggestions && suggestions.length > 0 ? suggestions : DEFAULT_SUGGESTIONS
 
@@ -49,7 +51,7 @@ export function AIChatPanel({ onNavigateToEvent, suggestions }: AIChatPanelProps
     const userMsg: ChatMessage = { role: 'user', content: text.trim() }
 
     // 收集历史消息（发送前的所有消息，最多 5 轮 = 10 条）
-    const currentMessages = [...messages]
+    const currentMessages = [...messagesRef.current]
 
     setMessages(prev => [...prev, userMsg])
     setInput('')
@@ -129,7 +131,7 @@ export function AIChatPanel({ onNavigateToEvent, suggestions }: AIChatPanelProps
       setIsStreaming(false)
       abortRef.current = null
     }
-  }, [isStreaming, messages])
+  }, [isStreaming])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {

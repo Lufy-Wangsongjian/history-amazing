@@ -39,11 +39,11 @@ export function generateChallengeLink(params: {
   score?: number
   nickname?: string
 }): string {
-  const url = new URL(window.location.origin)
-  url.hash = `challenge=${params.game}&seed=${params.seed}`
-  if (params.score !== undefined) url.searchParams.set('score', String(params.score))
-  if (params.nickname) url.searchParams.set('from', params.nickname)
-  return url.toString()
+  const base = window.location.href.split('#')[0].split('?')[0]
+  const parts = [`challenge=${params.game}`, `seed=${params.seed}`]
+  if (params.score !== undefined) parts.push(`score=${params.score}`)
+  if (params.nickname) parts.push(`from=${encodeURIComponent(params.nickname)}`)
+  return `${base}#${parts.join('&')}`
 }
 
 /** 从 URL 解析挑战参数 */
@@ -65,13 +65,11 @@ export function parseChallengeFromURL(): {
 
   if (!params.challenge || !params.seed) return null
 
-  const searchParams = new URLSearchParams(window.location.search)
-
   return {
     game: params.challenge,
     seed: params.seed,
-    score: searchParams.has('score') ? Number(searchParams.get('score')) : undefined,
-    from: searchParams.get('from') || undefined,
+    score: params.score !== undefined ? Number(params.score) : undefined,
+    from: params.from || undefined,
   }
 }
 

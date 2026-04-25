@@ -452,7 +452,8 @@ export function createSyncRouter(db: Database.Database): Router {
       return
     }
 
-    const today = new Date().toISOString().slice(0, 10)
+    const tzOffset = Number(req.query.tz) || 0
+    const today = getLocalDate(tzOffset)
     const checkedInToday = row.last_checkin === today
 
     res.json({
@@ -469,8 +470,9 @@ export function createSyncRouter(db: Database.Database): Router {
     const userId = requireAuth(req, res)
     if (!userId) return
 
-    const today = new Date().toISOString().slice(0, 10)
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+    const tzOffset = Number(req.body?.tz) || 0
+    const today = getLocalDate(tzOffset)
+    const yesterday = getLocalDate(tzOffset, -1)
 
     const row = db.prepare(
       'SELECT current_streak, longest_streak, last_checkin, total_checkins FROM user_streaks WHERE user_id = ?'
@@ -588,16 +590,13 @@ export function createSyncRouter(db: Database.Database): Router {
 
     const weekKey = getWeekKey()
 
-    // 累加分数（非替换）
+    // 只保留最高分
     db.prepare(`
       INSERT INTO weekly_scores (user_id, week_key, score_type, score)
       VALUES (?, ?, ?, ?)
       ON CONFLICT(user_id, week_key, score_type) DO UPDATE SET
-        score = CASE
-          WHEN ? = 'read_count' THEN excluded.score
-          ELSE MAX(weekly_scores.score, excluded.score)
-        END
-    `).run(userId, weekKey, scoreType, score, scoreType)
+        score = MAX(weekly_scores.score, excluded.score)
+    `).run(userId, weekKey, scoreType, score)
 
     res.json({ ok: true })
   })
@@ -605,11 +604,21 @@ export function createSyncRouter(db: Database.Database): Router {
   return router
 }
 
+/** 获取用户本地日期（基于客户端传来的时区偏移分钟数） */
+function getLocalDate(tzOffsetMinutes = 0, dayDelta = 0): string {
+  const now = new Date(Date.now() + tzOffsetMinutes * 60000 + dayDelta * 86400000)
+  return now.toISOString().slice(0, 10)
+}
+
 /** 获取当前 ISO 周的 key，如 "2026-W17" */
 function getWeekKey(): string {
   const now = new Date()
-  const jan1 = new Date(now.getFullYear(), 0, 1)
-  const days = Math.floor((now.getTime() - jan1.getTime()) / 86400000)
-  const weekNum = Math.ceil((days + jan1.getDay() + 1) / 7)
-  return `${now.getFullYear()}-W${String(weekNum).padStart(2, '0')}`
+  // ISO 8601: 周一为一周开始，含首个周四的那一周是第 1 周
+  const thu = new Date(now)
+  thu.setDate(thu.getDate() - ((thu.getDay() + 6) % 7) + 3)
+  const year = thu.getFullYear()
+  const jan4 = new Date(year, 0, 4)
+  const dayDiff = Math.round((thu.getTime() - jan4.getTime()) / 86400000)
+  const weekNum = 1 + Math.floor(dayDiff / 7)
+  return `${year}-W${String(weekNum).padStart(2, '0')}`
 }

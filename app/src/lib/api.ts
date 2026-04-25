@@ -204,12 +204,17 @@ export interface StreakInfo {
   isNew?: boolean
 }
 
+/** 获取客户端时区偏移（分钟），正值为东区 */
+function getTzOffset(): number {
+  return -new Date().getTimezoneOffset() // JS getTimezoneOffset 返回的是 UTC - local，取反得到 local - UTC
+}
+
 export function fetchStreak(signal?: AbortSignal) {
-  return apiGet<StreakInfo>('/api/sync/streak', signal)
+  return apiGet<StreakInfo>(`/api/sync/streak?tz=${getTzOffset()}`, signal)
 }
 
 export function checkin(signal?: AbortSignal) {
-  return apiPost<StreakInfo>('/api/sync/streak/checkin', {}, signal)
+  return apiPost<StreakInfo>('/api/sync/streak/checkin', { tz: getTzOffset() }, signal)
 }
 
 export interface LeaderboardEntry {
