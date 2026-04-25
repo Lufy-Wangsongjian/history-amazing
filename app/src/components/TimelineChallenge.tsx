@@ -4,7 +4,9 @@ import { CATEGORY_CONFIG, formatYear } from '@/data/types'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useGameRecords, shareScoreCard } from '@/lib/game-records'
-import { ArrowRightLeft, Flame, RotateCcw, Swords, Trophy, X } from 'lucide-react'
+import { generateChallengeSeed, generateChallengeLink, copyToClipboard, getChallengeShareText } from '@/lib/challenge-link'
+import { showAchievementToast } from '@/components/AchievementToast'
+import { ArrowRightLeft, Flame, Link2, RotateCcw, Swords, Trophy, X } from 'lucide-react'
 
 interface TimelineChallengeProps {
   open: boolean
@@ -353,6 +355,19 @@ export function TimelineChallenge({ open, onClose, events, onSelectEvent }: Time
                       className="rounded-2xl border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
                     >
                       分享成绩
+                    </button>
+                    <button
+                      onClick={async () => {
+                        const seed = generateChallengeSeed()
+                        const link = generateChallengeLink({ game: 'challenge', seed, score })
+                        const text = getChallengeShareText({ game: 'challenge', score, total: rounds.length, link })
+                        const ok = await copyToClipboard(text)
+                        if (ok) showAchievementToast({ id: 'challenge-link', emoji: '🔗', title: '挑战链接已复制！' })
+                      }}
+                      className="rounded-2xl border border-violet-500/30 bg-violet-500/5 px-5 py-2.5 text-sm font-medium text-violet-600 dark:text-violet-400 transition-colors hover:bg-violet-500/10 inline-flex items-center gap-2"
+                    >
+                      <Link2 size={14} />
+                      挑战好友
                     </button>
                   </div>
                 </div>

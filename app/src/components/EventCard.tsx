@@ -262,12 +262,13 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
           </div>
         </div>
 
-        {/* 描述摘要（未展开时也可见，hover 时更明显） */}
-        {!expanded && !isMilestone && (
-          <p className="text-[11px] text-muted-foreground/50 line-clamp-1 mt-1 group-hover:text-muted-foreground/80 transition-colors">
-            {event.description}
-          </p>
-        )}
+        {/* 描述摘要 — 默认显示 2 行，清晰可读 */}
+        <p className={cn(
+          'leading-relaxed mt-1.5',
+          isMilestone ? 'text-sm text-muted-foreground line-clamp-3' : 'text-xs text-muted-foreground/80 line-clamp-2'
+        )}>
+          {event.description}
+        </p>
 
         {/* 时间跨度条（有 endYear 的持续性事件） */}
         {event.endYear != null && !expanded && (() => {
@@ -303,13 +304,6 @@ export function EventCard({ event, onClick, isSelected, layout = 'timeline', ani
             />
           </div>
         )}
-
-        <p className={cn(
-          'text-muted-foreground leading-relaxed',
-          isMilestone ? 'text-sm line-clamp-3' : 'text-xs line-clamp-2'
-        )}>
-          {event.description}
-        </p>
 
         {/* 里程碑事件：底部 significance 星标行 */}
         {isMilestone && (

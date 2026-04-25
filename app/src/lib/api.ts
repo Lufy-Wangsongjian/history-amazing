@@ -192,3 +192,44 @@ export function syncSubmitGameRecord(data: {
     date: data.date || new Date().toISOString(),
   }, signal)
 }
+
+// ── 签到 & 排行榜 API ──
+
+export interface StreakInfo {
+  currentStreak: number
+  longestStreak: number
+  lastCheckin: string | null
+  totalCheckins: number
+  checkedInToday: boolean
+  isNew?: boolean
+}
+
+export function fetchStreak(signal?: AbortSignal) {
+  return apiGet<StreakInfo>('/api/sync/streak', signal)
+}
+
+export function checkin(signal?: AbortSignal) {
+  return apiPost<StreakInfo>('/api/sync/streak/checkin', {}, signal)
+}
+
+export interface LeaderboardEntry {
+  userId: string
+  nickname: string
+  avatar: string | null
+  score: number
+}
+
+export interface LeaderboardResponse {
+  weekKey: string
+  scoreType: string
+  top: LeaderboardEntry[]
+  me: { rank: number; score: number } | null
+}
+
+export function fetchLeaderboard(scoreType = 'read_count', signal?: AbortSignal) {
+  return apiGet<LeaderboardResponse>(`/api/sync/leaderboard?type=${scoreType}`, signal)
+}
+
+export function submitLeaderboardScore(scoreType: string, score: number, signal?: AbortSignal) {
+  return apiPost<{ ok: boolean }>('/api/sync/leaderboard/submit', { scoreType, score }, signal)
+}

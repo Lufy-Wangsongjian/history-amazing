@@ -727,10 +727,8 @@
 
 /* ===== 弹幕动画 ===== */
 @keyframes danmaku-slide {
-  from { right: -400px; opacity: 0.8; }
-  5% { opacity: 0.6; }
-  90% { opacity: 0.6; }
-  to { right: 110%; opacity: 0; }
+  from { right: -400px; }
+  to { right: 110%; }
 }
 
 /* ===== 里程碑 Ticker 无限滚动 ===== */

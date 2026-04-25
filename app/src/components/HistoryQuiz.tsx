@@ -4,9 +4,11 @@ import { CATEGORY_CONFIG, REGION_CONFIG, formatYear } from '@/data/types'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useGameRecords, shareScoreCard } from '@/lib/game-records'
+import { generateChallengeSeed, generateChallengeLink, copyToClipboard, getChallengeShareText } from '@/lib/challenge-link'
+import { showAchievementToast } from '@/components/AchievementToast'
 import {
   Brain, Trophy, RotateCcw, ArrowRight, X,
-  CheckCircle, XCircle, Zap
+  CheckCircle, XCircle, Zap, Link2
 } from 'lucide-react'
 
 interface HistoryQuizProps {
@@ -426,6 +428,19 @@ export function HistoryQuiz({ open, onClose, events, onSelectEvent, mode = 'glob
                       className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-all hover:bg-accent"
                     >
                       分享成绩
+                    </button>
+                    <button
+                      onClick={async () => {
+                        const seed = generateChallengeSeed()
+                        const link = generateChallengeLink({ game: 'quiz', seed, score, nickname: undefined })
+                        const text = getChallengeShareText({ game: 'quiz', score, total: questions.length, link })
+                        const ok = await copyToClipboard(text)
+                        if (ok) showAchievementToast({ id: 'challenge-link', emoji: '🔗', title: '挑战链接已复制！' })
+                      }}
+                      className="inline-flex items-center gap-2 rounded-xl border border-violet-500/30 bg-violet-500/5 px-5 py-2.5 text-sm font-medium text-violet-600 dark:text-violet-400 transition-all hover:bg-violet-500/10"
+                    >
+                      <Link2 size={14} />
+                      挑战好友
                     </button>
                   </div>
                 </div>

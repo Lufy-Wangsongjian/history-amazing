@@ -404,9 +404,9 @@ app.get('/api/stats', (_req, res) => {
   res.json({ total, coreTotal, byCategory, byRegion, bySignificance, yearRange })
 })
 
-// ── AI 问答 SSE 端点 ──
-app.post('/api/ai/chat', async (req, res) => {
-  const { message } = req.body as { message?: string }
+// ── AI 问答 SSE 端点（允许更大 body 以传历史对话） ──
+app.post('/api/ai/chat', express.json({ limit: '50kb' }), async (req, res) => {
+  const { message, history } = req.body as { message?: string; history?: Array<{ role: 'user' | 'assistant'; content: string }> }
   if (!message?.trim()) {
     res.status(400).json({ error: 'message is required' })
     return
@@ -423,8 +423,13 @@ app.post('/api/ai/chat', async (req, res) => {
   let clientDisconnected = false
   req.on('close', () => { clientDisconnected = true })
 
+  // 安全截取历史：最多 10 条消息（5 轮），每条 content 截断 500 字
+  const safeHistory = (history || [])
+    .slice(-10)
+    .map(m => ({ role: m.role, content: (m.content || '').slice(0, 500) }))
+
   try {
-    for await (const chunk of streamAIResponse(db, message.trim())) {
+    for await (const chunk of streamAIResponse(db, message.trim(), safeHistory)) {
       if (clientDisconnected) break
       res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`)
     }

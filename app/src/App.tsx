@@ -9,6 +9,7 @@ import { LoadingSkeletonWithTransition } from '@/components/LoadingSkeleton'
 import { OnboardingGuide } from '@/components/OnboardingGuide'
 import { AuthModal } from '@/components/AuthModal'
 import { AchievementToastContainer, showAchievementToast } from '@/components/AchievementToast'
+import { DailyCheckin } from '@/components/DailyCheckin'
 import { useAuth } from '@/contexts/AuthContext'
 import { GoogleLogin } from '@react-oauth/google'
 import { DEFAULT_YEAR_RANGE, useTimelineState } from '@/hooks/useTimelineState'
@@ -18,6 +19,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 import { useFavorites } from '@/hooks/useFavorites'
 import { useReadProgress, useAchievements } from '@/hooks/useProgress'
 import { useExplorerMissions, type ExplorerMission } from '@/hooks/useExplorerMissions'
+import { useUserProfile, getPersonalizedSuggestions } from '@/hooks/useUserProfile'
 import { useRandomFact } from '@/lib/fun-facts'
 import { shareEvent } from '@/lib/share-card'
 import { syncMergeAll } from '@/lib/api'
@@ -52,6 +54,7 @@ const HistoryRiddle = lazy(() => import('@/components/HistoryRiddle').then(m => 
 const TimelineSorter = lazy(() => import('@/components/TimelineSorter').then(m => ({ default: m.TimelineSorter })))
 const ProgressHeatmap = lazy(() => import('@/components/ProgressHeatmap').then(m => ({ default: m.ProgressHeatmap })))
 const AnnualReport = lazy(() => import('@/components/AnnualReport').then(m => ({ default: m.AnnualReport })))
+const Leaderboard = lazy(() => import('@/components/Leaderboard').then(m => ({ default: m.Leaderboard })))
 
 const WELCOME_STORAGE_KEY = 'chrono-atlas-welcome-dismissed'
 
@@ -137,6 +140,8 @@ function App() {
   }, [achievements.unlocked])
 
   const missions = useExplorerMissions(state.filteredEvents, progress.readIds)
+  const userProfile = useUserProfile(progress.readIds, state.filteredEvents)
+  const aiSuggestions = useMemo(() => getPersonalizedSuggestions(userProfile), [userProfile])
   const randomFact = useRandomFact(state.filteredEvents)
   const passportEras = useMemo(() => ERAS.map(era => ({
     label: era.name,
@@ -180,6 +185,7 @@ function App() {
   const [showTimelineSorter, setShowTimelineSorter] = useState(false)
   const [showProgressHeatmap, setShowProgressHeatmap] = useState(false)
   const [showAnnualReport, setShowAnnualReport] = useState(false)
+  const [showLeaderboard, setShowLeaderboard] = useState(false)
 
   // ── P0 弹窗单例策略：打开新弹窗时关闭所有其他弹窗 ──
   const closeAllModals = useCallback(() => {
@@ -197,6 +203,7 @@ function App() {
     setShowTimelineSorter(false)
     setShowProgressHeatmap(false)
     setShowAnnualReport(false)
+    setShowLeaderboard(false)
   }, [])
   const openModal = useCallback((setter: (v: boolean) => void) => {
     closeAllModals()
@@ -495,6 +502,7 @@ function App() {
               { icon: <Trophy size={14} />, label: `成就${achievements.unlockedCount > 0 ? ` (${achievements.unlockedCount})` : ''}`, onClick: () => openModal(setShowAchievements) },
               { icon: <Grid3X3 size={14} />, label: '探索热力图', onClick: () => openModal(setShowProgressHeatmap) },
               { icon: <BarChart3 size={14} />, label: '探索报告', onClick: () => openModal(setShowAnnualReport) },
+              { icon: <Trophy size={14} />, label: '周排行榜', onClick: () => openModal(setShowLeaderboard) },
             ]}
           />
 
@@ -515,6 +523,8 @@ function App() {
               <span className="text-[10px] text-muted-foreground/70 truncate">{randomFact.text}</span>
             </div>
           )}
+
+          <DailyCheckin />
 
           <button onClick={toggleTheme} className="p-2 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground" title={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'} aria-label={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}>
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
@@ -788,6 +798,8 @@ function App() {
           state.setSelectedEvent(event)
           setShowAutoExplore(false)
         }}
+        preferredCategories={userProfile.topCategories}
+        readIds={progress.readIds}
       />
 
       <FigureGallery
@@ -857,14 +869,18 @@ function App() {
         unlockedAchievements={achievements.unlockedCount}
         totalAchievements={achievements.total}
       />
-      </Suspense>
 
-      {/* AI 时光向导 */}
+      <Leaderboard
+        open={showLeaderboard}
+        onClose={() => setShowLeaderboard(false)}
+      />
+      </Suspense>
       <AIChatPanel
         onNavigateToEvent={(query) => {
           state.setSearchQuery(query)
           state.setViewMode('timeline')
         }}
+        suggestions={aiSuggestions}
       />
 
       {/* 首屏加载骨架屏 — 仅首次加载（无任何事件数据）时显示 */}

@@ -1,3 +1,6 @@
+/**
+ * 冷知识弹幕 — 飘浮式弹幕，从右向左滑过时间线上方
+ */
 import { useState, useEffect, useRef } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { generateFunFacts, type FunFact } from '@/lib/fun-facts'
@@ -72,14 +75,15 @@ export function DanmakuOverlay({ events, enabled, onToggle }: DanmakuOverlayProp
       {/* Toggle button */}
       <button
         onClick={onToggle}
-        className={`absolute top-14 right-14 z-20 p-1.5 rounded-md transition-colors hidden md:block ${
+        className={`absolute top-2 right-2 z-20 flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium transition-all ${
           enabled
-            ? 'bg-primary/10 text-primary border border-primary/20'
-            : 'bg-card/80 text-muted-foreground border border-border/30 hover:bg-accent'
+            ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20'
+            : 'bg-card/80 text-muted-foreground/50 border border-border/30 hover:bg-accent hover:text-muted-foreground'
         }`}
         title={enabled ? '关闭弹幕' : '开启冷知识弹幕'}
       >
-        {enabled ? <X size={12} /> : <MessageCircle size={12} />}
+        {enabled ? <X size={10} /> : <MessageCircle size={10} />}
+        <span className="hidden sm:inline">弹幕</span>
       </button>
 
       {/* Danmaku layer */}
@@ -88,18 +92,17 @@ export function DanmakuOverlay({ events, enabled, onToggle }: DanmakuOverlayProp
           {items.map(item => (
             <div
               key={item.id}
-              className="absolute whitespace-nowrap pointer-events-auto cursor-pointer
-                px-3 py-1 rounded-full bg-card/70 backdrop-blur-sm border border-border/20 shadow-sm
-                text-[11px] text-muted-foreground/70 hover:text-foreground hover:bg-card/90 transition-colors"
+              className="absolute whitespace-nowrap pointer-events-auto cursor-default
+                px-3 py-1.5 rounded-full
+                bg-foreground/90 dark:bg-foreground/85
+                text-background dark:text-background
+                text-xs font-medium shadow-md"
               style={{
                 top: `${item.y}%`,
                 animation: `danmaku-slide ${item.duration}s linear forwards`,
               }}
-              onClick={() => {
-                // Can't easily link to specific event from fun-facts, just dismiss
-              }}
             >
-              <span className="mr-1">{item.fact.emoji}</span>
+              <span className="mr-1.5">{item.fact.emoji}</span>
               {item.fact.text.length > 60 ? item.fact.text.slice(0, 58) + '…' : item.fact.text}
             </div>
           ))}

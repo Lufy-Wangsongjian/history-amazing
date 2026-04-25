@@ -3,6 +3,8 @@ import { MessageCircle, Send, X, Sparkles, Loader2, Trash2 } from 'lucide-react'
 
 interface AIChatPanelProps {
   onNavigateToEvent?: (query: string) => void
+  /** 个性化建议（来自用户画像），为空时使用默认 */
+  suggestions?: string[]
 }
 
 interface ChatMessage {
@@ -10,7 +12,7 @@ interface ChatMessage {
   content: string
 }
 
-const SUGGESTIONS = [
+const DEFAULT_SUGGESTIONS = [
   '秦始皇和亚历山大大帝谁更早？',
   '带我了解丝绸之路的历史',
   '二战有哪些关键转折点？',
@@ -19,7 +21,7 @@ const SUGGESTIONS = [
   '中国四大发明对世界有什么影响？',
 ]
 
-export function AIChatPanel({ onNavigateToEvent }: AIChatPanelProps) {
+export function AIChatPanel({ onNavigateToEvent, suggestions }: AIChatPanelProps) {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
@@ -27,6 +29,8 @@ export function AIChatPanel({ onNavigateToEvent }: AIChatPanelProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const abortRef = useRef<AbortController | null>(null)
+
+  const displaySuggestions = suggestions && suggestions.length > 0 ? suggestions : DEFAULT_SUGGESTIONS
 
   // 自动滚动到底部
   useEffect(() => {
@@ -43,6 +47,10 @@ export function AIChatPanel({ onNavigateToEvent }: AIChatPanelProps) {
   const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isStreaming) return
     const userMsg: ChatMessage = { role: 'user', content: text.trim() }
+
+    // 收集历史消息（发送前的所有消息，最多 5 轮 = 10 条）
+    const currentMessages = [...messages]
+
     setMessages(prev => [...prev, userMsg])
     setInput('')
     setIsStreaming(true)
@@ -58,7 +66,14 @@ export function AIChatPanel({ onNavigateToEvent }: AIChatPanelProps) {
       const response = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text.trim() }),
+        body: JSON.stringify({
+          message: text.trim(),
+          // 发送最近 5 轮对话历史
+          history: currentMessages.slice(-10).map(m => ({
+            role: m.role,
+            content: m.content,
+          })),
+        }),
         signal: controller.signal,
       })
 
@@ -114,7 +129,7 @@ export function AIChatPanel({ onNavigateToEvent }: AIChatPanelProps) {
       setIsStreaming(false)
       abortRef.current = null
     }
-  }, [isStreaming])
+  }, [isStreaming, messages])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -186,7 +201,7 @@ export function AIChatPanel({ onNavigateToEvent }: AIChatPanelProps) {
             </div>
             <div>
               <h3 className="text-sm font-bold leading-tight">时光向导</h3>
-              <p className="text-[10px] text-white/60">AI 历史问答</p>
+              <p className="text-[10px] text-white/60">AI 历史问答 · 支持多轮对话</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
@@ -208,9 +223,9 @@ export function AIChatPanel({ onNavigateToEvent }: AIChatPanelProps) {
           <div className="text-center py-4">
             <Sparkles size={28} className="mx-auto mb-2 text-violet-400" />
             <p className="text-sm font-medium text-foreground mb-1">你好！我是时光向导</p>
-            <p className="text-xs text-muted-foreground mb-4">问我任何历史问题，或选择下方话题开始</p>
+            <p className="text-xs text-muted-foreground mb-4">问我任何历史问题，支持多轮追问</p>
             <div className="space-y-1.5">
-              {SUGGESTIONS.slice(0, 4).map((s, i) => (
+              {displaySuggestions.slice(0, 4).map((s, i) => (
                 <button
                   key={i}
                   onClick={() => sendMessage(s)}

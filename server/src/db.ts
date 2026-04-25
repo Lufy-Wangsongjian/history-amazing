@@ -138,6 +138,28 @@ function initSchema(db: Database.Database) {
     CREATE INDEX IF NOT EXISTS idx_user_favorites_user ON user_favorites(user_id);
     CREATE INDEX IF NOT EXISTS idx_user_read_events_user ON user_read_events(user_id);
     CREATE INDEX IF NOT EXISTS idx_user_game_records_user ON user_game_records(user_id);
+
+    -- 每日挑战 + 连续签到
+    CREATE TABLE IF NOT EXISTS user_streaks (
+      user_id       TEXT PRIMARY KEY,
+      current_streak INTEGER NOT NULL DEFAULT 0,
+      longest_streak INTEGER NOT NULL DEFAULT 0,
+      last_checkin   TEXT,
+      total_checkins INTEGER NOT NULL DEFAULT 0,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+
+    -- 周排行榜快照
+    CREATE TABLE IF NOT EXISTS weekly_scores (
+      user_id    TEXT NOT NULL,
+      week_key   TEXT NOT NULL,
+      score_type TEXT NOT NULL,
+      score      INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (user_id, week_key, score_type),
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_weekly_scores_week ON weekly_scores(week_key, score_type, score DESC);
   `)
 }
 

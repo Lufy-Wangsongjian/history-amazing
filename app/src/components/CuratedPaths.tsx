@@ -609,42 +609,70 @@ interface CuratedPathsProps {
 export function CuratedPaths({ open, onClose, events, onSelectEvent }: CuratedPathsProps) {
   const [activePath, setActivePath] = useState<string | null>(null)
 
-  // 对每条路线匹配事件
+  // 对每条路线匹配事件 — 多层级相关性评分
   const pathEvents = useMemo(() => {
     const result: Map<string, HistoricalEvent[]> = new Map()
     CURATED_PATHS.forEach(path => {
-      const matched = events.filter(event => {
-        // ID 精确匹配
-        if (path.eventIds.includes(event.id)) return true
-        // 关键词模糊匹配
-        const text = `${event.title} ${event.description} ${event.figure || ''}`
-        return path.keywords.some(kw => text.includes(kw))
-      })
-      // 按年份排序
-      matched.sort((a, b) => a.year - b.year)
+      // ── 第一步：计算每个事件的相关性得分 ──
+      const scored: Array<{ event: HistoricalEvent; score: number }> = []
 
-      // 智能筛选：保留所有里程碑(3)和重要事件(2)，再从普通事件(1)中均匀采样补充
-      // 确保完整叙事线不被截断，同时避免关键词过于宽泛时产生数百条结果
-      const MAX_EVENTS = 60
-      if (matched.length <= MAX_EVENTS) {
-        result.set(path.id, matched)
-      } else {
-        const milestones = matched.filter(e => e.significance >= 2)
-        const normals = matched.filter(e => e.significance < 2)
-        const remaining = MAX_EVENTS - milestones.length
-        if (remaining > 0 && normals.length > 0) {
-          // 均匀采样普通事件以保持时间线分布均匀
-          const step = normals.length / remaining
-          const sampled: HistoricalEvent[] = []
-          for (let i = 0; i < remaining; i++) {
-            sampled.push(normals[Math.floor(i * step)])
+      for (const event of events) {
+        let score = 0
+
+        // 层级 1：精确 ID 匹配（最高优先级）
+        if (path.eventIds.includes(event.id)) {
+          score += 100
+        }
+
+        // 层级 2：关键词匹配（按命中数量加分）
+        const text = `${event.title} ${event.description} ${event.figure || ''}`
+        let keywordHits = 0
+        for (const kw of path.keywords) {
+          if (text.includes(kw)) keywordHits++
+        }
+
+        if (keywordHits > 0) {
+          // 标题命中权重更高
+          let titleHits = 0
+          for (const kw of path.keywords) {
+            if (event.title.includes(kw)) titleHits++
           }
-          const selected = [...milestones, ...sampled].sort((a, b) => a.year - b.year)
-          result.set(path.id, selected)
-        } else {
-          result.set(path.id, milestones.slice(0, MAX_EVENTS))
+          score += titleHits * 8 + (keywordHits - titleHits) * 3
+        }
+
+        // 层级 3：significance 加成
+        if (score > 0) {
+          score += event.significance * 2
+        }
+
+        // 层级 4：有 stepGuide 匹配的事件额外加分（编辑特别为它写了导读）
+        if (score > 0) {
+          for (const guide of path.stepGuides) {
+            if (guide.match.some(kw => text.includes(kw))) {
+              score += 15
+              break
+            }
+          }
+        }
+
+        if (score > 0) {
+          scored.push({ event, score })
         }
       }
+
+      // ── 第二步：按得分降序排序，取高分事件 ──
+      scored.sort((a, b) => b.score - a.score)
+
+      // 动态上限：根据路线性质决定最大事件数
+      // ID 精确匹配的路线（如考试路线）不限制，关键词路线按得分截断
+      const hasExplicitIds = path.eventIds.length > 0
+      const maxEvents = hasExplicitIds ? scored.length : Math.min(scored.length, 80)
+
+      // 取前 N 个高分事件，然后按年份排序恢复时间线顺序
+      const selected = scored.slice(0, maxEvents).map(s => s.event)
+      selected.sort((a, b) => a.year - b.year)
+
+      result.set(path.id, selected)
     })
     return result
   }, [events])

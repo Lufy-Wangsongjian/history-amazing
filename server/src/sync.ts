@@ -434,5 +434,182 @@ export function createSyncRouter(db: Database.Database): Router {
     res.json(result)
   })
 
+  // ────────────────────────────────────
+  // 每日签到 + 连续打卡
+  // ────────────────────────────────────
+
+  /** 获取签到状态 */
+  router.get('/streak', (req: Request, res: Response) => {
+    const userId = requireAuth(req, res)
+    if (!userId) return
+
+    const row = db.prepare(
+      'SELECT current_streak, longest_streak, last_checkin, total_checkins FROM user_streaks WHERE user_id = ?'
+    ).get(userId) as { current_streak: number; longest_streak: number; last_checkin: string | null; total_checkins: number } | undefined
+
+    if (!row) {
+      res.json({ currentStreak: 0, longestStreak: 0, lastCheckin: null, totalCheckins: 0, checkedInToday: false })
+      return
+    }
+
+    const today = new Date().toISOString().slice(0, 10)
+    const checkedInToday = row.last_checkin === today
+
+    res.json({
+      currentStreak: row.current_streak,
+      longestStreak: row.longest_streak,
+      lastCheckin: row.last_checkin,
+      totalCheckins: row.total_checkins,
+      checkedInToday,
+    })
+  })
+
+  /** 执行每日签到 */
+  router.post('/streak/checkin', (req: Request, res: Response) => {
+    const userId = requireAuth(req, res)
+    if (!userId) return
+
+    const today = new Date().toISOString().slice(0, 10)
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+
+    const row = db.prepare(
+      'SELECT current_streak, longest_streak, last_checkin, total_checkins FROM user_streaks WHERE user_id = ?'
+    ).get(userId) as { current_streak: number; longest_streak: number; last_checkin: string | null; total_checkins: number } | undefined
+
+    if (row?.last_checkin === today) {
+      // 今天已签到
+      res.json({
+        currentStreak: row.current_streak,
+        longestStreak: row.longest_streak,
+        totalCheckins: row.total_checkins,
+        checkedInToday: true,
+        isNew: false,
+      })
+      return
+    }
+
+    let newStreak: number
+    if (!row) {
+      // 首次签到
+      newStreak = 1
+      db.prepare(
+        'INSERT INTO user_streaks (user_id, current_streak, longest_streak, last_checkin, total_checkins) VALUES (?, 1, 1, ?, 1)'
+      ).run(userId, today)
+    } else if (row.last_checkin === yesterday) {
+      // 连续签到
+      newStreak = row.current_streak + 1
+      const longestStreak = Math.max(row.longest_streak, newStreak)
+      db.prepare(
+        'UPDATE user_streaks SET current_streak = ?, longest_streak = ?, last_checkin = ?, total_checkins = total_checkins + 1 WHERE user_id = ?'
+      ).run(newStreak, longestStreak, today, userId)
+    } else {
+      // 断签，重新开始
+      newStreak = 1
+      db.prepare(
+        'UPDATE user_streaks SET current_streak = 1, last_checkin = ?, total_checkins = total_checkins + 1 WHERE user_id = ?'
+      ).run(today, userId)
+    }
+
+    const updated = db.prepare(
+      'SELECT current_streak, longest_streak, total_checkins FROM user_streaks WHERE user_id = ?'
+    ).get(userId) as { current_streak: number; longest_streak: number; total_checkins: number }
+
+    res.json({
+      currentStreak: updated.current_streak,
+      longestStreak: updated.longest_streak,
+      totalCheckins: updated.total_checkins,
+      checkedInToday: true,
+      isNew: true,
+    })
+  })
+
+  // ────────────────────────────────────
+  // 周排行榜
+  // ────────────────────────────────────
+
+  /** 获取当前周的排行榜 */
+  router.get('/leaderboard', (req: Request, res: Response) => {
+    const userId = requireAuth(req, res)
+    if (!userId) return
+
+    const weekKey = getWeekKey()
+    const scoreType = (req.query.type as string) || 'read_count'
+
+    // 前 20 名
+    const rows = db.prepare(`
+      SELECT ws.user_id, ws.score, u.nickname, u.avatar
+      FROM weekly_scores ws
+      JOIN users u ON u.id = ws.user_id
+      WHERE ws.week_key = ? AND ws.score_type = ?
+      ORDER BY ws.score DESC
+      LIMIT 20
+    `).all(weekKey, scoreType) as Array<{ user_id: string; score: number; nickname: string; avatar: string | null }>
+
+    // 自己的排名
+    const myScore = db.prepare(
+      'SELECT score FROM weekly_scores WHERE user_id = ? AND week_key = ? AND score_type = ?'
+    ).get(userId, weekKey, scoreType) as { score: number } | undefined
+
+    const myRank = myScore
+      ? (db.prepare(
+          'SELECT COUNT(*) as rank FROM weekly_scores WHERE week_key = ? AND score_type = ? AND score > ?'
+        ).get(weekKey, scoreType, myScore.score) as { rank: number }).rank + 1
+      : null
+
+    res.json({
+      weekKey,
+      scoreType,
+      top: rows.map(r => ({
+        userId: r.user_id,
+        nickname: r.nickname,
+        avatar: r.avatar,
+        score: r.score,
+      })),
+      me: myScore ? { rank: myRank, score: myScore.score } : null,
+    })
+  })
+
+  /** 更新周分数（由后端自动调用或前端提交） */
+  router.post('/leaderboard/submit', (req: Request, res: Response) => {
+    const userId = requireAuth(req, res)
+    if (!userId) return
+
+    const { scoreType, score } = req.body as { scoreType?: string; score?: number }
+    if (!scoreType || typeof score !== 'number') {
+      res.status(400).json({ error: 'scoreType 和 score 必填' })
+      return
+    }
+
+    const validTypes = new Set(['read_count', 'quiz_score', 'challenge_score'])
+    if (!validTypes.has(scoreType)) {
+      res.status(400).json({ error: '无效的 scoreType' })
+      return
+    }
+
+    const weekKey = getWeekKey()
+
+    // 累加分数（非替换）
+    db.prepare(`
+      INSERT INTO weekly_scores (user_id, week_key, score_type, score)
+      VALUES (?, ?, ?, ?)
+      ON CONFLICT(user_id, week_key, score_type) DO UPDATE SET
+        score = CASE
+          WHEN ? = 'read_count' THEN excluded.score
+          ELSE MAX(weekly_scores.score, excluded.score)
+        END
+    `).run(userId, weekKey, scoreType, score, scoreType)
+
+    res.json({ ok: true })
+  })
+
   return router
+}
+
+/** 获取当前 ISO 周的 key，如 "2026-W17" */
+function getWeekKey(): string {
+  const now = new Date()
+  const jan1 = new Date(now.getFullYear(), 0, 1)
+  const days = Math.floor((now.getTime() - jan1.getTime()) / 86400000)
+  const weekNum = Math.ceil((days + jan1.getDay() + 1) / 7)
+  return `${now.getFullYear()}-W${String(weekNum).padStart(2, '0')}`
 }

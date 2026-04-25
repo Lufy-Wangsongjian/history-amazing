@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import type { HistoricalEvent } from '@/data/types'
+import type { HistoricalEvent, Category } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear, getEra } from '@/data/types'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { RegionFlag } from './RegionFlag'
@@ -11,22 +11,55 @@ interface AutoExploreProps {
   onClose: () => void
   events: HistoricalEvent[]
   onSelectEvent: (event: HistoricalEvent) => void
+  /** 用户偏好类别（来自画像），用于个性化选择 */
+  preferredCategories?: Category[]
+  /** 用户已读事件 ID 集合，优先推荐未读 */
+  readIds?: Set<string>
 }
 
 const SLIDE_COUNT = 10
 const SLIDE_INTERVAL = 5000 // 5 秒自动切换
 
-function pickRandomEvents(events: HistoricalEvent[], count: number): HistoricalEvent[] {
-  // 优先选里程碑，再补普通事件
+function pickRandomEvents(
+  events: HistoricalEvent[],
+  count: number,
+  preferredCategories?: Category[],
+  readIds?: Set<string>,
+): HistoricalEvent[] {
+  // 策略：40% 里程碑 + 40% 偏好类别（未读优先） + 20% 盲区探索
   const milestones = events.filter(e => e.significance === 3)
-  const others = events.filter(e => e.significance < 3)
   const shuffledMilestones = [...milestones].sort(() => Math.random() - 0.5)
-  const shuffledOthers = [...others].sort(() => Math.random() - 0.5)
-  const picked = [...shuffledMilestones.slice(0, Math.ceil(count * 0.6)), ...shuffledOthers]
-  return picked.sort(() => Math.random() - 0.5).slice(0, count).sort((a, b) => a.year - b.year)
+  const milestoneSlots = Math.ceil(count * 0.4)
+  const result: HistoricalEvent[] = shuffledMilestones.slice(0, milestoneSlots)
+  const usedIds = new Set(result.map(e => e.id))
+
+  // 偏好类别未读事件
+  if (preferredCategories && preferredCategories.length > 0 && readIds) {
+    const preferredSlots = Math.ceil(count * 0.4)
+    const preferred = events
+      .filter(e => preferredCategories.includes(e.category) && !readIds.has(e.id) && !usedIds.has(e.id))
+      .sort(() => Math.random() - 0.5)
+    for (const e of preferred) {
+      if (result.length >= milestoneSlots + preferredSlots) break
+      result.push(e)
+      usedIds.add(e.id)
+    }
+  }
+
+  // 补充随机事件
+  const remaining = count - result.length
+  if (remaining > 0) {
+    const others = events.filter(e => !usedIds.has(e.id)).sort(() => Math.random() - 0.5)
+    for (const e of others) {
+      if (result.length >= count) break
+      result.push(e)
+    }
+  }
+
+  return result.sort((a, b) => a.year - b.year)
 }
 
-export function AutoExplore({ open, onClose, events, onSelectEvent }: AutoExploreProps) {
+export function AutoExplore({ open, onClose, events, onSelectEvent, preferredCategories, readIds }: AutoExploreProps) {
   const [slides, setSlides] = useState<HistoricalEvent[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
   const [playing, setPlaying] = useState(true)
@@ -34,7 +67,7 @@ export function AutoExplore({ open, onClose, events, onSelectEvent }: AutoExplor
   // 打开时生成幻灯片序列
   useEffect(() => {
     if (open && events.length > 0) {
-      setSlides(pickRandomEvents(events, SLIDE_COUNT))
+      setSlides(pickRandomEvents(events, SLIDE_COUNT, preferredCategories, readIds))
       setCurrentIdx(0)
       setPlaying(true)
     }
