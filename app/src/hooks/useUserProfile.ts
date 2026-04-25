@@ -4,7 +4,7 @@
  */
 import { useMemo } from 'react'
 import type { Category, HistoricalEvent } from '@/data/types'
-import { CATEGORY_CONFIG, ERAS } from '@/data/types'
+import { ERAS } from '@/data/types'
 
 export interface UserProfile {
   /** 偏好类别（按阅读频率排序，前 3） */
