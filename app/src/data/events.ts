@@ -126,6 +126,8 @@ import { medicineShadowsEvents } from './events-medicine-shadows'
 import { faithsMarginsEvents } from './events-faiths-margins'
 import { musicWorldTraditionsEvents } from './events-music-world-traditions'
 import { frontierExplorersEvents } from './events-frontier-explorers'
+// Round 35: 北欧与东欧历史纵深（22条）
+import { nordicEasternEuropeEvents } from './events-nordic-eastern-europe'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -393,6 +395,7 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...faithsMarginsEvents,
   ...musicWorldTraditionsEvents,
   ...frontierExplorersEvents,
+  ...nordicEasternEuropeEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER
