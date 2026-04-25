@@ -78,6 +78,32 @@ function initSchema(db: Database.Database) {
   `)
 
   ensureColumnExists(db, 'events', 'image', 'TEXT')
+
+  // ── 用户认证相关表 ──
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id              TEXT PRIMARY KEY,
+      email           TEXT UNIQUE,
+      google_id       TEXT UNIQUE,
+      nickname        TEXT NOT NULL,
+      avatar          TEXT,
+      created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+      last_login_at   TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS email_codes (
+      id          INTEGER PRIMARY KEY AUTOINCREMENT,
+      email       TEXT NOT NULL,
+      code        TEXT NOT NULL,
+      expires_at  TEXT NOT NULL,
+      used        INTEGER NOT NULL DEFAULT 0,
+      created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+    CREATE INDEX IF NOT EXISTS idx_users_google_id ON users(google_id);
+    CREATE INDEX IF NOT EXISTS idx_email_codes_email ON email_codes(email);
+  `)
 }
 
 function ensureColumnExists(

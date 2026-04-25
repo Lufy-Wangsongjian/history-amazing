@@ -7,6 +7,7 @@ import type Database from 'better-sqlite3'
 import { fileURLToPath } from 'url'
 import { getDB, closeDB } from './db.js'
 import { streamAIResponse } from './ai.js'
+import { createAuthRouter } from './auth.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const CLIENT_DIST_PATH = path.resolve(__dirname, '../../app/dist')
@@ -20,6 +21,10 @@ app.use(cors({
   origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
 }))
 app.use(express.json({ limit: '10kb' }))
+
+// ── 认证路由 ──
+const authDb = getDB()
+app.use('/api/auth', createAuthRouter(authDb))
 
 interface EventRow {
   id: string

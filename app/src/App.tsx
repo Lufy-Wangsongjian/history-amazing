@@ -6,6 +6,8 @@ import { ActiveFiltersBar } from '@/components/ActiveFiltersBar'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { MobileTabBar } from '@/components/MobileTabBar'
 import { LoadingSkeletonWithTransition } from '@/components/LoadingSkeleton'
+import { AuthModal } from '@/components/AuthModal'
+import { useAuth } from '@/contexts/AuthContext'
 import { DEFAULT_YEAR_RANGE, useTimelineState } from '@/hooks/useTimelineState'
 import { useTheme } from '@/hooks/useTheme'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -21,7 +23,7 @@ import type { HistoricalEvent, Category } from '@/data/types'
 import { MilestoneTicker } from '@/components/MilestoneTicker'
 import { AIChatPanel } from '@/components/AIChatPanel'
 import { MobileQuickActions } from '@/components/MobileQuickActions'
-import { Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard, Target, Swords, Puzzle, HelpCircle, ArrowUpDown, Grid3X3, BarChart3 } from 'lucide-react'
+import { Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard, Target, Swords, Puzzle, HelpCircle, ArrowUpDown, Grid3X3, BarChart3, LogIn, LogOut, User } from 'lucide-react'
 import { useState, useCallback, useRef, useEffect, useMemo, lazy, Suspense } from 'react'
 import './App.css'
 
@@ -55,6 +57,8 @@ function App() {
   const isMobile = useIsMobile()
   const favs = useFavorites()
   const progress = useReadProgress()
+  const auth = useAuth()
+  const [showAuthModal, setShowAuthModal] = useState(false)
   const achievements = useAchievements(progress.readIds, state.filteredEvents)
   const missions = useExplorerMissions(state.filteredEvents, progress.readIds)
   const randomFact = useRandomFact(state.filteredEvents)
@@ -336,6 +340,20 @@ function App() {
               <button onClick={toggleTheme} className="p-2 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground" title={theme === 'dark' ? '亮色' : '暗色'} aria-label="主题切换">
                 {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
               </button>
+              {/* 用户头像 / 登录按钮（移动端） */}
+              {auth.user ? (
+                <button onClick={() => auth.logout()} className="p-1.5 rounded-full hover:bg-accent transition-colors" title={`${auth.user.nickname}（点击退出）`}>
+                  {auth.user.avatar ? (
+                    <img src={auth.user.avatar} alt="" className="w-6 h-6 rounded-full" />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-violet-500/20 text-violet-500 flex items-center justify-center text-[10px] font-bold">{auth.user.nickname[0]}</div>
+                  )}
+                </button>
+              ) : (
+                <button onClick={() => setShowAuthModal(true)} className="p-2 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground" title="登录" aria-label="登录">
+                  <LogIn size={18} />
+                </button>
+              )}
             </>
           ) : (
             <>
@@ -411,6 +429,25 @@ function App() {
           <button onClick={toggleTheme} className="p-2 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground" title={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'} aria-label={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}>
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
+
+          {/* 用户头像 / 登录按钮（桌面端） */}
+          {auth.user ? (
+            <div className="flex items-center gap-1.5 pl-1.5 border-l border-border/30 ml-0.5">
+              {auth.user.avatar ? (
+                <img src={auth.user.avatar} alt="" className="w-7 h-7 rounded-full" />
+              ) : (
+                <div className="w-7 h-7 rounded-full bg-violet-500/20 text-violet-500 flex items-center justify-center text-xs font-bold">{auth.user.nickname[0]}</div>
+              )}
+              <span className="text-xs text-muted-foreground hidden lg:inline max-w-[80px] truncate">{auth.user.nickname}</span>
+              <button onClick={() => auth.logout()} className="p-1.5 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground" title="退出登录">
+                <LogOut size={14} />
+              </button>
+            </div>
+          ) : (
+            <button onClick={() => setShowAuthModal(true)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20 text-violet-600 dark:text-violet-400 hover:from-violet-500/20 hover:to-purple-500/20 transition-all duration-200 hover:shadow-sm" title="登录">
+              <User size={14} /><span className="hidden sm:inline">登录</span>
+            </button>
+          )}
             </>
           )}
         </div>
@@ -723,6 +760,9 @@ function App() {
 
       {/* 首屏加载骨架屏 — 仅首次加载（无任何事件数据）时显示 */}
       <LoadingSkeletonWithTransition isLoading={state.isLoading && state.filteredEvents.length === 0} />
+
+      {/* 登录弹窗 */}
+      <AuthModal open={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </div>
   )
 }

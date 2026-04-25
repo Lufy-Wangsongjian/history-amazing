@@ -41,12 +41,21 @@ export interface AllEventsResponse {
   total: number
 }
 
+const TOKEN_KEY = 'chrono-atlas-token'
+
+function getAuthHeaders(): Record<string, string> {
+  const headers: Record<string, string> = { Accept: 'application/json' }
+  try {
+    const token = localStorage.getItem(TOKEN_KEY)
+    if (token) headers.Authorization = `Bearer ${token}`
+  } catch {}
+  return headers
+}
+
 async function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(path, {
     signal,
-    headers: {
-      Accept: 'application/json',
-    },
+    headers: getAuthHeaders(),
   })
 
   if (!response.ok) {
