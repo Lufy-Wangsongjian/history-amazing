@@ -114,6 +114,18 @@ import { lostExplorersEvents } from './events-lost-explorers'
 // Round 31: 海上丝路双珠 — 澳门与新加坡（23 条）
 import { portCitiesEvents } from './events-port-cities'
 import { mountainFaithsEvents } from './events-mountain-faiths'
+// Round 34: 半岛雨林与北国光 — Laos/Malaysia/Philippines/Bangladesh/Denmark/Finland/Serbia（23条）
+import { sparseRegionsRound34Events } from './events-sparse-regions-round34'
+import { andesSaharaEvents } from './events-andes-sahara'
+import { eastAfricaMediterraneanEvents } from './events-east-africa-mediterranean'
+import { chileAndesEvents } from './events-chile-andes'
+import { iceAgeEvents } from './events-ice-age'
+import { worldPhilosophyEvents } from './events-world-philosophy'
+import { voyagesForgottenEvents } from './events-voyages-forgotten'
+import { medicineShadowsEvents } from './events-medicine-shadows'
+import { faithsMarginsEvents } from './events-faiths-margins'
+import { musicWorldTraditionsEvents } from './events-music-world-traditions'
+import { frontierExplorersEvents } from './events-frontier-explorers'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -370,6 +382,17 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...lostExplorersEvents,
   ...portCitiesEvents,
   ...mountainFaithsEvents,
+  ...sparseRegionsRound34Events,
+  ...andesSaharaEvents,
+  ...eastAfricaMediterraneanEvents,
+  ...chileAndesEvents,
+  ...iceAgeEvents,
+  ...worldPhilosophyEvents,
+  ...voyagesForgottenEvents,
+  ...medicineShadowsEvents,
+  ...faithsMarginsEvents,
+  ...musicWorldTraditionsEvents,
+  ...frontierExplorersEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER

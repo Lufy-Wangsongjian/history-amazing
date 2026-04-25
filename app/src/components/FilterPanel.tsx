@@ -6,6 +6,7 @@ import { Slider } from '@/components/ui/slider'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
 import { SearchAutocomplete } from './SearchAutocomplete'
 import {
   BookOpen, FlaskConical, Music, Palette, Brain,
@@ -239,46 +240,46 @@ export function FilterPanel({
             <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">视图模式</p>
             <div className="grid grid-cols-2 gap-1 p-0.5 bg-muted/50 rounded-md">
               <Button
-                variant={viewMode === 'timeline' ? 'secondary' : 'ghost'}
+                variant={viewMode === 'timeline' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('timeline')}
-                className="h-7 text-xs gap-1"
+                className={cn('h-7 text-xs gap-1', viewMode === 'timeline' && 'shadow-sm font-semibold')}
               >
                 <AlignJustify size={12} />
                 时间线
               </Button>
               <Button
-                variant={viewMode === 'matrix' ? 'secondary' : 'ghost'}
+                variant={viewMode === 'matrix' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('matrix')}
-                className="h-7 text-xs gap-1"
+                className={cn('h-7 text-xs gap-1', viewMode === 'matrix' && 'shadow-sm font-semibold')}
               >
                 <Grid3X3 size={12} />
                 矩阵
               </Button>
               <Button
-                variant={viewMode === 'compare' ? 'secondary' : 'ghost'}
+                variant={viewMode === 'compare' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('compare')}
-                className="h-7 text-xs gap-1"
+                className={cn('h-7 text-xs gap-1', viewMode === 'compare' && 'shadow-sm font-semibold')}
               >
                 <Columns size={12} />
                 对照
               </Button>
               <Button
-                variant={viewMode === 'stats' ? 'secondary' : 'ghost'}
+                variant={viewMode === 'stats' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('stats')}
-                className="h-7 text-xs gap-1"
+                className={cn('h-7 text-xs gap-1', viewMode === 'stats' && 'shadow-sm font-semibold')}
               >
                 <BarChart3 size={12} />
                 统计
               </Button>
               <Button
-                variant={viewMode === 'civilizations' ? 'secondary' : 'ghost'}
+                variant={viewMode === 'civilizations' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('civilizations')}
-                className="h-7 text-xs gap-1 col-span-2"
+                className={cn('h-7 text-xs gap-1 col-span-2', viewMode === 'civilizations' && 'shadow-sm font-semibold')}
               >
                 <Layers size={12} />
                 文明图谱
