@@ -86,13 +86,14 @@ function ensureColumnExists(
   columnName: string,
   columnDefinition: string
 ) {
-  const columns = db
-    .prepare(`PRAGMA table_info(${tableName})`)
-    .all() as Array<{ name: string }>
-
-  const hasColumn = columns.some(column => column.name === columnName)
-  if (!hasColumn) {
+  // 直接尝试 ALTER TABLE，捕获 duplicate column 错误，避免 TOCTOU 竞态
+  try {
     db.exec(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnDefinition}`)
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : ''
+    if (!msg.includes('duplicate column')) {
+      throw err
+    }
   }
 }
 

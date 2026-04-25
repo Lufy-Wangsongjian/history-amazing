@@ -74,7 +74,7 @@ function App() {
     if (state.selectedEvent) {
       progress.markRead(state.selectedEvent.id)
     }
-  }, [state.selectedEvent])
+  }, [state.selectedEvent, progress.markRead])
 
   // 全局键盘快捷键
   useKeyboardShortcuts({
@@ -135,8 +135,10 @@ function App() {
     }
   }, [state.selectedEvent])
 
-  // 从 URL hash 恢复事件
+  // 从 URL hash 恢复事件（仅首次加载时触发一次）
+  const hashRestoredRef = useRef(false)
   useEffect(() => {
+    if (hashRestoredRef.current) return
     const hash = window.location.hash
     if (hash.startsWith('#event=') && state.filteredEvents.length > 0) {
       const eventId = hash.slice(7)
@@ -144,8 +146,9 @@ function App() {
       if (event) {
         state.setSelectedEvent(event)
       }
+      hashRestoredRef.current = true
     }
-  }, [state.filteredEvents.length > 0]) // 只在事件列表首次加载完成时触发
+  }, [state.filteredEvents, state.setSelectedEvent])
 
   const [showWelcome, setShowWelcome] = useState(() => {
     try {
@@ -543,8 +546,8 @@ function App() {
         onClose={() => state.setSelectedEvent(null)}
         onNavigate={(event) => state.setSelectedEvent(event)}
         isFavorite={state.selectedEvent ? favs.isFavorite(state.selectedEvent.id) : false}
-        onToggleFavorite={state.selectedEvent ? () => favs.toggleFavorite(state.selectedEvent!.id) : undefined}
-        onShare={state.selectedEvent ? () => shareEvent(state.selectedEvent!) : undefined}
+        onToggleFavorite={state.selectedEvent ? (() => { const id = state.selectedEvent?.id; if (id) favs.toggleFavorite(id) }) : undefined}
+        onShare={state.selectedEvent ? (() => { const e = state.selectedEvent; if (e) shareEvent(e) }) : undefined}
         readIds={progress.readIds}
       />
 

@@ -16,8 +16,10 @@ const HAS_CLIENT_BUILD = fs.existsSync(CLIENT_INDEX_PATH)
 const app = express()
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3001
 
-app.use(cors())
-app.use(express.json())
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
+}))
+app.use(express.json({ limit: '10kb' }))
 
 interface EventRow {
   id: string
@@ -49,6 +51,35 @@ const DERIVED_EVENT_PATTERN = /_(?:context|acceleration|diffusion|legacy)$/
 
 function isDerivedEventId(eventId: string) {
   return DERIVED_EVENT_PATTERN.test(eventId)
+}
+
+const MAX_LIMIT = 200
+const MAX_OFFSET = 100000
+
+/** 安全解析 limit/offset，防止 NaN 和超大值 */
+function safeLimit(raw: string | undefined, fallback = 1000): number {
+  const n = Number(raw)
+  return Number.isFinite(n) && n >= 1 ? Math.min(Math.floor(n), MAX_LIMIT) : Math.min(fallback, MAX_LIMIT)
+}
+function safeOffset(raw: string | undefined): number {
+  const n = Number(raw)
+  return Number.isFinite(n) && n >= 0 ? Math.min(Math.floor(n), MAX_OFFSET) : 0
+}
+/** 安全解析年份参数 */
+function safeYear(raw: string | undefined): number | undefined {
+  if (!raw) return undefined
+  const n = Number(raw)
+  return Number.isFinite(n) ? n : undefined
+}
+/** 安全解析 significance（1-3） */
+function safeSignificance(raw: string | undefined): number | undefined {
+  if (!raw) return undefined
+  const n = Number(raw)
+  return Number.isFinite(n) && n >= 1 && n <= 3 ? Math.floor(n) : undefined
+}
+/** 转义 LIKE 通配符 */
+function escapeLike(s: string): string {
+  return s.replace(/[%_\\]/g, '\\$&')
 }
 
 function getRelatedIdsMap(db: Database.Database, eventIds: string[]) {
@@ -134,27 +165,38 @@ function applySharedFilters(
   }
 
   if (query.yearMin) {
-    conditions.push(`${fieldPrefix}year >= @yearMin`)
-    params.yearMin = Number(query.yearMin)
+    const yearMin = safeYear(query.yearMin)
+    if (yearMin !== undefined) {
+      conditions.push(`${fieldPrefix}year >= @yearMin`)
+      params.yearMin = yearMin
+    }
   }
 
   if (query.yearMax) {
-    conditions.push(`${fieldPrefix}year <= @yearMax`)
-    params.yearMax = Number(query.yearMax)
+    const yearMax = safeYear(query.yearMax)
+    if (yearMax !== undefined) {
+      conditions.push(`${fieldPrefix}year <= @yearMax`)
+      params.yearMax = yearMax
+    }
   }
 
   if (query.significance) {
-    conditions.push(`${fieldPrefix}significance >= @significance`)
-    params.significance = Number(query.significance)
+    const significance = safeSignificance(query.significance)
+    if (significance !== undefined) {
+      conditions.push(`${fieldPrefix}significance >= @significance`)
+      params.significance = significance
+    }
   }
 }
 
 function fallbackSearch(db: Database.Database, req: express.Request, res: express.Response) {
   const query = req.query as ListQuery
-  const { search, limit = '1000', offset = '0' } = query
+  const { search } = query
+  const limitNum = safeLimit(query.limit)
+  const offsetNum = safeOffset(query.offset)
 
-  let sql = 'SELECT * FROM events WHERE (title LIKE @q OR description LIKE @q OR figure LIKE @q OR details LIKE @q)'
-  const params: Record<string, unknown> = { q: `%${search}%` }
+  let sql = "SELECT * FROM events WHERE (title LIKE @q ESCAPE '\\' OR description LIKE @q ESCAPE '\\' OR figure LIKE @q ESCAPE '\\' OR details LIKE @q ESCAPE '\\')"
+  const params: Record<string, unknown> = { q: `%${escapeLike(search || '')}%` }
   const conditions: string[] = []
 
   applySharedFilters(conditions, params, query)
@@ -164,13 +206,13 @@ function fallbackSearch(db: Database.Database, req: express.Request, res: expres
   }
 
   sql += ' ORDER BY year ASC LIMIT @limit OFFSET @offset'
-  params.limit = Number(limit)
-  params.offset = Number(offset)
+  params.limit = limitNum
+  params.offset = offsetNum
 
   const rows = db.prepare(sql).all(params) as EventRow[]
   const data = attachRelations(db, rows)
 
-  let countSql = 'SELECT COUNT(*) as total FROM events WHERE (title LIKE @q OR description LIKE @q OR figure LIKE @q OR details LIKE @q)'
+  let countSql = "SELECT COUNT(*) as total FROM events WHERE (title LIKE @q ESCAPE '\\' OR description LIKE @q ESCAPE '\\' OR figure LIKE @q ESCAPE '\\' OR details LIKE @q ESCAPE '\\')"
   if (conditions.length > 0) {
     countSql += ` AND ${conditions.join(' AND ')}`
   }
@@ -180,13 +222,15 @@ function fallbackSearch(db: Database.Database, req: express.Request, res: expres
   delete countParams.offset
 
   const { total } = db.prepare(countSql).get(countParams) as { total: number }
-  res.json({ data, total, limit: Number(limit), offset: Number(offset) })
+  res.json({ data, total, limit: limitNum, offset: offsetNum })
 }
 
 app.get('/api/events', (req, res) => {
   const db = getDB()
   const query = req.query as ListQuery
-  const { search, limit = '1000', offset = '0' } = query
+  const { search } = query
+  const limitNum = safeLimit(query.limit)
+  const offsetNum = safeOffset(query.offset)
 
   if (search && search.trim()) {
     const hasCJK = /[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]/.test(search)
@@ -195,7 +239,7 @@ app.get('/api/events', (req, res) => {
       return
     }
 
-    const ftsQuery = search.trim().split(/\s+/).map(word => `"${word}"`).join(' OR ')
+    const ftsQuery = search.trim().split(/\s+/).map(word => `"${word.replace(/"/g, '""')}"`).join(' OR ')
     let sql = `
       SELECT e.*
       FROM events e
@@ -212,8 +256,8 @@ app.get('/api/events', (req, res) => {
     }
 
     sql += ' ORDER BY e.year ASC LIMIT @limit OFFSET @offset'
-    params.limit = Number(limit)
-    params.offset = Number(offset)
+    params.limit = limitNum
+    params.offset = offsetNum
 
     try {
       const rows = db.prepare(sql).all(params) as EventRow[]
@@ -235,7 +279,7 @@ app.get('/api/events', (req, res) => {
       delete countParams.offset
 
       const { total } = db.prepare(countSql).get(countParams) as { total: number }
-      res.json({ data, total, limit: Number(limit), offset: Number(offset) })
+      res.json({ data, total, limit: limitNum, offset: offsetNum })
       return
     } catch {
       fallbackSearch(db, req, res)
@@ -254,8 +298,8 @@ app.get('/api/events', (req, res) => {
   }
 
   sql += ' ORDER BY year ASC LIMIT @limit OFFSET @offset'
-  params.limit = Number(limit)
-  params.offset = Number(offset)
+  params.limit = limitNum
+  params.offset = offsetNum
 
   const rows = db.prepare(sql).all(params) as EventRow[]
   const data = attachRelations(db, rows)
@@ -270,7 +314,7 @@ app.get('/api/events', (req, res) => {
   delete countParams.offset
 
   const { total } = db.prepare(countSql).get(countParams) as { total: number }
-  res.json({ data, total, limit: Number(limit), offset: Number(offset) })
+  res.json({ data, total, limit: limitNum, offset: offsetNum })
 })
 
 app.get('/api/events/:id/context', (req, res) => {
@@ -341,7 +385,9 @@ app.get('/api/stats', (_req, res) => {
   const db = getDB()
 
   const total = (db.prepare('SELECT COUNT(*) as cnt FROM events').get() as { cnt: number }).cnt
-  const coreTotal = (db.prepare('SELECT id FROM events').all() as Array<{ id: string }>).filter(row => !isDerivedEventId(row.id)).length
+  const coreTotal = (db.prepare(
+    "SELECT COUNT(*) as cnt FROM events WHERE id NOT LIKE '%\\_context' ESCAPE '\\' AND id NOT LIKE '%\\_acceleration' ESCAPE '\\' AND id NOT LIKE '%\\_diffusion' ESCAPE '\\' AND id NOT LIKE '%\\_legacy' ESCAPE '\\'"
+  ).get() as { cnt: number }).cnt
   const byCategory = db.prepare('SELECT category, COUNT(*) as count FROM events GROUP BY category ORDER BY count DESC').all()
   const byRegion = db.prepare('SELECT region, COUNT(*) as count FROM events GROUP BY region ORDER BY count DESC').all()
   const bySignificance = db.prepare('SELECT significance, COUNT(*) as count FROM events GROUP BY significance ORDER BY significance DESC').all()
@@ -366,14 +412,22 @@ app.post('/api/ai/chat', async (req, res) => {
   res.flushHeaders()
 
   const db = getDB()
+  let clientDisconnected = false
+  req.on('close', () => { clientDisconnected = true })
 
   try {
     for await (const chunk of streamAIResponse(db, message.trim())) {
+      if (clientDisconnected) break
       res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`)
     }
-    res.write(`data: ${JSON.stringify({ done: true })}\n\n`)
+    if (!clientDisconnected) {
+      res.write(`data: ${JSON.stringify({ done: true })}\n\n`)
+    }
   } catch (err) {
-    res.write(`data: ${JSON.stringify({ error: String(err) })}\n\n`)
+    if (!clientDisconnected) {
+      console.error('[AI Chat Error]', err)
+      res.write(`data: ${JSON.stringify({ error: '服务异常，请稍后重试' })}\n\n`)
+    }
   } finally {
     res.end()
   }

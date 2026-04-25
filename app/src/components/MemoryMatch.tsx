@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { formatYear, CATEGORY_CONFIG } from '@/data/types'
 import { X, RotateCcw, Trophy, Clock } from 'lucide-react'
@@ -47,6 +47,14 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
   const [startTime, setStartTime] = useState<number>(0)
   const [elapsed, setElapsed] = useState(0)
   const [gameState, setGameState] = useState<GameState>('playing')
+  const flipBackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // 清理翻牌定时器，防止组件卸载后更新 state
+  useEffect(() => {
+    return () => {
+      if (flipBackTimerRef.current) clearTimeout(flipBackTimerRef.current)
+    }
+  }, [])
 
   // Pick events and create card pairs
   const setupGame = useCallback(() => {
@@ -132,7 +140,7 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
       setLockBoard(false)
     } else {
       // No match - flip back after delay
-      setTimeout(() => {
+      flipBackTimerRef.current = setTimeout(() => {
         setFlippedIds(prev => {
           const next = new Set(prev)
           next.delete(firstPick.id)
@@ -141,6 +149,7 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
         })
         setFirstPick(null)
         setLockBoard(false)
+        flipBackTimerRef.current = null
       }, 800)
     }
   }, [lockBoard, flippedIds, matchedKeys, firstPick])

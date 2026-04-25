@@ -63,7 +63,7 @@ function computeStats(events: HistoricalEvent[], readIds: Set<string>): ReportSt
   const topRegions = Array.from(regionCountMap.entries())
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
-    .map(([, count]) => ({ label: '', count }))
+    .map(([region, count]) => ({ label: region, count }))
 
   // 里程碑
   const milestonesRead = readEvents.filter(e => e.significance === 3).length

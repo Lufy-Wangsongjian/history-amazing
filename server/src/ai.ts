@@ -124,6 +124,7 @@ export async function* streamAIResponse(
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    yield `\n\n[AI 调用出错: ${msg}]`
+    console.error('[AI Error]', msg)
+    yield '\n\n[AI 调用出错，请稍后重试]'
   }
 }
