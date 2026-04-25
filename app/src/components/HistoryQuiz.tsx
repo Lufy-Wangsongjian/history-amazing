@@ -1,8 +1,9 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear } from '@/data/types'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useGameRecords, shareScoreCard } from '@/lib/game-records'
 import {
   Brain, Trophy, RotateCcw, ArrowRight, X,
   CheckCircle, XCircle, Zap
@@ -143,6 +144,8 @@ const DIFFICULTY_LEVELS = [
 const QUIZ_SIZES = [5, 10, 15] as const
 
 export function HistoryQuiz({ open, onClose, events, onSelectEvent, mode = 'global' }: HistoryQuizProps) {
+  const { best, submitScore } = useGameRecords('quiz')
+  const [isNewBest, setIsNewBest] = useState(false)
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -199,6 +202,17 @@ export function HistoryQuiz({ open, onClose, events, onSelectEvent, mode = 'glob
     if (pct >= 0.4) return { emoji: '🌱', title: '历史新芽', desc: '继续探索，你会成为历史通' }
     return { emoji: '🔭', title: '历史探险家', desc: '每一次探索都是学习的开始' }
   }, [quizFinished, score, questions.length])
+
+  // 提交最佳记录
+  const scoreSubmittedRef = useRef(false)
+  useEffect(() => {
+    if (quizFinished && questions.length > 0 && !scoreSubmittedRef.current) {
+      const result = submitScore({ score, total: questions.length })
+      setIsNewBest(result.isNewBest)
+      scoreSubmittedRef.current = true
+    }
+    if (!quizFinished) scoreSubmittedRef.current = false
+  }, [quizFinished, score, questions.length, submitScore])
 
   return (
     <Dialog open={open} onOpenChange={(nextOpen) => { if (!nextOpen) onClose() }}>
@@ -387,13 +401,19 @@ export function HistoryQuiz({ open, onClose, events, onSelectEvent, mode = 'glob
                   <div className="text-5xl mb-3">{grade.emoji}</div>
                   <h3 className="text-xl font-bold text-foreground mb-1">{grade.title}</h3>
                   <p className="text-sm text-muted-foreground mb-4">{grade.desc}</p>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-violet-500/10 px-4 py-2 mb-6">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-violet-500/10 px-4 py-2 mb-2">
                     <Trophy size={16} className="text-violet-500" />
                     <span className="text-sm font-bold text-foreground">
                       {score} / {questions.length} 题正确
                     </span>
                   </div>
-                  <div className="flex gap-3 justify-center">
+                  {isNewBest && (
+                    <p className="text-xs font-medium text-amber-500 mb-2">🏆 新纪录！</p>
+                  )}
+                  {best && !isNewBest && (
+                    <p className="text-[11px] text-muted-foreground mb-2">历史最佳：{best.score}/{best.total}</p>
+                  )}
+                  <div className="flex gap-3 justify-center mb-3">
                     <button
                       onClick={() => startQuiz(quizMode)}
                       className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5"
@@ -402,10 +422,10 @@ export function HistoryQuiz({ open, onClose, events, onSelectEvent, mode = 'glob
                       再来一轮
                     </button>
                     <button
-                      onClick={onClose}
+                      onClick={() => shareScoreCard({ gameTitle: '知识测验', score, total: questions.length, label: grade.title, isNewBest })}
                       className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-all hover:bg-accent"
                     >
-                      返回探索
+                      分享成绩
                     </button>
                   </div>
                 </div>

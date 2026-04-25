@@ -6,7 +6,9 @@ import { ActiveFiltersBar } from '@/components/ActiveFiltersBar'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { MobileTabBar } from '@/components/MobileTabBar'
 import { LoadingSkeletonWithTransition } from '@/components/LoadingSkeleton'
+import { OnboardingGuide } from '@/components/OnboardingGuide'
 import { AuthModal } from '@/components/AuthModal'
+import { AchievementToastContainer, showAchievementToast } from '@/components/AchievementToast'
 import { useAuth } from '@/contexts/AuthContext'
 import { GoogleLogin } from '@react-oauth/google'
 import { DEFAULT_YEAR_RANGE, useTimelineState } from '@/hooks/useTimelineState'
@@ -61,6 +63,22 @@ function App() {
   const auth = useAuth()
   const [showAuthModal, setShowAuthModal] = useState(false)
   const achievements = useAchievements(progress.readIds, state.filteredEvents)
+
+  // 成就解锁检测 — 新解锁时弹出庆祝 toast
+  const prevUnlockedRef = useRef<Set<string>>(new Set())
+  useEffect(() => {
+    if (achievements.unlocked.length === 0) return
+    const currentIds = new Set(achievements.unlocked.map(a => a.id))
+    if (prevUnlockedRef.current.size > 0) {
+      for (const a of achievements.unlocked) {
+        if (!prevUnlockedRef.current.has(a.id)) {
+          showAchievementToast({ id: a.id, emoji: a.emoji, title: a.title })
+        }
+      }
+    }
+    prevUnlockedRef.current = currentIds
+  }, [achievements.unlocked])
+
   const missions = useExplorerMissions(state.filteredEvents, progress.readIds)
   const randomFact = useRandomFact(state.filteredEvents)
   const passportEras = useMemo(() => ERAS.map(era => ({
@@ -538,6 +556,16 @@ function App() {
             onClearAll={state.clearFilters}
           />
 
+          {state.viewMode === 'timeline' && (
+            <OnboardingGuide
+              onAction={(cardId) => {
+                if (cardId === 0) openModal(setShowCuratedPaths)
+                else if (cardId === 1) openModal(setShowProgressHeatmap)
+                else if (cardId === 2) openModal(setShowQuiz)
+              }}
+            />
+          )}
+
           <div key={state.viewMode} className="flex-1 min-h-0 flex flex-col view-transition-enter">
             <Suspense fallback={<div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">加载中…</div>}>
             {state.viewMode === 'timeline' ? (
@@ -602,6 +630,15 @@ function App() {
         onToggleFavorite={state.selectedEvent ? (() => { const id = state.selectedEvent?.id; if (id) favs.toggleFavorite(id) }) : undefined}
         onShare={state.selectedEvent ? (() => { const e = state.selectedEvent; if (e) shareEvent(e) }) : undefined}
         readIds={progress.readIds}
+        onFigureClick={(figure) => {
+          state.setSelectedEvent(null)
+          openModal(setShowFigureGallery)
+          // 延迟设置搜索以确保 gallery 打开后能聚焦
+          setTimeout(() => {
+            const input = document.querySelector<HTMLInputElement>('[data-figure-search]')
+            if (input) { input.value = figure; input.dispatchEvent(new Event('input', { bubbles: true })) }
+          }, 300)
+        }}
       />
 
       <KeyboardShortcutsHelp />
@@ -778,6 +815,9 @@ function App() {
 
       {/* 登录弹窗 */}
       <AuthModal open={showAuthModal} onClose={() => setShowAuthModal(false)} />
+
+      {/* 成就解锁庆祝 toast */}
+      <AchievementToastContainer />
     </div>
   )
 }

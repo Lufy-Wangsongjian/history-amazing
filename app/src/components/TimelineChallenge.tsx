@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useEffect, useRef } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, formatYear } from '@/data/types'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useGameRecords, shareScoreCard } from '@/lib/game-records'
 import { ArrowRightLeft, Flame, RotateCcw, Swords, Trophy, X } from 'lucide-react'
 
 interface TimelineChallengeProps {
@@ -114,6 +115,8 @@ function ChallengeCard({
 }
 
 export function TimelineChallenge({ open, onClose, events, onSelectEvent }: TimelineChallengeProps) {
+  const { best, submitScore } = useGameRecords('challenge')
+  const [isNewBest, setIsNewBest] = useState(false)
   const [rounds, setRounds] = useState<ChallengeRound[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedSide, setSelectedSide] = useState<'left' | 'right' | null>(null)
@@ -134,6 +137,21 @@ export function TimelineChallenge({ open, onClose, events, onSelectEvent }: Time
     if (ratio >= 0.7) return { title: '年代猎手', desc: '你对时代先后已经很敏感了。' }
     if (ratio >= 0.5) return { title: '文明观察员', desc: '方向对了，再多玩两轮就会越来越准。' }
     return { title: '新手旅者', desc: '别急，时间感是玩出来的。' }
+  }, [finished, rounds.length, score])
+
+  // 提交最佳记录
+  const scoreSubmittedRef = useRef(false)
+  useEffect(() => {
+    if (finished && rounds.length > 0 && !scoreSubmittedRef.current) {
+      const r = submitScore({ score, total: rounds.length, combo: bestCombo })
+      setIsNewBest(r.isNewBest)
+      scoreSubmittedRef.current = true
+    }
+    if (!finished) scoreSubmittedRef.current = false
+  }, [finished, score, rounds.length, bestCombo, submitScore])
+    }
+    if (!finished) scoreSubmittedRef.current = false
+  }, [finished, score, rounds.length, bestCombo, submitScore])
   }, [finished, rounds.length, score])
 
   const startChallenge = useCallback(() => {
@@ -320,6 +338,12 @@ export function TimelineChallenge({ open, onClose, events, onSelectEvent }: Time
                     <span className="text-sm font-semibold text-foreground">{score} / {rounds.length} 轮正确</span>
                     <span className="text-xs text-muted-foreground">最佳连击 {bestCombo}</span>
                   </div>
+                  {isNewBest && (
+                    <p className="mt-2 text-xs font-medium text-amber-500">🏆 新纪录！</p>
+                  )}
+                  {best && !isNewBest && (
+                    <p className="mt-2 text-[11px] text-muted-foreground">历史最佳：{best.score}/{best.total} 连击{best.combo}</p>
+                  )}
                   <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                     <button
                       onClick={startChallenge}
@@ -329,10 +353,10 @@ export function TimelineChallenge({ open, onClose, events, onSelectEvent }: Time
                       再战一轮
                     </button>
                     <button
-                      onClick={onClose}
+                      onClick={() => shareScoreCard({ gameTitle: '时间对决', score, total: rounds.length, label: result.title, extraLine: `最佳连击 ${bestCombo}`, isNewBest })}
                       className="rounded-2xl border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
                     >
-                      返回时间线
+                      分享成绩
                     </button>
                   </div>
                 </div>

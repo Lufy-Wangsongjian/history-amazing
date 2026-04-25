@@ -1,7 +1,8 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, formatYear } from '@/data/types'
 import { ArrowUpDown, CheckCircle2, XCircle, RotateCcw, ChevronUp, ChevronDown, Send } from 'lucide-react'
+import { useGameRecords, shareScoreCard } from '@/lib/game-records'
 import {
   Dialog,
   DialogContent,
@@ -38,6 +39,8 @@ function pickSortableEvents(events: HistoricalEvent[], count: number): Historica
 }
 
 export function TimelineSorter({ open, onClose, events }: TimelineSorterProps) {
+  const { best, submitScore } = useGameRecords('sorter')
+  const [isNewBest, setIsNewBest] = useState(false)
   const ITEM_COUNT = 5
   const sourceEvents = useMemo(() => pickSortableEvents(events, ITEM_COUNT), [events, open])
 
@@ -76,7 +79,9 @@ export function TimelineSorter({ open, onClose, events }: TimelineSorterProps) {
     const correct = checks.filter(Boolean).length
     setScore(correct)
     setSubmitted(true)
-  }, [items, correctOrder])
+    const r = submitScore({ score: correct, total: ITEM_COUNT })
+    setIsNewBest(r.isNewBest)
+  }, [items, correctOrder, submitScore, ITEM_COUNT])
 
   // Auto-start
   if (open && round === 0 && sourceEvents.length >= ITEM_COUNT) {
@@ -162,18 +167,32 @@ export function TimelineSorter({ open, onClose, events }: TimelineSorterProps) {
                    score >= 3 ? `不错！答对 ${score}/${ITEM_COUNT}` :
                    `答对 ${score}/${ITEM_COUNT}，继续加油！`}
                 </p>
+                {isNewBest && (
+                  <p className="text-xs font-medium text-amber-500">🏆 新纪录！</p>
+                )}
+                {best && !isNewBest && (
+                  <p className="text-[11px] text-muted-foreground">历史最佳：{best.score}/{best.total}</p>
+                )}
                 {submitted && score < ITEM_COUNT && (
                   <p className="text-xs text-muted-foreground">
                     正确顺序：{correctOrder.map(e => `${e.title}(${formatYear(e.year)})`).join(' → ')}
                   </p>
                 )}
-                <button
-                  onClick={startGame}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-500 text-white text-sm font-medium hover:bg-orange-600 transition-colors"
-                >
-                  <RotateCcw size={14} />
-                  再来一轮
-                </button>
+                <div className="flex gap-2 justify-center">
+                  <button
+                    onClick={startGame}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-500 text-white text-sm font-medium hover:bg-orange-600 transition-colors"
+                  >
+                    <RotateCcw size={14} />
+                    再来一轮
+                  </button>
+                  <button
+                    onClick={() => shareScoreCard({ gameTitle: '排序挑战', score, total: ITEM_COUNT, label: score === ITEM_COUNT ? '完美！' : `答对 ${score}/${ITEM_COUNT}`, isNewBest })}
+                    className="px-4 py-2 rounded-lg border border-border text-sm font-medium hover:bg-accent transition-colors"
+                  >
+                    分享成绩
+                  </button>
+                </div>
               </div>
             )}
           </div>

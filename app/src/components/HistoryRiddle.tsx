@@ -1,7 +1,8 @@
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, REGION_CONFIG, formatYear } from '@/data/types'
 import { Search, HelpCircle, CheckCircle2, XCircle, RotateCcw } from 'lucide-react'
+import { useGameRecords, shareScoreCard } from '@/lib/game-records'
 import {
   Dialog,
   DialogContent,
@@ -56,6 +57,8 @@ function pickMilestoneEvents(events: HistoricalEvent[], count: number): Historic
 }
 
 export function HistoryRiddle({ open, onClose, events, onSelectEvent }: HistoryRiddleProps) {
+  const { best, submitScore } = useGameRecords('riddle')
+  const [isNewBest, setIsNewBest] = useState(false)
   const TOTAL_ROUNDS = 5
   const targetPool = useMemo(() => pickMilestoneEvents(events, TOTAL_ROUNDS), [events, open])
 
@@ -63,6 +66,17 @@ export function HistoryRiddle({ open, onClose, events, onSelectEvent }: HistoryR
   const [guessInput, setGuessInput] = useState('')
   const [suggestions, setSuggestions] = useState<HistoricalEvent[]>([])
   const [gameOver, setGameOver] = useState(false)
+
+  // 提交最佳记录
+  const scoreSubmittedRef = useRef(false)
+  useEffect(() => {
+    if (gameOver && state && !scoreSubmittedRef.current) {
+      const r = submitScore({ score: state.score, total: state.totalRounds * 3 })
+      setIsNewBest(r.isNewBest)
+      scoreSubmittedRef.current = true
+    }
+    if (!gameOver) scoreSubmittedRef.current = false
+  }, [gameOver, state, submitScore])
 
   const startGame = useCallback(() => {
     if (targetPool.length === 0) return
@@ -230,6 +244,12 @@ export function HistoryRiddle({ open, onClose, events, onSelectEvent }: HistoryR
             <p className="text-sm text-muted-foreground">
               {state.score >= state.totalRounds * 2 ? '历史大师！' : state.score >= state.totalRounds ? '不错的成绩！' : '继续加油！'}
             </p>
+            {isNewBest && (
+              <p className="text-xs font-medium text-amber-500">🏆 新纪录！</p>
+            )}
+            {best && !isNewBest && (
+              <p className="text-[11px] text-muted-foreground">历史最佳：{best.score}/{best.total}</p>
+            )}
             <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
               {state.roundScores.map((s, i) => (
                 <span key={i} className={`px-2 py-1 rounded ${s > 0 ? 'bg-green-500/10 text-green-600' : 'bg-red-500/10 text-red-500'}`}>
@@ -237,13 +257,21 @@ export function HistoryRiddle({ open, onClose, events, onSelectEvent }: HistoryR
                 </span>
               ))}
             </div>
-            <button
-              onClick={startGame}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-500 text-white text-sm font-medium hover:bg-violet-600 transition-colors"
-            >
-              <RotateCcw size={14} />
-              再来一局
-            </button>
+            <div className="flex gap-2 justify-center">
+              <button
+                onClick={startGame}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-500 text-white text-sm font-medium hover:bg-violet-600 transition-colors"
+              >
+                <RotateCcw size={14} />
+                再来一局
+              </button>
+              <button
+                onClick={() => shareScoreCard({ gameTitle: '历史猜谜', score: state.score, total: state.totalRounds * 3, label: state.score >= state.totalRounds * 2 ? '历史大师' : '继续加油', isNewBest })}
+                className="px-4 py-2 rounded-lg border border-border text-sm font-medium hover:bg-accent transition-colors"
+              >
+                分享成绩
+              </button>
+            </div>
           </div>
         )}
 

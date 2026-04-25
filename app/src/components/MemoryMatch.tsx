@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { formatYear, CATEGORY_CONFIG } from '@/data/types'
 import { X, RotateCcw, Trophy, Clock } from 'lucide-react'
+import { useGameRecords, shareScoreCard } from '@/lib/game-records'
 
 interface MemoryMatchProps {
   open: boolean
@@ -30,6 +31,8 @@ function shuffleArray<T>(arr: T[]): T[] {
 }
 
 export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
+  const { best, submitScore } = useGameRecords('memory')
+  const [isNewBest, setIsNewBest] = useState(false)
   const DIFFICULTY_LEVELS = [
     { label: '简单', pairs: 4, cols: 'grid-cols-4' },
     { label: '普通', pairs: 6, cols: 'grid-cols-4' },
@@ -108,6 +111,9 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
   useEffect(() => {
     if (matchedKeys.size === PAIR_COUNT && PAIR_COUNT > 0 && cards.length > 0) {
       setGameState('won')
+      const rating = attempts <= PAIR_COUNT + 2 ? 3 : attempts <= PAIR_COUNT * 2 ? 2 : 1
+      const result = submitScore({ score: rating, total: 3, time: elapsed })
+      setIsNewBest(result.isNewBest)
     }
   }, [matchedKeys, cards])
 
@@ -213,15 +219,29 @@ export function MemoryMatch({ open, onClose, events }: MemoryMatchProps) {
               <p className="text-sm text-muted-foreground mb-2">
                 {'★'.repeat(getRating().stars)}{'☆'.repeat(3 - getRating().stars)}
               </p>
-              <p className="text-xs text-muted-foreground mb-4">
+              <p className="text-xs text-muted-foreground mb-1">
                 用时 {formatTime(elapsed)}，翻牌 {attempts} 次
               </p>
-              <button
-                onClick={setupGame}
-                className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
-              >
-                再来一局
-              </button>
+              {isNewBest && (
+                <p className="text-xs font-medium text-amber-500 mb-2">🏆 新纪录！</p>
+              )}
+              {best && !isNewBest && (
+                <p className="text-[11px] text-muted-foreground mb-2">历史最佳：{best.score}★ {best.time ? formatTime(best.time) : ''}</p>
+              )}
+              <div className="flex gap-2 justify-center mt-3">
+                <button
+                  onClick={setupGame}
+                  className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+                >
+                  再来一局
+                </button>
+                <button
+                  onClick={() => shareScoreCard({ gameTitle: '连连看', score: getRating().stars, total: 3, label: getRating().label, extraLine: `用时 ${formatTime(elapsed)}，翻牌 ${attempts} 次`, isNewBest })}
+                  className="px-4 py-2 border border-border text-sm font-medium rounded-lg hover:bg-accent transition-colors"
+                >
+                  分享成绩
+                </button>
+              </div>
             </div>
           ) : (
             <div className={`grid ${gridCols} gap-2.5`}>

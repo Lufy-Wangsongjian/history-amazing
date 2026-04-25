@@ -55,6 +55,8 @@ interface EventDetailProps {
   onShare?: () => void
   /** 已阅读事件 ID 集合（用于智能推荐） */
   readIds?: Set<string>
+  /** 点击人物名跳转图鉴 */
+  onFigureClick?: (figure: string) => void
 }
 
 const EMPTY_CONTEXT = {
@@ -63,7 +65,7 @@ const EMPTY_CONTEXT = {
   relatedEvents: [] as HistoricalEvent[],
 }
 
-export function EventDetail({ event, events, onClose, onNavigate, isFavorite, onToggleFavorite, onShare, readIds }: EventDetailProps) {
+export function EventDetail({ event, events, onClose, onNavigate, isFavorite, onToggleFavorite, onShare, readIds, onFigureClick }: EventDetailProps) {
   const catCfg = event ? CATEGORY_CONFIG[event.category] : null
   const regionCfg = event ? REGION_CONFIG[event.region] : null
   const era = event ? getEra(event.year) : null
@@ -308,10 +310,14 @@ export function EventDetail({ event, events, onClose, onNavigate, isFavorite, on
                 {catCfg.label}
               </span>
               {event.figure && (
-                <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <button
+                  onClick={() => onFigureClick?.(event.figure!)}
+                  className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-violet-500 transition-colors cursor-pointer"
+                  title="在人物图鉴中查看"
+                >
                   <User size={12} />
-                  {event.figure}
-                </span>
+                  <span className="underline decoration-dotted underline-offset-2">{event.figure}</span>
+                </button>
               )}
               <span className="flex items-center gap-0.5 text-xs text-amber-500">
                 {Array.from({ length: event.significance }, (_, index) => (
