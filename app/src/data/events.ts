@@ -128,6 +128,13 @@ import { musicWorldTraditionsEvents } from './events-music-world-traditions'
 import { frontierExplorersEvents } from './events-frontier-explorers'
 // Round 35: 北欧与东欧历史纵深（22条）
 import { nordicEasternEuropeEvents } from './events-nordic-eastern-europe'
+// Round 35: 薄弱地区补齐 — 中亚/东南亚/非洲/欧洲小国/美洲缺口（22条）
+import { weakRegionsRound35Events } from './events-weak-regions-round35'
+// 自进化轮次 2026-04-25_1536 — 非洲内陆 + 哲学纵深 + 远古补强（25条）
+import { evolve202604251536Events } from './events-evolve-20260425-1536'
+
+// Round 36: 自进化轮次 2026-04-25 — 非洲深化 + 建筑奇迹 + 远古补强（25条）
+import { evolve20260425Events } from './events-evolve-20260425'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -396,6 +403,9 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...musicWorldTraditionsEvents,
   ...frontierExplorersEvents,
   ...nordicEasternEuropeEvents,
+  ...evolve20260425Events,
+  ...evolve202604251536Events,
+  ...weakRegionsRound35Events,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER

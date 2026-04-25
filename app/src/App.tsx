@@ -8,6 +8,7 @@ import { MobileTabBar } from '@/components/MobileTabBar'
 import { LoadingSkeletonWithTransition } from '@/components/LoadingSkeleton'
 import { AuthModal } from '@/components/AuthModal'
 import { useAuth } from '@/contexts/AuthContext'
+import { GoogleLogin } from '@react-oauth/google'
 import { DEFAULT_YEAR_RANGE, useTimelineState } from '@/hooks/useTimelineState'
 import { useTheme } from '@/hooks/useTheme'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -23,7 +24,7 @@ import type { HistoricalEvent, Category } from '@/data/types'
 import { MilestoneTicker } from '@/components/MilestoneTicker'
 import { AIChatPanel } from '@/components/AIChatPanel'
 import { MobileQuickActions } from '@/components/MobileQuickActions'
-import { Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard, Target, Swords, Puzzle, HelpCircle, ArrowUpDown, Grid3X3, BarChart3, LogIn, LogOut, User } from 'lucide-react'
+import { Sparkles, Sun, Moon, PanelLeftOpen, Shuffle, CalendarDays, BookOpen, Brain, Heart, Users, Trophy, Clapperboard, Target, Swords, Puzzle, HelpCircle, ArrowUpDown, Grid3X3, BarChart3, LogIn, LogOut, User, Mail } from 'lucide-react'
 import { useState, useCallback, useRef, useEffect, useMemo, lazy, Suspense } from 'react'
 import './App.css'
 
@@ -290,6 +291,20 @@ function App() {
       label: '包含衍生事件',
       onRemove: () => state.setCoreOnly(true),
     })
+  }
+
+  // ── 全站登录拦截 ──
+  if (auth.isLoading) {
+    return (
+      <div className="h-screen w-screen flex flex-col items-center justify-center bg-background text-foreground">
+        <img src="/logo.svg" alt="Chrono Atlas" className="w-12 h-12 mb-4 loading-logo-pulse" />
+        <p className="text-sm text-muted-foreground">验证登录状态...</p>
+      </div>
+    )
+  }
+
+  if (!auth.user) {
+    return <LoginGate />
   }
 
   return (
@@ -815,6 +830,76 @@ function NavDropdown({ icon, label, gradientFrom, gradientTo, borderColor, textC
           ))}
         </div>
       )}
+    </div>
+  )
+}
+
+/** 全屏登录页 — 未登录时替代整个 App 内容 */
+function LoginGate() {
+  const auth = useAuth()
+  const { theme, toggleTheme } = useTheme()
+  const [showAuth, setShowAuth] = useState(false)
+
+  return (
+    <div className="h-screen w-screen flex flex-col items-center justify-center bg-background text-foreground relative overflow-hidden">
+      {/* 背景装饰 */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.08),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(245,158,11,0.06),transparent_50%)]" />
+
+      {/* 主题切换 */}
+      <button
+        onClick={toggleTheme}
+        className="absolute top-4 right-4 p-2 rounded-md hover:bg-accent transition-colors text-muted-foreground hover:text-foreground"
+        title={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
+      >
+        {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+      </button>
+
+      <div className="relative z-10 flex flex-col items-center max-w-sm w-full px-6">
+        {/* Logo */}
+        <img src="/logo.svg" alt="Chrono Atlas" className="w-16 h-16 mb-4 drop-shadow-lg" />
+        <h1 className="text-2xl font-bold tracking-tight mb-1">Chrono Atlas</h1>
+        <p className="text-sm text-muted-foreground mb-8">探索两万年人类文明时间线</p>
+
+        {/* 登录按钮组 */}
+        <div className="w-full space-y-3">
+          <button
+            onClick={() => setShowAuth(true)}
+            className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl bg-violet-500 text-white text-sm font-medium hover:bg-violet-600 transition-colors shadow-lg shadow-violet-500/20"
+          >
+            <Mail size={18} />
+            邮箱验证码登录
+          </button>
+
+          <div className="flex items-center gap-3 py-1">
+            <div className="flex-1 h-px bg-border/50" />
+            <span className="text-[10px] text-muted-foreground">或</span>
+            <div className="flex-1 h-px bg-border/50" />
+          </div>
+
+          <div className="flex justify-center [&>div]:w-full">
+            <GoogleLogin
+              onSuccess={async (response) => {
+                if (response.credential) {
+                  await auth.loginWithGoogle(response.credential)
+                }
+              }}
+              onError={() => {}}
+              size="large"
+              width="320"
+              text="continue_with"
+              shape="pill"
+            />
+          </div>
+        </div>
+
+        <p className="text-[10px] text-muted-foreground/50 text-center mt-6">
+          首次登录自动创建账号 · 登录即表示同意服务条款和隐私政策
+        </p>
+      </div>
+
+      {/* 邮箱登录弹窗（复用 AuthModal） */}
+      <AuthModal open={showAuth} onClose={() => setShowAuth(false)} />
     </div>
   )
 }

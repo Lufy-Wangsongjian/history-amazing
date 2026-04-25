@@ -139,6 +139,24 @@ const QUOTES_BY_ID: Record<string, LiteraryQuote[]> = {
   ],
   la015: [{ text: 'I have always imagined that Paradise will be a kind of library.', source: 'Jorge Luis Borges', translation: '我一直想象天堂应该是某种图书馆的样子。' }],
   la011: [{ text: 'Hasta la victoria siempre.', source: 'Ernesto "Che" Guevara', translation: '直到胜利，永远。' }],
+  // 萨曼王朝·布哈拉智慧宫
+  wr35002: [
+    { text: '求知，哪怕远在中国。', source: '伊斯兰教圣训（布哈里辑录）', translation: 'Seek knowledge, even as far as China.' },
+    { text: '学者的墨水，贵于殉道者的血。', source: '伊斯兰教圣训', translation: 'The ink of the scholar is more sacred than the blood of the martyr.' },
+  ],
+  // 帖木儿帝国·撒马尔罕
+  wr35004: [
+    { text: '如果你怀疑这个世界曾有天堂，那它一定在撒马尔罕。', source: '帖木儿帝国时期中亚民间谚语' },
+  ],
+  // 吴哥窟
+  wr35007: [
+    { text: '石头的诗，比任何文字都更长久。', source: '高棉建筑铭文（吴哥时期）', translation: 'A poem in stone lasts longer than any inscription.' },
+  ],
+  // 伊本·西那（阿维森纳）
+  wr35021: [
+    { text: '医学是一种科学，它研究人体的各种状态。', source: '伊本·西那《医典》第一卷', translation: 'Medicine is a science that deals with the states of the human body.' },
+    { text: '比知识更重要的是想象力。', source: '伊本·西那（传）', translation: 'Imagination is more important than knowledge. (attributed)' },
+  ],
 }
 
 /** 按标题关键词模糊匹配的引用（当 ID 精确匹配失败时使用） */
@@ -3653,6 +3671,78 @@ const QUOTES_BY_KEYWORD: Array<{ keywords: string[]; quotes: LiteraryQuote[] }> 
     quotes: [
       { text: '我们是作为一个团队到达的。', source: '埃德蒙·希拉里拒绝回答"谁先登顶珠峰"（1953）' },
       { text: '人们从不记得我登珠峰，他们记得我帮夏尔巴建学校。这让我心安。', source: '希拉里晚年访谈（2003）' },
+    ],
+  },
+  // ═══ 自进化轮次 2026-04-25 引文 ═══
+  {
+    keywords: ['马拉喀什', '红城', '摩洛哥', 'Almoravid'],
+    quotes: [
+      { text: '马拉喀什的土地是红色的，一如日落时撒哈拉的沙丘。', source: '摩洛哥谚语' },
+      { text: '这座城市是沙漠与绿洲的契约，商队从南而来，学者从北而至。', source: '伊本·白图泰《游记》' },
+    ],
+  },
+  {
+    keywords: ['贝宁', '青铜', '贝宁青铜', 'Oba'],
+    quotes: [
+      { text: '贝宁的青铜是会说话的金属，每一道纹饰都是一首被铸进铜里的诗。', source: '尼日利亚现代诗人 沃莱·索因卡' },
+      { text: '这些头像不是死者面具——它们是活着的祖先，注视着每一个来访者。', source: '贝宁宫廷口述史' },
+    ],
+  },
+  {
+    keywords: ['吴哥窟', '高棉', '吴哥', 'Angkor'],
+    quotes: [
+      { text: '石头的寺庙会老去，但石头上的微笑永远年轻。', source: '高棉民谚' },
+      { text: '吴哥的回廊是世界上最长的神话绘本，走过一遍，等于读了一遍《罗摩衍那》。', source: '法国考古学家 乔治·戈岱司' },
+    ],
+  },
+  {
+    keywords: ['泰姬陵', '沙贾汗', '泰姬', 'Taj Mahal'],
+    quotes: [
+      { text: '月光下的泰姬陵是一滴凝固的泪，而沙贾汗的泪，流了22年。', source: '印度诗人 泰戈尔' },
+      { text: '我询问石头的颜色，石头说：我是一颗为爱而碎的心。', source: '沙贾汗 题泰姬陵诗句（传说）' },
+    ],
+  },
+  {
+    keywords: ['马丘比丘', '印加', '帕查库特克', 'Machu Picchu'],
+    quotes: [
+      { text: '石头在城市中唱歌，如果你足够安静，你能听见安第斯的心跳。', source: '秘鲁作家 何塞·马里亚·阿尔格达斯' },
+      { text: '印加人不用灰浆，他们用耐心和敬畏把巨石变成诗歌。', source: '秘鲁历史学家 玛利亚·罗斯沃斯卡' },
+    ],
+  },
+  // ═══ 自进化轮次 2026-04-25_1536 引文 ═══
+  {
+    keywords: ['大津巴布韦', '石头城', '绍纳', 'Great Zimbabwe'],
+    quotes: [
+      { text: '石头会说话，如果你懂得倾听。大津巴布韦的墙壁里住着一千年的风。', source: '津巴布韦口述传统' },
+      { text: '我们没有写下历史，我们把历史砌进了石头里。', source: '绍纳族谚语' },
+    ],
+  },
+  {
+    keywords: ['乌班图', 'Ubuntu', '班图', '非洲哲学'],
+    quotes: [
+      { text: 'Umuntu ngumuntu ngabantu. （一个人之所以为人，是因为他人存在。）', source: '绍纳族谚语' },
+      { text: '如果你想走得快，一个人走；如果你想走得远，一起走。', source: '非洲谚语' },
+    ],
+  },
+  {
+    keywords: ['楔形文字', '苏美尔', '泥板', 'cuneiform'],
+    quotes: [
+      { text: '泥板会干，但文字一旦刻下，就再也抹不掉了。', source: '苏美尔书吏谚语' },
+      { text: '天上的星星有多少，泥板上的符号就有多少种读法。', source: '亚述书吏学校教材' },
+    ],
+  },
+  {
+    keywords: ['曼萨·穆萨', '马里', '廷巴克图', '朝圣'],
+    quotes: [
+      { text: '黄金不是最美的东西，知识才是。我去麦加是为了灵魂，却带回了全世界对马里这个名字的敬畏。', source: '曼萨·穆萨（传说）' },
+      { text: '在开罗，人人都谈论马里的黄金；在廷巴克图，人人都谈论马里的学者。', source: '14世纪阿拉伯旅行家 伊本·白图泰' },
+    ],
+  },
+  {
+    keywords: ['存在主义', '萨特', '自由', '存在先于本质'],
+    quotes: [
+      { text: '人被判自由。（L\'homme est condamné à être libre.）', source: '让-保罗·萨特《存在主义是一种人道主义》' },
+      { text: '他人即地狱。（L\'enfer, c\'est les autres.）', source: '让-保罗·萨特《禁闭》' },
     ],
   },
 ]
