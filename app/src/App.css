@@ -773,3 +773,21 @@
 .pt-safe {
   padding-top: env(safe-area-inset-top, 0);
 }
+
+/* ===== Loading Skeleton Animations ===== */
+@keyframes shimmer {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+.loading-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+.loading-logo-pulse {
+  animation: logoPulse 2s ease-in-out infinite;
+}

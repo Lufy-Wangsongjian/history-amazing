@@ -5,6 +5,7 @@ import { EraNavigator } from '@/components/EraNavigator'
 import { ActiveFiltersBar } from '@/components/ActiveFiltersBar'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { MobileTabBar } from '@/components/MobileTabBar'
+import { LoadingSkeletonWithTransition } from '@/components/LoadingSkeleton'
 import { DEFAULT_YEAR_RANGE, useTimelineState } from '@/hooks/useTimelineState'
 import { useTheme } from '@/hooks/useTheme'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -719,6 +720,9 @@ function App() {
           state.setViewMode('timeline')
         }}
       />
+
+      {/* 首屏加载骨架屏 — 仅首次加载（无任何事件数据）时显示 */}
+      <LoadingSkeletonWithTransition isLoading={state.isLoading && state.filteredEvents.length === 0} />
     </div>
   )
 }

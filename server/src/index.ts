@@ -53,7 +53,7 @@ function isDerivedEventId(eventId: string) {
   return DERIVED_EVENT_PATTERN.test(eventId)
 }
 
-const MAX_LIMIT = 200
+const MAX_LIMIT = 2000
 const MAX_OFFSET = 100000
 
 /** 安全解析 limit/offset，防止 NaN 和超大值 */
