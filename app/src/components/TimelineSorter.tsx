@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import type { HistoricalEvent } from '@/data/types'
 import { CATEGORY_CONFIG, formatYear } from '@/data/types'
 import { ArrowUpDown, CheckCircle2, XCircle, RotateCcw, ChevronUp, ChevronDown, Send } from 'lucide-react'

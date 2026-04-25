@@ -20,6 +20,7 @@ import { useReadProgress, useAchievements } from '@/hooks/useProgress'
 import { useExplorerMissions, type ExplorerMission } from '@/hooks/useExplorerMissions'
 import { useRandomFact } from '@/lib/fun-facts'
 import { shareEvent } from '@/lib/share-card'
+import { syncMergeAll } from '@/lib/api'
 import { ALL_REGIONS, getVisibleSelectedRegions } from '@/data/regions'
 import { CATEGORY_CONFIG, REGION_CONFIG, ERAS, formatYear } from '@/data/types'
 import type { HistoricalEvent, Category } from '@/data/types'
@@ -63,6 +64,62 @@ function App() {
   const auth = useAuth()
   const [showAuthModal, setShowAuthModal] = useState(false)
   const achievements = useAchievements(progress.readIds, state.filteredEvents)
+
+  // ── 登录后数据同步：把 localStorage 数据合并到服务端，并用服务端返回的合并结果覆盖本地 ──
+  const syncedRef = useRef(false)
+  useEffect(() => {
+    if (!auth.user || !auth.token) {
+      syncedRef.current = false
+      // 登出时清除 token，停止增量同步
+      favs.setToken(null)
+      progress.setToken(null)
+      return
+    }
+    if (syncedRef.current) return
+    syncedRef.current = true
+
+    // 收集本地数据（在启用增量同步之前做快照，避免竞态）
+    const localFavorites = Array.from(favs.favorites)
+    const localReadEvents = Array.from(progress.readIds)
+
+    let localGameRecords: Record<string, { score: number; total: number; time?: number; combo?: number; date: string }> = {}
+    try {
+      const raw = localStorage.getItem('chrono-atlas-game-records')
+      if (raw) localGameRecords = JSON.parse(raw)
+    } catch {}
+
+    // 一次性合并
+    const token = auth.token
+    syncMergeAll({
+      favorites: localFavorites,
+      readEvents: localReadEvents,
+      gameRecords: localGameRecords,
+    }).then(merged => {
+      // 用服务端合并后的数据覆盖本地
+      favs.setFavoritesFromServer(merged.favorites)
+      progress.setReadIdsFromServer(merged.readEvents)
+
+      // 合并游戏记录到 localStorage
+      if (merged.gameRecords) {
+        try {
+          const existing = JSON.parse(localStorage.getItem('chrono-atlas-game-records') || '{}')
+          const updated = { ...existing, ...merged.gameRecords }
+          localStorage.setItem('chrono-atlas-game-records', JSON.stringify(updated))
+        } catch {}
+      }
+
+      // 合并完成后才启用增量同步，避免 merge response 覆盖用户中途操作
+      favs.setToken(token)
+      progress.setToken(token)
+    }).catch(() => {
+      // 合并失败：重置标记以便后续可重试，但仍启用增量同步
+      syncedRef.current = false
+      favs.setToken(token)
+      progress.setToken(token)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // 仅在登录状态变化时触发，favs/progress 回调引用稳定
+  }, [auth.user, auth.token])
 
   // 成就解锁检测 — 新解锁时弹出庆祝 toast
   const prevUnlockedRef = useRef<Set<string>>(new Set())

@@ -41,11 +41,22 @@ function getStepNarrative(path: CuratedPath, event: HistoricalEvent, idx: number
     }
   }
 
-  // 2. 自动生成位置感知的过渡句
+  // 2. 自动生成位置感知的过渡句（仅首尾 + 少量位置锚点，避免长路线重复）
   if (idx === 0) return `故事从这里开始。在「${path.name}」的叙事中，这是最早的起点——一切后来的发展，都可以追溯到此刻。`
   if (idx === total - 1) return `故事在这里暂时落幕。但历史从不真正结束——「${path.name}」的叙事还在继续，只是接力棒已经传到了我们这一代。`
-  if (idx < total * 0.3) return '在叙事的早期阶段，变化往往是缓慢而不可见的。但正是这些不起眼的积累，为后来的剧变埋下了种子。'
-  if (idx > total * 0.7) return '到了叙事的后半段，变化的速度和规模都在加速。每一个新事件，都建立在此前所有事件的累积之上。'
+
+  // 路线较短（≤20）：保留原有的区间导读
+  if (total <= 20) {
+    if (idx < total * 0.3) return '在叙事的早期阶段，变化往往是缓慢而不可见的。但正是这些不起眼的积累，为后来的剧变埋下了种子。'
+    if (idx > total * 0.7) return '到了叙事的后半段，变化的速度和规模都在加速。每一个新事件，都建立在此前所有事件的累积之上。'
+  } else {
+    // 路线较长（>20）：仅在 1/4、1/2、3/4 位置插入过渡
+    const quarter = Math.floor(total / 4)
+    if (idx === quarter) return '在叙事的早期阶段，变化往往是缓慢而不可见的。但正是这些不起眼的积累，为后来的剧变埋下了种子。'
+    if (idx === quarter * 2) return '故事行至中段，早期的铺垫开始结出果实。此前看似无关的线索，在这里交织成了清晰的脉络。'
+    if (idx === quarter * 3) return '到了叙事的后半段，变化的速度和规模都在加速。每一个新事件，都建立在此前所有事件的累积之上。'
+  }
+
   return null
 }
 
@@ -281,7 +292,7 @@ const CURATED_PATHS: CuratedPath[] = [
     color: '#DE2910',
     eventIds: [],
     keywords: ['中国', '华夏', '黄帝', '夏朝', '商朝', '周朝', '秦', '汉', '唐', '宋', '明', '清', '春秋', '战国', '孔子', '造纸', '科举', '大运河', '丝绸', '紫禁城', '鸦片', '辛亥', '五四', '改革开放', '长城'],
-    narrativeSummary: '从黄帝传说到改革开放——华夏文明是人类历史上唯一从未中断的文明。五千年间，它经历了统一与分裂的反复交替、儒道佛的精神建构、科技发明的全球领先、近代百年的屈辱与觉醒。这条路线串联了中国文明最关键的 20+ 个节点，带你走完华夏五千年。',
+    narrativeSummary: '从黄帝传说到改革开放——华夏文明是人类历史上唯一从未中断的文明。五千年间，它经历了统一与分裂的反复交替、儒道佛的精神建构、科技发明的全球领先、近代百年的屈辱与觉醒。这条路线串联了中国文明最关键的节点，带你走完华夏五千年。',
     prologue: '华夏文明的独特之处在于它的连续性——世界上没有第二个文明能在同一片土地上、用同一套文字、延续五千年不间断的历史记录。从黄帝传说开始，经历了夏商周三代奠基、秦汉大一统、唐宋文化巅峰、明清帝国的辉煌与封闭、近代百年的痛苦转型，直到当代的重新崛起。让我们沿着这条脉络，看看华夏文明的每一个关键转折。',
     epilogue: '回望五千年，华夏文明最了不起的不是任何单一的发明或制度，而是它的韧性——无论经历多少次入侵、分裂和动荡，它总能在废墟上重建。从"九九归一"到"天下大同"，从"四大发明"到"改革开放"，这条文明的河流虽然多次改道，但从未干涸。今天的中国正站在一个新的历史节点上——它将如何书写下一个五千年？',
     stepGuides: [
@@ -611,7 +622,29 @@ export function CuratedPaths({ open, onClose, events, onSelectEvent }: CuratedPa
       })
       // 按年份排序
       matched.sort((a, b) => a.year - b.year)
-      result.set(path.id, matched.slice(0, 20))
+
+      // 智能筛选：保留所有里程碑(3)和重要事件(2)，再从普通事件(1)中均匀采样补充
+      // 确保完整叙事线不被截断，同时避免关键词过于宽泛时产生数百条结果
+      const MAX_EVENTS = 60
+      if (matched.length <= MAX_EVENTS) {
+        result.set(path.id, matched)
+      } else {
+        const milestones = matched.filter(e => e.significance >= 2)
+        const normals = matched.filter(e => e.significance < 2)
+        const remaining = MAX_EVENTS - milestones.length
+        if (remaining > 0 && normals.length > 0) {
+          // 均匀采样普通事件以保持时间线分布均匀
+          const step = normals.length / remaining
+          const sampled: HistoricalEvent[] = []
+          for (let i = 0; i < remaining; i++) {
+            sampled.push(normals[Math.floor(i * step)])
+          }
+          const selected = [...milestones, ...sampled].sort((a, b) => a.year - b.year)
+          result.set(path.id, selected)
+        } else {
+          result.set(path.id, milestones.slice(0, MAX_EVENTS))
+        }
+      }
     })
     return result
   }, [events])

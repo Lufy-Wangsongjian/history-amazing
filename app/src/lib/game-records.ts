@@ -1,11 +1,13 @@
 /**
  * 游戏最佳记录持久化 + 成绩卡分享
  */
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
+import { syncSubmitGameRecord } from '@/lib/api'
 
 // ── 最佳记录 ──
 
 const RECORDS_KEY = 'chrono-atlas-game-records'
+const TOKEN_KEY = 'chrono-atlas-token'
 
 export interface GameRecord {
   score: number       // 得分
@@ -32,6 +34,15 @@ function saveRecords(records: Record<string, GameRecord>) {
   } catch {}
 }
 
+/** 检查当前是否已登录（通过 localStorage token） */
+function hasAuthToken(): boolean {
+  try {
+    return !!localStorage.getItem(TOKEN_KEY)
+  } catch {
+    return false
+  }
+}
+
 export function useGameRecords(gameId: GameId) {
   const [best, setBest] = useState<GameRecord | null>(() => {
     const records = loadRecords()
@@ -53,13 +64,36 @@ export function useGameRecords(gameId: GameId) {
       records[gameId] = newRecord
       saveRecords(records)
       setBest(newRecord)
+
+      // 后台同步到服务端（fire-and-forget，通过 localStorage token 判断登录态）
+      if (hasAuthToken()) {
+        syncSubmitGameRecord({
+          gameId,
+          score: newRecord.score,
+          total: newRecord.total,
+          time: newRecord.time,
+          combo: newRecord.combo,
+          date: newRecord.date,
+        }).catch(() => {})
+      }
+
       return { isNewBest: true }
     }
 
     return { isNewBest: false }
   }, [gameId])
 
-  return { best, submitScore }
+  /** 用服务端合并后的数据覆盖本地（登录合并后调用） */
+  const setBestFromServer = useCallback((record: GameRecord | null) => {
+    if (record) {
+      const records = loadRecords()
+      records[gameId] = record
+      saveRecords(records)
+      setBest(record)
+    }
+  }, [gameId])
+
+  return { best, submitScore, setBestFromServer }
 }
 
 // ── 成绩卡分享（Canvas 生成图片） ──

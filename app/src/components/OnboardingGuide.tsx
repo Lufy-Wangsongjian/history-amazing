@@ -52,7 +52,7 @@ export function OnboardingGuide({ onAction }: OnboardingGuideProps) {
       return 0
     }
   })
-  const [visible, setVisible] = useState(true)
+  const [visible] = useState(true)
 
   // 每次 dismiss 后持久化
   useEffect(() => {

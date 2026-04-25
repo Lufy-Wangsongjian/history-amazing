@@ -104,6 +104,41 @@ function initSchema(db: Database.Database) {
     CREATE INDEX IF NOT EXISTS idx_users_google_id ON users(google_id);
     CREATE INDEX IF NOT EXISTS idx_email_codes_email ON email_codes(email);
   `)
+
+  // ── 用户数据同步表 ──
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS user_favorites (
+      user_id    TEXT NOT NULL,
+      event_id   TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      PRIMARY KEY (user_id, event_id),
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS user_read_events (
+      user_id    TEXT NOT NULL,
+      event_id   TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      PRIMARY KEY (user_id, event_id),
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS user_game_records (
+      user_id  TEXT NOT NULL,
+      game_id  TEXT NOT NULL,
+      score    INTEGER NOT NULL,
+      total    INTEGER NOT NULL,
+      time     INTEGER,
+      combo    INTEGER,
+      date     TEXT NOT NULL,
+      PRIMARY KEY (user_id, game_id),
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_user_favorites_user ON user_favorites(user_id);
+    CREATE INDEX IF NOT EXISTS idx_user_read_events_user ON user_read_events(user_id);
+    CREATE INDEX IF NOT EXISTS idx_user_game_records_user ON user_game_records(user_id);
+  `)
 }
 
 function ensureColumnExists(

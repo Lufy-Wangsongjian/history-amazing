@@ -149,10 +149,6 @@ export function TimelineChallenge({ open, onClose, events, onSelectEvent }: Time
     }
     if (!finished) scoreSubmittedRef.current = false
   }, [finished, score, rounds.length, bestCombo, submitScore])
-    }
-    if (!finished) scoreSubmittedRef.current = false
-  }, [finished, score, rounds.length, bestCombo, submitScore])
-  }, [finished, rounds.length, score])
 
   const startChallenge = useCallback(() => {
     const nextRounds = buildRounds(events)

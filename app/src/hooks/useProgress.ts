@@ -1,6 +1,7 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import type { Category } from '@/data/types'
 import { CATEGORY_CONFIG, ERAS } from '@/data/types'
+import { syncMarkRead } from '@/lib/api'
 
 const PROGRESS_STORAGE_KEY = 'chrono-atlas-read-events'
 
@@ -12,12 +13,18 @@ export function useReadProgress() {
       return stored ? new Set(JSON.parse(stored) as string[]) : new Set()
     } catch { return new Set() }
   })
+  const tokenRef = useRef<string | null>(null)
 
   useEffect(() => {
     try {
       localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(Array.from(readIds)))
     } catch {}
   }, [readIds])
+
+  /** 让外部传入当前 token，用于判断是否需要同步服务端 */
+  const setToken = useCallback((token: string | null) => {
+    tokenRef.current = token
+  }, [])
 
   const markRead = useCallback((id: string) => {
     setReadIds(prev => {
@@ -26,13 +33,23 @@ export function useReadProgress() {
       next.add(id)
       return next
     })
+
+    // 后台同步到服务端（fire-and-forget）
+    if (tokenRef.current) {
+      syncMarkRead(id).catch(() => {})
+    }
   }, [])
 
   const isRead = useCallback((id: string) => readIds.has(id), [readIds])
 
   const readCount = readIds.size
 
-  return { readIds, markRead, isRead, readCount }
+  /** 用服务端合并后的数据覆盖本地 */
+  const setReadIdsFromServer = useCallback((ids: string[]) => {
+    setReadIds(new Set(ids))
+  }, [])
+
+  return { readIds, markRead, isRead, readCount, setToken, setReadIdsFromServer }
 }
 
 /** 成就定义 */

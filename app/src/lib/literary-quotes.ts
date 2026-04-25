@@ -157,6 +157,80 @@ const QUOTES_BY_ID: Record<string, LiteraryQuote[]> = {
     { text: '医学是一种科学，它研究人体的各种状态。', source: '伊本·西那《医典》第一卷', translation: 'Medicine is a science that deals with the states of the human body.' },
     { text: '比知识更重要的是想象力。', source: '伊本·西那（传）', translation: 'Imagination is more important than knowledge. (attributed)' },
   ],
+  // ══ 哲学补充引文 2026-04-25 ══
+  // 女性哲学家
+  phe001: [
+    { text: '我在庙中聆听玛阿特的声音，她比任何法老的诏令都古老。', source: '梅里特·普塔（传）' },
+  ],
+  phe002: [
+    { text: '生命是短暂的，但智慧是不朽的。让我们致力于灵魂，而不是身体。', source: '希帕提娅（传）', translation: 'Life is short, but wisdom is immortal. Let us devote ourselves to the soul, not the body.' },
+  ],
+  phe003: [
+    { text: '万物皆有它的绿意（Viriditas）。大地在呼吸，上帝在万物中呼吸。', source: '宾根的希尔德加德《知路》', translation: 'All things have their greenness. The earth is breathing, God is breathing in all things.' },
+  ],
+  phe004: [
+    { text: '上帝赋予我们理性，不是为了让我们盲目服从，而是为了让我们自由地选择善。', source: '劳拉·切蕾塔《为她自己辩护》' },
+  ],
+  phe005: [
+    { text: '自然比所有哲学家的图书馆都更有智慧。', source: '玛格丽特·卡文迪什《实验哲学观察》', translation: 'Nature is wiser than all the philosophers\' libraries.' },
+  ],
+  phe006: [
+    { text: '我不希望女性拥有支配男性的权力，我希望她们拥有支配自己的权力。', source: '玛丽·沃斯通克拉夫特《为女权辩护》', translation: 'I do not wish them [women] to have power over men, but over themselves.' },
+  ],
+  phe007: [
+    { text: '回到事物本身！（Zu den Sachen selbst!）', source: '埃德蒙德·胡塞尔《逻辑研究》', translation: 'Back to the things themselves!' },
+  ],
+  phe008: [
+    { text: '我们不是出生于这个世界，我们是被抛入这个世界的。（Geworfenheit）', source: '汉娜·阿伦特《人的境况》', translation: 'We are not born into this world, we are thrown into it.' },
+  ],
+  // 非洲哲学
+  phe009: [
+    { text: 'Umuntu ngumuntu ngabantu. （一个人之所以为人，是因为他人存在。）', source: '班图哲学箴言' },
+  ],
+  phe010: [
+    { text: '时间不是一条直线，而是一个水池。祖先在水中，我们也在水中。', source: '埃文斯-普里查德《努尔人》引述概念的哲学阐释' },
+  ],
+  phe011: [
+    { text: 'OBODO 不是政治，是存在的秩序。没有 OBODO，土地不认识你。', source: '伊格博族长老口述（整理）' },
+  ],
+  phe012: [
+    { text: 'Sankofa —— 回到过去，才能走向未来。', source: '阿坎族谚语（加纳）' },
+  ],
+  // 美洲原住民哲学
+  phe013: [
+    { text: 'All are related.（万物互连。）', source: '黑麋鹿（拉科塔族）', translation: '万物皆相关。' },
+  ],
+  phe014: [
+    { text: '双子英雄用玉米造人，因为人是大地的种子，不是大地的主人。', source: '《波波尔·乌》（基切玛雅）' },
+  ],
+  phe015: [
+    { text: '天有六方，地有六方，人心也有六方。失去一方，整圈就破了。', source: '黑麋鹿之语（整理）' },
+  ],
+  phe016: [
+    { text: '我们不是拥有土地，我们是土地拥有我们。', source: '美洲原住民哲言（整理）' },
+  ],
+  // 中亚哲学
+  phe017: [
+    { text: '我是一个没有经文的可汗，我用我的行为写我的书。', source: '艾哈迈德·亚萨维（传）' },
+  ],
+  phe018: [
+    { text: '寻找真理的人，必须先失去自己。', source: '阿赫马德·亚萨维《智慧之书》' },
+  ],
+  phe019: [
+    { text: '天堂不在天上，而在两耳之间。', source: '中亚苏菲谚语' },
+  ],
+  // 东南亚哲学
+  phe020: [
+    { text: 'Anicca, Dukkha, Anatta —— 诸行无常，诸受皆苦，诸法无我。', source: '佛陀初转法轮（巴利语三法印）' },
+  ],
+  phe021: [
+    { text: '呼吸是时间的量尺。知道呼吸的人，知道时间不是敌人。', source: '正念禅修传统（缅甸）' },
+  ],
+  // 大洋洲哲学
+  phe022: [
+    { text: 'The Dreaming is not a memory of the past; it is a presence that never left.', source: '澳大利亚原住民哲言', translation: '梦幻时光不是对过去的记忆，而是从未离开的在场。' },
+  ],
+
 }
 
 /** 按标题关键词模糊匹配的引用（当 ID 精确匹配失败时使用） */

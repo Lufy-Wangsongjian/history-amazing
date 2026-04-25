@@ -65,6 +65,21 @@ async function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> {
   return response.json() as Promise<T>
 }
 
+async function apiPost<T>(path: string, body: unknown, signal?: AbortSignal): Promise<T> {
+  const response = await fetch(path, {
+    method: 'POST',
+    signal,
+    headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+
+  if (!response.ok) {
+    throw new Error(`请求失败：${response.status} ${response.statusText}`)
+  }
+
+  return response.json() as Promise<T>
+}
+
 function buildEventsQuery(query: EventsQuery) {
   const params = new URLSearchParams()
 
@@ -116,4 +131,64 @@ export function fetchEventContext(id: string, signal?: AbortSignal) {
 
 export function fetchStats(signal?: AbortSignal) {
   return apiGet<StatsResponse>('/api/stats', signal)
+}
+
+// ── 数据同步 API ──
+
+export interface SyncGameRecord {
+  score: number
+  total: number
+  time?: number
+  combo?: number
+  date: string
+}
+
+export interface MergeAllResponse {
+  favorites: string[]
+  readEvents: string[]
+  gameRecords: Record<string, SyncGameRecord>
+}
+
+/** 登录后一次性合并所有本地数据到服务端 */
+export function syncMergeAll(data: {
+  favorites?: string[]
+  readEvents?: string[]
+  gameRecords?: Record<string, SyncGameRecord>
+}, signal?: AbortSignal) {
+  return apiPost<MergeAllResponse>('/api/sync/merge-all', data, signal)
+}
+
+/** 切换单个收藏 */
+export function syncToggleFavorite(eventId: string, signal?: AbortSignal) {
+  return apiPost<{ favorited: boolean }>('/api/sync/favorites/toggle', { eventId }, signal)
+}
+
+/** 清空所有收藏 */
+export async function syncClearFavorites(signal?: AbortSignal): Promise<void> {
+  const response = await fetch('/api/sync/favorites', {
+    method: 'DELETE',
+    signal,
+    headers: getAuthHeaders(),
+  })
+  if (!response.ok) throw new Error(`请求失败：${response.status}`)
+}
+
+/** 标记单个事件已读 */
+export function syncMarkRead(eventId: string, signal?: AbortSignal) {
+  return apiPost<{ ok: boolean }>('/api/sync/read-events/mark', { eventId }, signal)
+}
+
+/** 提交单个游戏分数 */
+export function syncSubmitGameRecord(data: {
+  gameId: string
+  score: number
+  total: number
+  time?: number
+  combo?: number
+  date?: string
+}, signal?: AbortSignal) {
+  return apiPost<{ isNewBest: boolean }>('/api/sync/game-records/submit', {
+    ...data,
+    date: data.date || new Date().toISOString(),
+  }, signal)
 }

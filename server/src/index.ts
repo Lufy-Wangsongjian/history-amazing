@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url'
 import { getDB, closeDB } from './db.js'
 import { streamAIResponse } from './ai.js'
 import { createAuthRouter } from './auth.js'
+import { createSyncRouter } from './sync.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const CLIENT_DIST_PATH = path.resolve(__dirname, '../../app/dist')
@@ -22,9 +23,11 @@ app.use(cors({
 }))
 app.use(express.json({ limit: '10kb' }))
 
-// ── 认证路由 ──
+// ── 认证 & 数据同步路由 ──
 const authDb = getDB()
 app.use('/api/auth', createAuthRouter(authDb))
+// sync 路由需要更大 body 限制（用户可能有数千个收藏/已读）
+app.use('/api/sync', express.json({ limit: '1mb' }), createSyncRouter(authDb))
 
 interface EventRow {
   id: string

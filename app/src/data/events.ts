@@ -121,6 +121,7 @@ import { eastAfricaMediterraneanEvents } from './events-east-africa-mediterranea
 import { chileAndesEvents } from './events-chile-andes'
 import { iceAgeEvents } from './events-ice-age'
 import { worldPhilosophyEvents } from './events-world-philosophy'
+import { philosophyEnrichEvents } from './events-philosophy-enrich'
 import { voyagesForgottenEvents } from './events-voyages-forgotten'
 import { medicineShadowsEvents } from './events-medicine-shadows'
 import { faithsMarginsEvents } from './events-faiths-margins'
@@ -135,6 +136,14 @@ import { evolve202604251536Events } from './events-evolve-20260425-1536'
 
 // Round 36: 自进化轮次 2026-04-25 — 非洲深化 + 建筑奇迹 + 远古补强（25条）
 import { evolve20260425Events } from './events-evolve-20260425'
+// 自进化 2026-04-25_1803 — 医学深化 + 远古补强 + 21世纪补强（24条）
+import { medicineRound36Events } from './events-medicine-round36'
+import { prehistoryRound36Events } from './events-prehistory-round36'
+import { century21Round36Events } from './events-21st-century-round36'
+// 自进化 2026-04-25_1920 — 非洲内部历史深度补齐 第二期（25条）
+import { africanInternal2Events } from './events-african-internal-2'
+import { southeastAsiaRound2Events } from './events-southeast-asia-round2'
+import { twentyFirstCenturyHighlightsEvents } from './events-21st-century-highlights'
 
 export const baseHistoricalEvents: HistoricalEvent[] = [
   ...ancientEvents,
@@ -406,6 +415,13 @@ export const baseHistoricalEvents: HistoricalEvent[] = [
   ...evolve20260425Events,
   ...evolve202604251536Events,
   ...weakRegionsRound35Events,
+  ...medicineRound36Events,
+  ...prehistoryRound36Events,
+  ...century21Round36Events,
+  ...africanInternal2Events,
+  ...southeastAsiaRound2Events,
+  ...twentyFirstCenturyHighlightsEvents,
+  ...philosophyEnrichEvents,
 ]
 
 export const historicalEventsMultiplier = HISTORICAL_EVENTS_MULTIPLIER
